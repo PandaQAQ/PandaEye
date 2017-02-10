@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parentPanel"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:transitionName="@string/zhihu_story_parent">
+
+    <com.pandaq.pandaeye.widget.FourThreeImageView
+        android:id="@+id/top_story_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue_2196F3"
+        android:scaleType="fitXY"
+        android:transitionName="@string/zhihu_story_img"/>
+
+    <TextView
+        android:id="@+id/top_story_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:textColor="@color/white_FFFFFF"
+        android:textSize="@dimen/text_size_big"/>
+</RelativeLayout>

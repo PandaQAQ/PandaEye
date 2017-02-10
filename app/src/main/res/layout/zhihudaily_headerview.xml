@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:indicator="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.pandaq.pandaqlib.loopbander.AutoScrollViewPager
+        android:id="@+id/scroll_pager"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zhihu_header_height"/>
+
+    <com.pandaq.pandaqlib.loopbander.ViewGroupIndicator
+        android:id="@+id/scroll_pager_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/zhihu_header_indi_bottom_margin"
+        indicator:distance_from_two_indicator="@dimen/distance_from_tow_indicator"
+        indicator:radius="@dimen/indicator_radius"
+        indicator:selected_color="@color/indicator_selected_607D8B"
+        indicator:unselected_color="@color/indicator_unselected_607D8B"/>
+</RelativeLayout>

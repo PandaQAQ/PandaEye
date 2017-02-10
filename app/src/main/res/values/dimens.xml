@@ -1,0 +1,26 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="nav_header_height">240dp</dimen>
+    <dimen name="user_image_size">80dp</dimen>
+    <dimen name="margin_8dp">8dp</dimen>
+    <dimen name="text_size_big">20sp</dimen>
+    <dimen name="text_size_mid">18sp</dimen>
+    <dimen name="text_size_small">16sp</dimen>
+    <dimen name="text_size_min">14sp</dimen>
+    <dimen name="userimage_border_width">2dp</dimen>
+    <dimen name="zhihu_header_height">220dp</dimen>
+    <dimen name="zhihu_header_indi_bottom_margin">8dp</dimen>
+    <dimen name="distance_from_tow_indicator">3dp</dimen>
+    <dimen name="indicator_radius">3dp</dimen>
+    <dimen name="news_image_width">80dp</dimen>
+    <dimen name="news_image_height">64dp</dimen>
+    <dimen name="news_item_height">86dp</dimen>
+    <dimen name="app_bar_height">280dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="floating_button_bmargin">72dp</dimen>
+</resources>
+

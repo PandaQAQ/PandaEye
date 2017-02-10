@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">熊猫眼</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <!--左侧DrawerLayout菜单-->
+    <string name="action_settings">设置</string>
+    <string name="nav_intem0_title">标题零</string>
+    <string name="nav_intem1_title">标题一</string>
+    <string name="nav_intem2_title">标题二</string>
+    <string name="nav_intem3_title">标题三</string>
+    <string name="username">PandaQ</string>
+    <!--知乎日报-->
+    <string name="title_activity_zhihu_story_info">PandaEye</string>
+    <string name="zhihu_story_img">zhihu_story_img</string>
+    <string name="zhihu_story_parent">zhihu_story_parent</string>
+    <string name="zhihustory">知乎日报</string>
+    <!--新闻头条-->
+    <string name="title_activity_top_news_info">TopNewsInfo</string>
+    <string name="top_news_img">top_news_img</string>
+    <string name="top_news_parent">top_news_parent</string>
+    <string name="empty_msg">数据被外星人劫走了~~</string>
+    <string name="floating_behavior">com.pandaq.pandaeye.behavior.FABScrollBehavior</string>
+</resources>

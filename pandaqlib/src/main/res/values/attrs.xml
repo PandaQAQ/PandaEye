@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BottomNavigationBar">
+        <attr name="bnbElevation" format="dimension"/>
+        <attr name="bnbActiveColor" format="color"/>
+        <attr name="bnbInactiveColor" format="color"/>
+        <attr name="bnbBackgroundColor" format="color"/>
+        <attr name="bnbAnimationDuration" format="integer"/>
+        <attr name="bnbMode" format="enum">
+            <enum name="mode_default" value="0"/>
+            <enum name="mode_fixed" value="1"/>
+            <enum name="mode_shifting" value="2"/>
+        </attr>
+        <attr name="bnbBackgroundStyle" format="enum">
+            <enum name="background_style_default" value="0"/>
+            <enum name="background_style_static" value="1"/>
+            <enum name="background_style_ripple" value="2"/>
+        </attr>
+        <attr name="bnbAutoHideEnabled" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="indicator">
+        <attr name="selected_color" format="color"/>
+        <attr name="unselected_color" format="color"/>
+        <attr name="distance_from_two_indicator" format="dimension"/>
+        <attr name="radius" format="dimension"/>
+    </declare-styleable>
+
+    <attr name="indicatorDefStyleAttr" format="reference"/>
+
+    <declare-styleable name="MagicRecyclerView">
+        <attr name="header_layout" format="reference"/>
+        <attr name="parallaxMultiplier" format="float"/>
+        <attr name="emptyView" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="SlopRefreshLayout">
+        <attr name="slopValue" format="integer"/>
+    </declare-styleable>
+</resources>

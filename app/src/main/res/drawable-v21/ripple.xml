@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--android:radius="10dp"-->
+<!--设置水波纹的半径   radius    -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+        android:color="@color/grey_607D8B"
+    >
+    <!--&lt;!&ndash;用于限制水波纹显示在控件内&ndash;&gt;-->
+    <!--&lt;!&ndash;drawable为png图片时水波纹会作用在非透明区域内，因此可用图片来实现特定形状的水波纹&ndash;&gt;-->
+    <!--<item-->
+        <!--android:id="@android:id/mask"-->
+        <!--android:drawable="@color/orange"/>-->
+
+    <!--&lt;!&ndash;搭配selector使用&ndash;&gt;-->
+    <!--<item>-->
+        <!--<selector>-->
+            <!--<item-->
+                <!--android:drawable="@color/orange"-->
+                <!--android:state_pressed="true">-->
+            <!--</item>-->
+            <!--<item-->
+                <!--android:drawable="@color/white"-->
+                <!--android:state_pressed="false">-->
+            <!--</item>-->
+        <!--</selector>-->
+    <!--</item>-->
+</ripple>
