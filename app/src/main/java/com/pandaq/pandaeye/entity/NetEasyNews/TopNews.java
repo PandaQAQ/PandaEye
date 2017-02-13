@@ -2,13 +2,15 @@ package com.pandaq.pandaeye.entity.NetEasyNews;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by PandaQ on 2016/9/20.
  * email : 767807368@qq.com
  * 网易头条新闻实体类
  */
 
-public class TopNews {
+public class TopNews implements Serializable{
     /**
      * docid
      */

@@ -59,10 +59,10 @@ public class MovieListFragment extends BaseFragment implements IMovieListFrag {
         mMovieList.setItemAnimator(new DefaultItemAnimator());
         mMovieList.setLayoutManager(layoutManager);
         refreshData();
+        mPresenter.loadCache();
         mMovieList.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View view) {
-                System.out.println(mMovieSubjects.get(position).getTitle());
             }
         });
     }

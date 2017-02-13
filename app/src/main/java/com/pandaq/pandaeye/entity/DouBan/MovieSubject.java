@@ -1,5 +1,6 @@
 package com.pandaq.pandaeye.entity.DouBan;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * email : 767807368@qq.com
  * 电影条目实体类
  */
-public class MovieSubject {
+public class MovieSubject implements Serializable{
 
     /**
      * max : 10
@@ -160,7 +161,7 @@ public class MovieSubject {
         this.directors = directors;
     }
 
-    public static class RatingBean {
+    public static class RatingBean implements Serializable{
         private int max;
         private float average;
         private String stars;
@@ -199,7 +200,7 @@ public class MovieSubject {
         }
     }
 
-    public static class ImagesBean {
+    public static class ImagesBean implements Serializable{
         private String small;
         private String large;
         private String medium;
@@ -229,7 +230,7 @@ public class MovieSubject {
         }
     }
 
-    public static class CastsBean {
+    public static class CastsBean implements Serializable{
         private String alt;
         /**
          * small : http://img3.douban.com/img/celebrity/small/615.jpg
@@ -273,7 +274,7 @@ public class MovieSubject {
             this.id = id;
         }
 
-        public static class AvatarsBean {
+        public static class AvatarsBean implements Serializable{
             private String small;
             private String large;
             private String medium;
@@ -304,7 +305,7 @@ public class MovieSubject {
         }
     }
 
-    public static class DirectorsBean {
+    public static class DirectorsBean implements Serializable{
         private String alt;
         /**
          * small : http://img3.douban.com/img/celebrity/small/4360.jpg
@@ -348,7 +349,7 @@ public class MovieSubject {
             this.id = id;
         }
 
-        public static class AvatarsBean {
+        public static class AvatarsBean implements Serializable{
             private String small;
             private String large;
             private String medium;

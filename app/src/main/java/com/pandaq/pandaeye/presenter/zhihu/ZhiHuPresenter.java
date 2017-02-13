@@ -1,6 +1,9 @@
 package com.pandaq.pandaeye.presenter.zhihu;
 
+import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.api.ApiManager;
+import com.pandaq.pandaeye.config.Constants;
+import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
 import com.pandaq.pandaeye.entity.ZhiHu.ZhiHuDaily;
 import com.pandaq.pandaeye.entity.ZhiHu.ZhiHuStory;
 import com.pandaq.pandaeye.presenter.BasePresenter;
@@ -50,6 +53,8 @@ public class ZhiHuPresenter extends BasePresenter {
                     public void onNext(ZhiHuDaily zhiHuDaily) {
                         date = zhiHuDaily.getDate();
                         mZhiHuDailyFrag.refreshSuccessed(zhiHuDaily);
+                        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_ZHIHU_FILE);
+                        manager.put(Constants.CACHE_ZHIHU_DAILY, zhiHuDaily);
                     }
                 });
         addSubscription(subscription);
@@ -86,5 +91,16 @@ public class ZhiHuPresenter extends BasePresenter {
                     }
                 });
         addSubscription(subscription);
+    }
+
+    /**
+     * 加载缓存
+     */
+    public void loadCache() {
+        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_ZHIHU_FILE);
+        ZhiHuDaily zhiHuDaily = manager.getSerializable(Constants.CACHE_ZHIHU_DAILY);
+        if (zhiHuDaily != null) {
+            mZhiHuDailyFrag.refreshSuccessed(zhiHuDaily);
+        }
     }
 }

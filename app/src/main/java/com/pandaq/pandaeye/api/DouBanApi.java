@@ -9,7 +9,7 @@ import rx.Observable;
 /**
  * Created by PandaQ on 2016/9/8.
  * email : 767807368@qq.com
- * 豆瓣电影API接口
+ * 豆瓣API接口
  */
 public interface DouBanApi {
 

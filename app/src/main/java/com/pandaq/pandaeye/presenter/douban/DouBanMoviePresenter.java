@@ -1,6 +1,9 @@
 package com.pandaq.pandaeye.presenter.douban;
 
+import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.api.ApiManager;
+import com.pandaq.pandaeye.config.Constants;
+import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
 import com.pandaq.pandaeye.entity.DouBan.MovieSubject;
 import com.pandaq.pandaeye.entity.DouBan.MovieTop250;
 import com.pandaq.pandaeye.presenter.BasePresenter;
@@ -62,6 +65,8 @@ public class DouBanMoviePresenter extends BasePresenter {
                     public void onNext(ArrayList<MovieSubject> movieSubjects) {
                         mMovieListFrag.hideProgressBar();
                         mMovieListFrag.refreshSucceed(movieSubjects);
+                        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_DOUBAN_FILE);
+                        manager.put(Constants.CACHE_DOUBAN_MOVIE,movieSubjects);
                     }
                 });
         addSubscription(subscription);
@@ -117,5 +122,14 @@ public class DouBanMoviePresenter extends BasePresenter {
         addSubscription(subscription);
     }
 
-
+    /**
+     * 加载缓存
+     */
+    public void loadCache(){
+        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_DOUBAN_FILE);
+        ArrayList<MovieSubject> movieSubjects = manager.getSerializable(Constants.CACHE_DOUBAN_MOVIE);
+        if (movieSubjects!=null){
+            mMovieListFrag.refreshSucceed(movieSubjects);
+        }
+    }
 }

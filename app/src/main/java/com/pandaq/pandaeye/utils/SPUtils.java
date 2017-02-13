@@ -78,7 +78,7 @@ public class SPUtils {
 
     private static void checkSp() {
         if (sp == null) {
-            sp = getInstance(CustomApplication.sContext);
+            sp = getInstance(CustomApplication.getContext());
         }
     }
 }

@@ -76,6 +76,7 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
         refreshNews();
+        mPresenter.loadCache();
         mNewsRecycler.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View view) {

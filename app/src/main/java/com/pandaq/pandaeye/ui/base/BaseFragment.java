@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
+
 /**
  * Created by PandaQ on 2016/9/8.
  * email : 767807368@qq.com
@@ -38,6 +40,8 @@ public class BaseFragment extends Fragment{
     @Override
     public void onPause() {
         super.onPause();
+        //同步 DiskCache 的缓存日志
+        DiskCacheManager.flush();
     }
 
     @Override

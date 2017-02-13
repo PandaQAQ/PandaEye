@@ -93,7 +93,7 @@ public class ApiManager {
 //                .getTrustAllClient()
                 .getTrusClient(inputStream)
                 .newBuilder()
-                .addInterceptor(new CustomInterceptor(CustomApplication.sContext))
+                .addInterceptor(new CustomInterceptor(CustomApplication.getContext()))
                 .build();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Config.baseTestUrl)

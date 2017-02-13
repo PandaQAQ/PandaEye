@@ -6,9 +6,28 @@ package com.pandaq.pandaeye.config;
  */
 
 public class Constants {
+    //SecretUtil
+    public static String NOSUCHALGORITHM = "不支持此种加密方式";
+    public static String UNSUPPENCODING = "不支持的编码格式";
     /**
      * SharePreference
      */
     public static final String SP_NAME = "com.pandaq.pandaeye";
+    /**
+     * BundleKey
+     */
+    public static final String BUNDLE_KEY_TITLE = "title";//bundle传至用的key各处可以复用
+    public static final String BUNDLE_KEY_ID = "id";
+    /**
+     * DiskCache
+     */
+    public static final long CACHE_MAXSIZE = 10 * 1024 * 1024;
+    public static final String CACHE_TOPNEWS_FILE = "top_news_cache_file";
+    public static final String CACHE_TOPNEWS = "top_news_cache";
 
+    public static final String CACHE_ZHIHU_FILE = "zhihu_cache_file";
+    public static final String CACHE_ZHIHU_DAILY = "zhihu_daily_cache";
+
+    public static final String CACHE_DOUBAN_FILE = "douban_cache_file";
+    public static final String CACHE_DOUBAN_MOVIE = "douban_movie_cache";
 }

@@ -92,6 +92,7 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
         refreshData();
+        mPresenter.loadCache();
         mZhihudailyList.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View view) {

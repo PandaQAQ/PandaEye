@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pandaq.pandaeye.R;
+import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.entity.ZhiHu.ZhiHuTopStory;
 import com.pandaq.pandaeye.utils.TranslateHelper;
 import com.pandaq.pandaeye.ui.zhihu.ZhihuStoryInfoActivity;
@@ -63,8 +64,8 @@ public class ZhihuTopPagerAdapter extends PagerAdapter {
                 //跳转到其他界面
                 Bundle bundle = new Bundle();
                 Intent intent = new Intent(mFragment.getActivity(), ZhihuStoryInfoActivity.class);
-                bundle.putString("title", mTopStories.get(position).getTitle());
-                bundle.putInt("id", mTopStories.get(position).getId());
+                bundle.putString(Constants.BUNDLE_KEY_TITLE, mTopStories.get(position).getTitle());
+                bundle.putInt(Constants.BUNDLE_KEY_ID, mTopStories.get(position).getId());
                 intent.putExtras(bundle);
                 //多个控件共享用pairs
                 Pair[] pairs = TranslateHelper.createSafeTransitionParticipants(mFragment.getActivity(), false,

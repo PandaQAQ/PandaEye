@@ -2,13 +2,14 @@ package com.pandaq.pandaeye.entity.ZhiHu;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by PandaQ on 2016/9/13.
  * email : 767807368@qq.com
  */
-public class ZhiHuDaily {
+public class ZhiHuDaily implements Serializable{
 
     /**
      * date : 20160913

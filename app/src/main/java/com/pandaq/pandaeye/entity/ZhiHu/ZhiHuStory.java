@@ -1,12 +1,13 @@
 package com.pandaq.pandaeye.entity.ZhiHu;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by PandaQ on 2016/9/13.
  * email : 767807368@qq.com
  */
-public class ZhiHuStory {
+public class ZhiHuStory implements Serializable{
     private int type;
     private int id;
     private String ga_prefix;

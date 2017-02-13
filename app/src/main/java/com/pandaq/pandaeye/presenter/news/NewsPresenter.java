@@ -1,6 +1,9 @@
 package com.pandaq.pandaeye.presenter.news;
 
+import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.api.ApiManager;
+import com.pandaq.pandaeye.config.Constants;
+import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
 import com.pandaq.pandaeye.entity.NetEasyNews.TopNews;
 import com.pandaq.pandaeye.entity.NetEasyNews.TopNewsList;
 import com.pandaq.pandaeye.presenter.BasePresenter;
@@ -11,6 +14,7 @@ import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -54,9 +58,18 @@ public class NewsPresenter extends BasePresenter {
                     }
                 })
                 .toList()
+                //将 List 转为ArrayList 缓存存储 ArrayList Serializable对象
+                .map(new Func1<List<TopNews>, ArrayList<TopNews>>() {
+                    @Override
+                    public ArrayList<TopNews> call(List<TopNews> topNewses) {
+                        ArrayList<TopNews> news = new ArrayList<>();
+                        news.addAll(topNewses);
+                        return news;
+                    }
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<TopNews>>() {
+                .subscribe(new Subscriber<ArrayList<TopNews>>() {
                     @Override
                     public void onCompleted() {
                         mNewsListFrag.hideRefreshBar();
@@ -69,15 +82,17 @@ public class NewsPresenter extends BasePresenter {
                     }
 
                     @Override
-                    public void onNext(List<TopNews> topNewses) {
+                    public void onNext(ArrayList<TopNews> topNewses) {
+                        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_TOPNEWS_FILE);
+                        manager.put(Constants.CACHE_TOPNEWS, topNewses);
                         currentIndex += 20;
-                        mNewsListFrag.refreshNewsSuccessed((ArrayList<TopNews>) topNewses);
+                        mNewsListFrag.refreshNewsSuccessed(topNewses);
                     }
                 });
         addSubscription(subscription);
     }
 
-    //两个方法没区别
+    //两个方法没区别,只是刷新会重新赋值
     public void loadMore() {
         mNewsListFrag.showLoadBar();
         Subscription subscription = ApiManager.getInstence().getTopNewsServie()
@@ -122,5 +137,16 @@ public class NewsPresenter extends BasePresenter {
                     }
                 });
         addSubscription(subscription);
+    }
+
+    /**
+     * 读取缓存
+     */
+    public void loadCache() {
+        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_TOPNEWS_FILE);
+        ArrayList<TopNews> topNews = manager.getSerializable(Constants.CACHE_TOPNEWS);
+        if (topNews != null) {
+            mNewsListFrag.refreshNewsSuccessed(topNews);
+        }
     }
 }

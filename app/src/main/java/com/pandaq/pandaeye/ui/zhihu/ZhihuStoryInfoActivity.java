@@ -23,6 +23,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.pandaq.pandaeye.R;
+import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.entity.ZhiHu.ZhihuStoryContent;
 import com.pandaq.pandaeye.presenter.zhihu.ZhihuStoryInfoPresenter;
 import com.pandaq.pandaeye.ui.ImplView.IZhihuStoryInfoActivity;
@@ -91,7 +92,7 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
 
     private void initData() {
         Bundle bundle = getIntent().getExtras();
-        story_id = bundle.getInt("id") + "";
+        story_id = String.valueOf(bundle.getInt(Constants.BUNDLE_KEY_ID));
         loadZhihuStory();
     }
 
