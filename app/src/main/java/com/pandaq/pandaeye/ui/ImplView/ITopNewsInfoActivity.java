@@ -12,7 +12,7 @@ public interface ITopNewsInfoActivity {
 
     void hideProgressBar();
 
-    void loadTopNewsInfo();
+    void loadTopNewsInfo(String newsId);
 
     void loadFail(String errmsg);
 

@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.ZhihuDailyAdapter;
 import com.pandaq.pandaeye.adapters.ZhihuTopPagerAdapter;
+import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.entity.ZhiHu.ZhiHuDaily;
 import com.pandaq.pandaeye.entity.ZhiHu.ZhiHuStory;
 import com.pandaq.pandaeye.presenter.zhihu.ZhiHuPresenter;
@@ -99,15 +100,12 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
                 //跳转到其他界面
                 Bundle bundle = new Bundle();
                 Intent intent = new Intent(ZhihuDailyFragment.this.getActivity(), ZhihuStoryInfoActivity.class);
-                bundle.putString("title", mZhiHuStories.get(position).getTitle());
-                bundle.putInt("id", mZhiHuStories.get(position).getId());
+                bundle.putString(Constants.BUNDLE_KEY_TITLE, mZhiHuStories.get(position).getTitle());
+                bundle.putInt(Constants.BUNDLE_KEY_ID, mZhiHuStories.get(position).getId());
                 intent.putExtras(bundle);
-                ImageView sharedView = (ImageView) view.findViewById(R.id.news_image);
-                CardView cardView = (CardView) view.findViewById(R.id.item_cardview);
                 String transitionName = getString(R.string.zhihu_story_img);
-                String transitionName1 = getString(R.string.zhihu_story_parent);
-                Pair[] pair = TranslateHelper.createSafeTransitionParticipants(getActivity(), false, new Pair<>(sharedView, transitionName), new Pair<>(cardView, transitionName1));
-                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pair);
+                Pair pairImg = new Pair<>(view.findViewById(R.id.news_image), transitionName);
+                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairImg);
                 startActivity(intent, transitionActivityOptions.toBundle());
             }
         });

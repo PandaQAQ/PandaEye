@@ -18,6 +18,7 @@ public class Constants {
      */
     public static final String BUNDLE_KEY_TITLE = "title";//bundle传至用的key各处可以复用
     public static final String BUNDLE_KEY_ID = "id";
+    public static final String BUNDLE_KEY_IMG_URL = "img_url";
     /**
      * DiskCache
      */

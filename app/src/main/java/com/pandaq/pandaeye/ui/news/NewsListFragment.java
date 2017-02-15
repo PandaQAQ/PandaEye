@@ -16,6 +16,7 @@ import android.widget.ImageView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.TopNewsListAdapter;
+import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.entity.NetEasyNews.TopNews;
 import com.pandaq.pandaeye.presenter.news.NewsPresenter;
 import com.pandaq.pandaeye.utils.TranslateHelper;
@@ -83,16 +84,13 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
                 //跳转到其他界面
                 Bundle bundle = new Bundle();
                 Intent intent = new Intent(NewsListFragment.this.getActivity(), TopNewsInfoActivity.class);
-                bundle.putString("title", mTopNewses.get(position).getTitle());
-                bundle.putString("id", mTopNewses.get(position).getDocid());
-                bundle.putString("img_url", mTopNewses.get(position).getImgsrc());
+                bundle.putString(Constants.BUNDLE_KEY_TITLE, mTopNewses.get(position).getTitle());
+                bundle.putString(Constants.BUNDLE_KEY_ID, mTopNewses.get(position).getDocid());
+                bundle.putString(Constants.BUNDLE_KEY_IMG_URL, mTopNewses.get(position).getImgsrc());
                 intent.putExtras(bundle);
-                ImageView sharedView = (ImageView) view.findViewById(R.id.news_image);
-                CardView cardView = (CardView) view.findViewById(R.id.item_cardview);
                 String transitionName = getString(R.string.top_news_img);
-                String transitionName1 = getString(R.string.top_news_parent);
-                Pair[] pair = TranslateHelper.createSafeTransitionParticipants(getActivity(), false, new Pair<>(sharedView, transitionName), new Pair<>(cardView, transitionName1));
-                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pair);
+                Pair pairImg = new Pair<>(view.findViewById(R.id.news_image), transitionName);
+                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairImg);
                 startActivity(intent, transitionActivityOptions.toBundle());
             }
         });

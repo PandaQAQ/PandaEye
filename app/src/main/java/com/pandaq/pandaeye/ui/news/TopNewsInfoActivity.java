@@ -1,6 +1,6 @@
 package com.pandaq.pandaeye.ui.news;
 
-import android.graphics.Rect;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -8,15 +8,16 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Window;
+import android.webkit.WebView;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pandaq.pandaeye.R;
+import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.entity.NetEasyNews.TopNewsContent;
-import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaeye.ui.ImplView.ITopNewsInfoActivity;
+import com.pandaq.pandaeye.utils.DensityUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,8 +34,8 @@ public class TopNewsInfoActivity extends AppCompatActivity implements ITopNewsIn
     AppBarLayout mAppBar;
     @BindView(R.id.fab)
     FloatingActionButton mFab;
-    private String news_id;
-    private String news_img;
+    @BindView(R.id.wv_topnews_content)
+    WebView mWvTopnewsContent;
     int[] mDeviceInfo;
     int width;
     int heigh;
@@ -45,7 +46,7 @@ public class TopNewsInfoActivity extends AppCompatActivity implements ITopNewsIn
         setContentView(R.layout.activity_top_news_info);
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mNewsImg.setBackgroundColor(Color.RED);
         initView();
         initData();
     }
@@ -53,27 +54,27 @@ public class TopNewsInfoActivity extends AppCompatActivity implements ITopNewsIn
     private void initView() {
         mDeviceInfo = DensityUtil.getDeviceInfo(this);
         width = mDeviceInfo[0];
-        heigh = width*3/ 4;
-        System.out.println(width + "----" + heigh);
+        heigh = width * 3 / 5;
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println(mNewsImg.getHeight() - mToolbar.getHeight() - getstatuBarHeight());
             }
         });
     }
 
     private void initData() {
         Bundle bundle = getIntent().getExtras();
-        news_id = bundle.getInt("id") + "";
-        news_img = bundle.getString("img_url");
+        String news_id = bundle.getString(Constants.BUNDLE_KEY_ID);
+        String newsImg = bundle.getString(Constants.BUNDLE_KEY_IMG_URL);
+        loadTopNewsInfo(news_id);
         Glide.with(this)
-                .load(news_img)
-                .centerCrop()
+                .load(newsImg)
+//                .listener(new ZhihuStoryInfoActivity.GlideRequestListener())
                 .override(width, heigh)
+                .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .crossFade()
                 .into(mNewsImg);
-        loadTopNewsInfo();
     }
 
     @Override
@@ -87,7 +88,7 @@ public class TopNewsInfoActivity extends AppCompatActivity implements ITopNewsIn
     }
 
     @Override
-    public void loadTopNewsInfo() {
+    public void loadTopNewsInfo(String news_id) {
 
     }
 
@@ -98,13 +99,5 @@ public class TopNewsInfoActivity extends AppCompatActivity implements ITopNewsIn
 
     @Override
     public void loadSuccess(TopNewsContent topNewsContent) {
-
-    }
-
-    private int getstatuBarHeight() {
-        Rect rectangle = new Rect();
-        Window window = getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
-        return rectangle.top;
     }
 }
