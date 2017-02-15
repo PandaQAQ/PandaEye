@@ -1,7 +1,9 @@
 package com.pandaq.pandaeye.ui.zhihu;
 
 import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -11,13 +13,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Interpolator;
-import android.view.animation.LinearInterpolator;
-import android.webkit.WebView;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -34,6 +35,8 @@ import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaeye.utils.GlideUtils;
 import com.pandaq.pandaeye.utils.ViewUtils;
 import com.pandaq.pandaeye.utils.WebUtils;
+import com.pandaq.pandaeye.widget.FiveThreeImageView;
+import com.tencent.smtt.sdk.WebView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,7 +58,7 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
     @BindView(R.id.fab)
     FloatingActionButton mFab;
     @BindView(R.id.story_img)
-    ImageView mStoryImg;
+    FiveThreeImageView mStoryImg;
     @BindView(R.id.zhihudaily_webview)
     WebView mZhihudailyWebview;
     private String story_id = "";
@@ -71,6 +74,8 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         mToolbarLayout.setTitle(getString(R.string.zhihustory));
+        getWindow().setEnterTransition(new Fade().setDuration(800));
+        getWindow().setExitTransition(new Fade().setDuration(800));
         initView();
         initData();
     }
@@ -87,7 +92,7 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                finishAfterTransition();
             }
         });
     }
@@ -128,6 +133,7 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .crossFade()
                 .into(mStoryImg);
+        startPostponedEnterTransition();
         String url = zhihuStory.getShare_url();
         boolean isEmpty = TextUtils.isEmpty(zhihuStory.getBody());
         String mBody = zhihuStory.getBody();
@@ -165,6 +171,7 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
                     .clearFilters()
                     .setRegion(0, 0, bitmap.getWidth() - 1, twentyFourDip)
                     .generate(new Palette.PaletteAsyncListener() {
+                        @TargetApi(Build.VERSION_CODES.M)
                         @Override
                         public void onGenerated(Palette palette) {
                             boolean isDark;
@@ -178,7 +185,6 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
                             // light or dark color on M (with matching status bar icons)
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 int statusBarColor = getWindow().getStatusBarColor();
-                                mToolbar.setBackgroundColor(statusBarColor);
                                 final Palette.Swatch topColor = ColorUtils.getMostPopulousSwatch(palette);
                                 if (topColor != null && (isDark || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)) {
                                     statusBarColor = ColorUtils.scrimify(topColor.getRgb(), isDark, SCRIM_ADJUSTMENT);
@@ -188,6 +194,8 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
                                     }
                                 }
                                 if (statusBarColor != getWindow().getStatusBarColor()) {
+                                    mToolbarLayout.setContentScrimColor(statusBarColor);
+                                    mToolbar.setBackgroundColor(getResources().getColor(R.color.trans_toolbar_7c424141, null));
                                     ValueAnimator statusBarColorAnim = ValueAnimator.ofArgb(
                                             getWindow().getStatusBarColor(), statusBarColor);
                                     statusBarColorAnim.addUpdateListener(new ValueAnimator

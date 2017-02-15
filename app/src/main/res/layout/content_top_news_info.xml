@@ -9,7 +9,7 @@
     tools:context="com.pandaq.pandaeye.ui.news.TopNewsInfoActivity"
     tools:showIn="@layout/activity_top_news_info">
 
-    <WebView
+    <com.tencent.smtt.sdk.WebView
         android:id="@+id/wv_topnews_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

@@ -18,14 +18,13 @@
             android:layout_height="wrap_content"
             android:background="@color/transparent_00ffffff">
 
-            <com.pandaq.pandaeye.widget.FourThreeImageView
+            <ImageView
                 android:id="@+id/news_image"
                 android:layout_width="@dimen/news_image_width"
                 android:layout_height="@dimen/news_image_height"
                 android:layout_margin="@dimen/margin_8dp"
                 android:elevation="2dp"
-                android:scaleType="fitXY"
-                android:transitionName="@string/zhihu_story_img"/>
+                android:scaleType="fitXY"/>
 
             <TextView
                 android:id="@+id/news_title"

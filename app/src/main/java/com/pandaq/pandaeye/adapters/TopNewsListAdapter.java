@@ -45,7 +45,7 @@ public class TopNewsListAdapter extends BaseRecyclerAdapter<TopNews> {
             Glide.with(mFragment)
                     .load(image)
                     .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(((ViewHolder) holder).mNewsImage);
         }
     }

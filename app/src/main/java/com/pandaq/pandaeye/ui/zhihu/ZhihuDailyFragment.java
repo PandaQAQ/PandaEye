@@ -1,5 +1,6 @@
 package com.pandaq.pandaeye.ui.zhihu;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,8 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Explode;
+import android.transition.Fade;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,6 +74,8 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
     }
 
     private void initView() {
+        getActivity().getWindow().setEnterTransition(new Fade().setDuration(800));
+        getActivity().getWindow().setExitTransition(new Fade().setDuration(800));
         mZhiHuStories = new ArrayList<>();
         mZhihudailyList.setItemAnimator(new DefaultItemAnimator());
         mZhihudailyList.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -103,10 +108,7 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
                 bundle.putString(Constants.BUNDLE_KEY_TITLE, mZhiHuStories.get(position).getTitle());
                 bundle.putInt(Constants.BUNDLE_KEY_ID, mZhiHuStories.get(position).getId());
                 intent.putExtras(bundle);
-                String transitionName = getString(R.string.zhihu_story_img);
-                Pair pairImg = new Pair<>(view.findViewById(R.id.news_image), transitionName);
-                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairImg);
-                startActivity(intent, transitionActivityOptions.toBundle());
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
             }
         });
     }

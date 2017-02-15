@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:transitionName="@string/zhihu_story_parent"
     tools:context="com.pandaq.pandaeye.ui.zhihu.ZhihuStoryInfoActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -19,15 +18,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="@color/transparent_00ffffff"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <ImageView
+            <com.pandaq.pandaeye.widget.FiveThreeImageView
                 android:id="@+id/story_img"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="fitXY"
-                android:transitionName="@string/zhihu_story_img"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.7"/>
 
@@ -35,7 +33,6 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/trans_green_5b00796b"
                 app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/ic_arrow_back"
                 app:popupTheme="@style/AppTheme.PopupOverlay"/>

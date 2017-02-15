@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:transitionName="@string/zhihu_story_parent">
 
-    <com.pandaq.pandaeye.widget.FourThreeImageView
+    <com.pandaq.pandaeye.widget.FiveThreeImageView
         android:id="@+id/top_story_img"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

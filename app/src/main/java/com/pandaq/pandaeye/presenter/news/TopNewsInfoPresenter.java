@@ -20,7 +20,13 @@ public class TopNewsInfoPresenter extends BasePresenter {
         mActivity = activity;
     }
 
+    /**
+     * 加载新闻详情
+     *
+     * @param id
+     */
     public void loadNewsContent(String id) {
+        mActivity.showProgressBar();
         Subscription subscription = ApiManager.getInstence()
                 .getTopNewsServie()
                 .getNewsContent(id)
@@ -32,14 +38,17 @@ public class TopNewsInfoPresenter extends BasePresenter {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        mActivity.hideProgressBar();
+                        mActivity.loadFail(e.getMessage());
                     }
 
                     @Override
                     public void onNext(TopNewsContent content) {
-
+                        mActivity.hideProgressBar();
+                        mActivity.loadSuccess(content);
                     }
                 });
         addSubscription(subscription);
     }
+
 }

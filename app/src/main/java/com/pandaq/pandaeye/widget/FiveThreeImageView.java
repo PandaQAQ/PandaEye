@@ -10,18 +10,18 @@ import android.widget.ImageView;
  * 长宽比为4:3的imageView
  */
 
-public class FourThreeImageView extends ImageView {
-    public FourThreeImageView(Context context, AttributeSet attrs) {
+public class FiveThreeImageView extends ImageView {
+    public FiveThreeImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public FourThreeImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public FiveThreeImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int height = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec) * 3 / 4, MeasureSpec.EXACTLY);
+        int height = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec) * 3 / 5, MeasureSpec.EXACTLY);
         super.onMeasure(widthMeasureSpec, height);
     }
 }
