@@ -32,7 +32,7 @@ public class BubblCircleFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.bubble_fragment, container, false);
         ButterKnife.bind(this, view);
         Glide.with(this)
-                .load("https://dolphins.seuic.info/uploads/05a4eceeac0f1ca9ca67ca7538f2bba6.png")
+                .load("http://cms-bucket.nosdn.127.net/a65200c64b2b41b69e0b879f4026edaf20170217090556.png")
                 .into(mImage);
         return view;
     }

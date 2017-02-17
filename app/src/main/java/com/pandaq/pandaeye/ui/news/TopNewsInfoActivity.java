@@ -1,25 +1,35 @@
 package com.pandaq.pandaeye.ui.news;
 
-import android.graphics.Color;
+import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.animation.AccelerateInterpolator;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.entity.NetEasyNews.TopNewsContent;
 import com.pandaq.pandaeye.presenter.news.TopNewsInfoPresenter;
 import com.pandaq.pandaeye.ui.ImplView.ITopNewsInfoActivity;
 import com.pandaq.pandaeye.ui.base.BaseActivity;
+import com.pandaq.pandaeye.utils.ColorUtils;
 import com.pandaq.pandaeye.utils.DensityUtil;
+import com.pandaq.pandaeye.utils.GlideUtils;
+import com.pandaq.pandaeye.utils.ViewUtils;
 import com.pandaq.pandaeye.widget.FiveThreeImageView;
 import com.tencent.smtt.sdk.WebView;
 
@@ -27,7 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoActivity {
-
+    private static final float SCRIM_ADJUSTMENT = 0.075f;
     @BindView(R.id.news_img)
     FiveThreeImageView mNewsImg;
     @BindView(R.id.toolbar)
@@ -54,6 +64,7 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         initView();
+        initData();
     }
 
     private void initView() {
@@ -67,22 +78,17 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initData();
-    }
-
     private void initData() {
         Bundle bundle = getIntent().getExtras();
         String news_id = bundle.getString(Constants.BUNDLE_KEY_ID);
         String newsImg = bundle.getString(Constants.BUNDLE_KEY_IMG_URL);
         loadTopNewsInfo(news_id);
         Glide.with(this)
-                .load(R.drawable.userimage)
-//                .listener(new ZhihuStoryInfoActivity.GlideRequestListener())
-                .override(width, heigh)
+                .load(newsImg)
+                .override(width,heigh)
+                .listener(new GlideRequestListener())
                 .crossFade()
+                .centerCrop()
                 .into(mNewsImg);
     }
 
@@ -103,7 +109,7 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
 
     @Override
     public void loadFail(String errmsg) {
-        showSnackBar(mClTopnewsContentParent, errmsg, Snackbar.LENGTH_SHORT);
+        showSnackBar(mClTopnewsContentParent, Constants.ERRO+errmsg, Snackbar.LENGTH_SHORT);
     }
 
     @Override
@@ -115,5 +121,69 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
     protected void onPause() {
         super.onPause();
         mPresenter.unsubcription();
+    }
+
+    class GlideRequestListener implements RequestListener<String, GlideDrawable> {
+
+        @Override
+        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+            final Bitmap bitmap = GlideUtils.getBitmap(resource);
+            final int twentyFourDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                    24, TopNewsInfoActivity.this.getResources().getDisplayMetrics());
+            assert bitmap != null;
+            Palette.from(bitmap)
+                    .maximumColorCount(16)
+                    .clearFilters()
+                    .setRegion(0, 0, bitmap.getWidth() - 1, twentyFourDip)
+                    .generate(new Palette.PaletteAsyncListener() {
+                        @TargetApi(Build.VERSION_CODES.M)
+                        @Override
+                        public void onGenerated(Palette palette) {
+                            boolean isDark;
+                            int lightness = ColorUtils.isDark(palette);
+                            if (lightness == ColorUtils.LIGHTNESS_UNKNOWN) {
+                                isDark = ColorUtils.isDark(bitmap, bitmap.getWidth() / 2, 0);
+                            } else {
+                                isDark = lightness == ColorUtils.IS_DARK;
+                            }
+                            // color the status bar. Set a complementary dark color on L,
+                            // light or dark color on M (with matching status bar icons)
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                int statusBarColor = getWindow().getStatusBarColor();
+                                final Palette.Swatch topColor = ColorUtils.getMostPopulousSwatch(palette);
+                                if (topColor != null && (isDark || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)) {
+                                    statusBarColor = ColorUtils.scrimify(topColor.getRgb(), isDark, SCRIM_ADJUSTMENT);
+                                    // set a light status bar on M+
+                                    if (!isDark && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                        ViewUtils.setLightStatusBar(mNewsImg);
+                                    }
+                                }
+                                if (statusBarColor != getWindow().getStatusBarColor()) {
+                                    mToolbarLayout.setContentScrimColor(statusBarColor);
+                                    mToolbar.setBackgroundColor(getResources().getColor(R.color.trans_toolbar_7c424141, null));
+                                    ValueAnimator statusBarColorAnim = ValueAnimator.ofArgb(
+                                            getWindow().getStatusBarColor(), statusBarColor);
+                                    statusBarColorAnim.addUpdateListener(new ValueAnimator
+                                            .AnimatorUpdateListener() {
+                                        @Override
+                                        public void onAnimationUpdate(ValueAnimator animation) {
+                                            getWindow().setStatusBarColor((int) animation.getAnimatedValue());
+                                        }
+                                    });
+                                    statusBarColorAnim.setDuration(1000L);
+                                    statusBarColorAnim.setInterpolator(
+                                            new AccelerateInterpolator());
+                                    statusBarColorAnim.start();
+                                }
+                            }
+                        }
+                    });
+            return false;
+        }
     }
 }

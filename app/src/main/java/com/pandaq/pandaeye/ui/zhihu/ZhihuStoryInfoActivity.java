@@ -1,23 +1,25 @@
 package com.pandaq.pandaeye.ui.zhihu;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.transition.Explode;
-import android.transition.Fade;
-import android.transition.Slide;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 
 import com.bumptech.glide.Glide;
@@ -61,6 +63,8 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
     FiveThreeImageView mStoryImg;
     @BindView(R.id.zhihudaily_webview)
     WebView mZhihudailyWebview;
+    @BindView(R.id.parentPanel)
+    CoordinatorLayout mParentPanel;
     private String story_id = "";
     private ZhihuStoryInfoPresenter mPresenter = new ZhihuStoryInfoPresenter(this);
     int[] mDeviceInfo;
@@ -74,8 +78,6 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         mToolbarLayout.setTitle(getString(R.string.zhihustory));
-        getWindow().setEnterTransition(new Fade().setDuration(800));
-        getWindow().setExitTransition(new Fade().setDuration(800));
         initView();
         initData();
     }
@@ -216,5 +218,4 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
             return false;
         }
     }
-
 }

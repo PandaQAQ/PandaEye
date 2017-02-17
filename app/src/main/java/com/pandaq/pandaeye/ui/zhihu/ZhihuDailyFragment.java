@@ -1,24 +1,15 @@
 package com.pandaq.pandaeye.ui.zhihu;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.Explode;
-import android.transition.Fade;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.pandaq.pandaeye.R;
@@ -28,15 +19,13 @@ import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.entity.ZhiHu.ZhiHuDaily;
 import com.pandaq.pandaeye.entity.ZhiHu.ZhiHuStory;
 import com.pandaq.pandaeye.presenter.zhihu.ZhiHuPresenter;
-import com.pandaq.pandaeye.utils.TranslateHelper;
 import com.pandaq.pandaeye.ui.ImplView.IZhiHuDailyFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
-import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
-import com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView;
 import com.pandaq.pandaqlib.loopbander.AutoScrollViewPager;
 import com.pandaq.pandaqlib.loopbander.ViewGroupIndicator;
+import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
+import com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -74,8 +63,6 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
     }
 
     private void initView() {
-        getActivity().getWindow().setEnterTransition(new Fade().setDuration(800));
-        getActivity().getWindow().setExitTransition(new Fade().setDuration(800));
         mZhiHuStories = new ArrayList<>();
         mZhihudailyList.setItemAnimator(new DefaultItemAnimator());
         mZhihudailyList.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -101,14 +88,14 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
         mPresenter.loadCache();
         mZhihudailyList.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position, View view) {
+            public void onItemClick(final int position, View view) {
                 //跳转到其他界面
                 Bundle bundle = new Bundle();
                 Intent intent = new Intent(ZhihuDailyFragment.this.getActivity(), ZhihuStoryInfoActivity.class);
                 bundle.putString(Constants.BUNDLE_KEY_TITLE, mZhiHuStories.get(position).getTitle());
                 bundle.putInt(Constants.BUNDLE_KEY_ID, mZhiHuStories.get(position).getId());
                 intent.putExtras(bundle);
-                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                startActivity(intent);
             }
         });
     }
@@ -196,4 +183,5 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
             loadOrRefreshAble = false;
         }
     }
+
 }

@@ -6,6 +6,8 @@ package com.pandaq.pandaeye.config;
  */
 
 public class Constants {
+    //NetWork Erro
+    public static String ERRO = "错误信息:";
     //SecretUtil
     public static String NOSUCHALGORITHM = "不支持此种加密方式";
     public static String UNSUPPENCODING = "不支持的编码格式";
