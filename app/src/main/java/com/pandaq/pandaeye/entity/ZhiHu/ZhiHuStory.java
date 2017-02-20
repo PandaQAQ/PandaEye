@@ -7,7 +7,10 @@ import java.util.List;
  * Created by PandaQ on 2016/9/13.
  * email : 767807368@qq.com
  */
-public class ZhiHuStory implements Serializable{
+public class ZhiHuStory implements Serializable {
+
+    //时间
+    private String date;
     private int type;
     private int id;
     private String ga_prefix;
@@ -52,5 +55,13 @@ public class ZhiHuStory implements Serializable{
 
     public void setImages(List<String> images) {
         this.images = images;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

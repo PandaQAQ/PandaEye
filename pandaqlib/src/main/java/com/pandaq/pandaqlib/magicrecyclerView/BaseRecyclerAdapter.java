@@ -14,12 +14,11 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
     private static final int TYPE_NORMAL = 1;
 
     private ArrayList<T> mDatas = new ArrayList<>();
-
     private View mHeaderView;
 
     private OnItemClickListener mListener;
 
-    public void setOnItemClickListener(OnItemClickListener li) {
+    void setOnItemClickListener(OnItemClickListener li) {
         mListener = li;
     }
 
@@ -28,7 +27,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
         notifyItemInserted(0);
     }
 
-    public void setDatas(ArrayList<T> datas) {
+     public void setDatas(ArrayList<T> datas) {
         mDatas.clear();
         if (datas != null) {
             mDatas.addAll(datas);
@@ -142,4 +141,5 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
     public interface OnItemClickListener {
         void onItemClick(int position, View view);
     }
+
 }

@@ -14,6 +14,7 @@ import com.pandaq.pandaeye.ui.base.BaseFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
  * Created by PandaQ on 2016/9/9.

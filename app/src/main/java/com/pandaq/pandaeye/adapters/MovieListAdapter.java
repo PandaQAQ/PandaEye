@@ -45,7 +45,7 @@ public class MovieListAdapter extends BaseRecyclerAdapter<MovieSubject> {
         holder.mMovieStarts.setRating(rate / 2);
         Glide.with(mFragment)
                 .load(data.getImages().getMedium())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(holder.mMoviePic);
     }
 

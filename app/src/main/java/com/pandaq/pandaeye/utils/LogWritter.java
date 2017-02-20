@@ -2,6 +2,8 @@ package com.pandaq.pandaeye.utils;
 
 import android.util.Log;
 
+import com.pandaq.pandaeye.config.Config;
+
 import java.util.logging.Logger;
 
 /**
@@ -15,7 +17,9 @@ public class LogWritter extends Logger {
         super(name, resourceBundleName);
     }
 
-    public static void LogStr(String string){
-        Log.i("PandaEye",string);
+    public static void LogStr(String string) {
+        if (Config.debug) {
+            Log.i("PandaEye", string);
+        }
     }
 }

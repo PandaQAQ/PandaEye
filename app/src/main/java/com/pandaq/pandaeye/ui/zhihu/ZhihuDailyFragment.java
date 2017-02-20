@@ -112,7 +112,6 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
 
     @Override
     public void showLoadBar() {
-
     }
 
     @Override

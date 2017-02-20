@@ -15,6 +15,8 @@ import com.pandaq.pandaeye.entity.ZhiHu.ZhiHuStory;
 import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -27,6 +29,7 @@ public class ZhihuDailyAdapter extends BaseRecyclerAdapter<ZhiHuStory> {
     private Fragment mFragment;
     private int image_width;
     private int image_height;
+    private ArrayList<ZhiHuStory> mDatas = new ArrayList<>();
 
     public ZhihuDailyAdapter(Fragment fragment) {
         this.mFragment = fragment;
@@ -41,6 +44,10 @@ public class ZhihuDailyAdapter extends BaseRecyclerAdapter<ZhiHuStory> {
         return new ViewHolder(view);
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
 
     @Override
     public void onBind(RecyclerView.ViewHolder viewHolder, int RealPosition, ZhiHuStory data) {

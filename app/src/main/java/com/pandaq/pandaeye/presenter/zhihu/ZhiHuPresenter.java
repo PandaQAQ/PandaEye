@@ -10,7 +10,9 @@ import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.IZhiHuDailyFrag;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -51,6 +53,7 @@ public class ZhiHuPresenter extends BasePresenter {
 
                     @Override
                     public void onNext(ZhiHuDaily zhiHuDaily) {
+                        mZhiHuDailyFrag.hideRefreshBar();
                         date = zhiHuDaily.getDate();
                         mZhiHuDailyFrag.refreshSuccessed(zhiHuDaily);
                         DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_ZHIHU_FILE);
@@ -72,9 +75,24 @@ public class ZhiHuPresenter extends BasePresenter {
                         return zhiHuDaily.getStories();
                     }
                 })
+                .flatMap(new Func1<ArrayList<ZhiHuStory>, Observable<ZhiHuStory>>() {
+                    @Override
+                    public Observable<ZhiHuStory> call(ArrayList<ZhiHuStory> zhiHuStories) {
+                        return Observable.from(zhiHuStories);
+                    }
+                })
+                .map(new Func1<ZhiHuStory, ZhiHuStory>() {
+                    @Override
+                    public ZhiHuStory call(ZhiHuStory zhiHuStory) {
+                        //将日期值设置到 story 中
+                        zhiHuStory.setDate(date);
+                        return zhiHuStory;
+                    }
+                })
+                .toList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ArrayList<ZhiHuStory>>() {
+                .subscribe(new Subscriber<List<ZhiHuStory>>() {
                     @Override
                     public void onCompleted() {
                         mZhiHuDailyFrag.hideLoadBar();
@@ -82,12 +100,14 @@ public class ZhiHuPresenter extends BasePresenter {
 
                     @Override
                     public void onError(Throwable e) {
+                        mZhiHuDailyFrag.hideLoadBar();
                         mZhiHuDailyFrag.loadFail(e.getMessage());
                     }
 
                     @Override
-                    public void onNext(ArrayList<ZhiHuStory> stories) {
-                        mZhiHuDailyFrag.loadSuccessed(stories);
+                    public void onNext(List<ZhiHuStory> stories) {
+                        mZhiHuDailyFrag.hideLoadBar();
+                        mZhiHuDailyFrag.loadSuccessed((ArrayList<ZhiHuStory>) stories);
                     }
                 });
         addSubscription(subscription);

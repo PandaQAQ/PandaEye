@@ -44,5 +44,11 @@ dependencies {
     compile project(':pandaqlib')
     //缓存 DiskLruCache
     compile 'com.jakewharton:disklrucache:2.0.2'
+    //腾讯 X5 浏览服务
     compile files('libs/tbs_sdk_thirdapp_v3.0.0.1038_43000_sharewithdownload_obfs_20170110_144724.jar')
+    //bilibili ijkplayer
+    compile 'tv.danmaku.ijk.media:ijkplayer-java:0.7.7.1'
+    compile 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.7.7.1'
+    compile 'tv.danmaku.ijk.media:ijkplayer-armv5:0.7.7.1'
+    compile 'tv.danmaku.ijk.media:ijkplayer-x86:0.7.7.1'
 }
