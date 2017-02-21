@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:emptyView="@layout/emptyview"
+        app:footer_layout="@layout/recycler_footer_layout"
         app:header_layout="@layout/zhihudaily_headerview"
         app:parallaxMultiplier="0.8"/>
 

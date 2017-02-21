@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import com.pandaq.pandaeye.utils.LogWritter;
 import com.tencent.smtt.sdk.QbSdk;
 
 /**
@@ -23,7 +24,9 @@ public class CustomApplication extends Application {
             sApplication = this;
         }
         //预加载腾讯浏览服务 X5 内核
+        LogWritter.LogStr(String.valueOf(System.currentTimeMillis()));
         QbSdk.initX5Environment(getContext(),null);
+        LogWritter.LogStr(String.valueOf(System.currentTimeMillis()));
     }
 
     public static Context getContext() {

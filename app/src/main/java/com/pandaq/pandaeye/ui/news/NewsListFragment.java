@@ -65,9 +65,9 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
                 if (mNewsRecycler.refreshAble()) {
                     mRefresh.setEnabled(true);
                 }
-                if (mNewsRecycler.loadAble()) {
-                    loadMoreNews();
-                }
+//                if (mNewsRecycler.loadAble()) {
+//                    loadMoreNews();
+//                }
             }
         });
         mRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.white_FFFFFF));
@@ -94,6 +94,15 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
                 startActivity(intent, transitionActivityOptions.toBundle());
             }
         });
+        View footer = mNewsRecycler.getFooterView();
+        if (footer!=null){
+            footer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    loadMoreNews();
+                }
+            });
+        }
     }
 
     @Override

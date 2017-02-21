@@ -15,6 +15,7 @@ import com.pandaq.pandaqlib.R;
 /**
  * Created by PandaQ on 2016/9/18.
  * email : 767807368@qq.com
+ * 自带 header 和 footer 的 RecyclerView
  */
 public class MagicRecyclerView extends RecyclerView {
 
@@ -24,6 +25,7 @@ public class MagicRecyclerView extends RecyclerView {
         STAGGERED_GRID
     }
 
+    private static final int NULL_VALUE = 0;
     /**
      * 布局类型
      */
@@ -39,6 +41,7 @@ public class MagicRecyclerView extends RecyclerView {
 
     private View headerView;
     private View emptyView;
+    private View footerView;
     //当前的头部视图底部外边距
     private int scrolledMargin = 0; //滑动结束时的margin
     private int distance = 0; // 每次滑动的距离
@@ -62,18 +65,22 @@ public class MagicRecyclerView extends RecyclerView {
 
     private void init(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.MagicRecyclerView);
-        int header_layout = ta.getResourceId(R.styleable.MagicRecyclerView_header_layout, 0);
-        int empty_layout = ta.getResourceId(R.styleable.MagicRecyclerView_emptyView, 0);
+        int header_layout = ta.getResourceId(R.styleable.MagicRecyclerView_header_layout, NULL_VALUE);
+        int empty_layout = ta.getResourceId(R.styleable.MagicRecyclerView_emptyView, NULL_VALUE);
+        int footer_layout = ta.getResourceId(R.styleable.MagicRecyclerView_footer_layout, NULL_VALUE);
         multiplier = ta.getFloat(R.styleable.MagicRecyclerView_parallaxMultiplier, multiplier);
         //取值范围为0-1
         if (multiplier > 1) {
             multiplier = 1;
         }
-        if (header_layout != 0) {
+        if (header_layout != NULL_VALUE) {
             headerView = inflate(context, header_layout, null);
         }
-        if (empty_layout != 0) {
+        if (empty_layout != NULL_VALUE) {
             emptyView = inflate(context, empty_layout, null);
+        }
+        if (footer_layout != NULL_VALUE) {
+            footerView = inflate(context, footer_layout, null);
         }
         ta.recycle();
     }
@@ -164,6 +171,9 @@ public class MagicRecyclerView extends RecyclerView {
         if (headerView != null) {
             mRecyclerAdapter.setHeaderView(headerView);
         }
+        if (footerView != null) {
+            mRecyclerAdapter.setFooterView(footerView);
+        }
         if (mItemClickListener != null) {
             mRecyclerAdapter.setOnItemClickListener(mItemClickListener);
         }
@@ -180,6 +190,10 @@ public class MagicRecyclerView extends RecyclerView {
 
     public View getHeaderView() {
         return headerView;
+    }
+
+    public View getFooterView() {
+        return footerView;
     }
 
     public void setOnItemClickListener(BaseRecyclerAdapter.OnItemClickListener li) {

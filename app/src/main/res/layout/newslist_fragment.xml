@@ -11,5 +11,6 @@
     <com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView
         android:id="@+id/testRecycler"
         android:layout_width="match_parent"
+        app:footer_layout="@layout/recycler_footer_layout"
         android:layout_height="match_parent"/>
 </android.support.v4.widget.SwipeRefreshLayout>

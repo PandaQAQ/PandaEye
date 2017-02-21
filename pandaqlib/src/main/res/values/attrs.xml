@@ -32,6 +32,7 @@
         <attr name="header_layout" format="reference"/>
         <attr name="parallaxMultiplier" format="float"/>
         <attr name="emptyView" format="reference"/>
+        <attr name="footer_layout" format="reference"/>
     </declare-styleable>
 
     <declare-styleable name="SlopRefreshLayout">

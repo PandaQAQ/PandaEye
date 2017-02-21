@@ -21,4 +21,5 @@
     <string name="empty_msg">数据被外星人劫走了~~</string>
     <string name="floating_behavior">com.pandaq.pandaeye.behavior.FABScrollBehavior</string>
     <string name="today_hot_story">今日热闻</string>
+    <string name="load_more">加载更多</string>
 </resources>
