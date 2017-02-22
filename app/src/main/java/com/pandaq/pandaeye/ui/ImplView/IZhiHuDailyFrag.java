@@ -15,10 +15,6 @@ public interface IZhiHuDailyFrag {
 
     void hideRefreshBar();
 
-    void showLoadBar();
-
-    void hideLoadBar();
-
     void refreshData();
 
     void refreshSuccessed(ZhiHuDaily stories);

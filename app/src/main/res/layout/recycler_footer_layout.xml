@@ -3,13 +3,24 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_FFFFFF">
+    android:background="@color/white_FFFFFF"
+    android:gravity="center_horizontal">
+
+    <ProgressBar
+        android:id="@+id/cp_progressbar"
+        style="@style/Base.Widget.AppCompat.ProgressBar"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_centerVertical="true"
+        android:padding="@dimen/margin_8dp"/>
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="48dp"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/cp_progressbar"
         android:gravity="center"
         android:text="@string/load_more"
-        android:textColor="@color/black_414040"
-        android:textSize="@dimen/text_size_mid"/>
+        android:textColor="@color/grey_text_5d5c5c"
+        android:textSize="@dimen/text_size_small"/>
 </RelativeLayout>

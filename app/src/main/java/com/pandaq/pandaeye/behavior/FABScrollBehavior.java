@@ -4,18 +4,29 @@ import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+
+import com.pandaq.pandaeye.utils.AnimUtils;
 
 /**
  * Created by huxinyu on 2016/8/30.
  * 自定义behavior
  */
 public class FABScrollBehavior extends FloatingActionButton.Behavior {
-    public FABScrollBehavior(Context context, AttributeSet attrs) {
-        super();
+
+    public FABScrollBehavior() {
     }
+
+    public FABScrollBehavior(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    // 隐藏动画是否正在执行
+    private boolean isAnimatingOut = false;
+    private OnStateChangedListener mOnStateChangedListener;
 
     @Override
     public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child,
@@ -25,31 +36,47 @@ public class FABScrollBehavior extends FloatingActionButton.Behavior {
     }
 
     @Override
-    public void onNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target,
-                               final int dxConsumed, final int dyConsumed, final int dxUnconsumed, final int dyUnconsumed) {
-//        if ((dyUnconsumed > 0 || dxUnconsumed > 0) && child.isShown()) {
-//            child.hide();
-//        } else if ((dyUnconsumed < 0 || dxUnconsumed < 0) && !child.isShown()) {
-//            child.show();
-//        }
-
-    }
-
-    @Override
-    public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target, int dx, int dy, int[] consumed) {
-//        Log.i("dy", dxConsumed + "");
-        Log.i("dy1", dy + "");
-        Log.i("dy2", child.getVisibility() + "");
-
-        if (dy >= 0 && child.getVisibility() == View.VISIBLE) {// 手指上滑，隐藏FAB
-            child.hide();
-        } else if (dy <= 0 && child.getVisibility() != View.VISIBLE) {
-            child.show();// 手指下滑，显示FAB
+    public void onNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child,
+                               View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
+        if ((dyConsumed > 0 || dyUnconsumed > 0) && !isAnimatingOut
+                && child.getVisibility() == View.VISIBLE) {// 手指上滑，隐藏FAB
+            AnimUtils.scaleHide(child, listener);
+            if (mOnStateChangedListener != null) {
+                mOnStateChangedListener.onChanged(false);
+            }
+        } else if ((dyConsumed < 0 || dyUnconsumed < 0) && child.getVisibility() != View.VISIBLE) {
+            AnimUtils.scaleShow(child, null);// 手指下滑，显示FAB
+            if (mOnStateChangedListener != null) {
+                mOnStateChangedListener.onChanged(true);
+            }
         }
     }
 
-    @Override
-    public void onStopNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target) {
-        super.onStopNestedScroll(coordinatorLayout, child, target);
+    private ViewPropertyAnimatorListener listener = new ViewPropertyAnimatorListener() {
+        @Override
+        public void onAnimationStart(View view) {
+            isAnimatingOut = true;
+        }
+
+        @Override
+        public void onAnimationEnd(View view) {
+            isAnimatingOut = false;
+            view.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onAnimationCancel(View arg0) {
+            isAnimatingOut = false;
+        }
+    };
+
+    // 外部监听显示和隐藏。
+    public interface OnStateChangedListener {
+        void onChanged(boolean isShow);
+    }
+
+    //设置监听
+    public void setOnStateChangedListener(OnStateChangedListener mOnStateChangedListener) {
+        this.mOnStateChangedListener = mOnStateChangedListener;
     }
 }

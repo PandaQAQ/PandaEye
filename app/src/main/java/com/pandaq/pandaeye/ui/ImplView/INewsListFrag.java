@@ -15,10 +15,6 @@ public interface INewsListFrag {
 
     void hideRefreshBar();
 
-    void showLoadBar();
-
-    void hideLoadBar();
-
     void refreshNews();
 
     void refreshNewsFail(String errorMsg);

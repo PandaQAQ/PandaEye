@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 import com.pandaq.pandaeye.utils.LogWritter;
+import com.squareup.leakcanary.LeakCanary;
 import com.tencent.smtt.sdk.QbSdk;
 
 /**
@@ -23,10 +24,13 @@ public class CustomApplication extends Application {
         if (sApplication == null) {
             sApplication = this;
         }
+//        if (LeakCanary.isInAnalyzerProcess(this)) {
+//            return;
+//        }
+//        LeakCanary.install(this);
         //预加载腾讯浏览服务 X5 内核
-        LogWritter.LogStr(String.valueOf(System.currentTimeMillis()));
-        QbSdk.initX5Environment(getContext(),null);
-        LogWritter.LogStr(String.valueOf(System.currentTimeMillis()));
+        QbSdk.initX5Environment(getContext(), null);
+
     }
 
     public static Context getContext() {
@@ -35,6 +39,7 @@ public class CustomApplication extends Application {
 
     /**
      * 获取应用的版本号
+     *
      * @return 应用版本号，默认返回1
      */
     public static int getAppVersionCode() {

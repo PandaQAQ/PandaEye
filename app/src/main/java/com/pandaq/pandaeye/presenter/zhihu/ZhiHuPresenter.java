@@ -64,7 +64,6 @@ public class ZhiHuPresenter extends BasePresenter {
     }
 
     public void loadMoreData() {
-        mZhiHuDailyFrag.showLoadBar();
         Subscription subscription = ApiManager.getInstence()
                 .getZhihuService()
                 .getZhihuDaily(date)
@@ -95,18 +94,15 @@ public class ZhiHuPresenter extends BasePresenter {
                 .subscribe(new Subscriber<List<ZhiHuStory>>() {
                     @Override
                     public void onCompleted() {
-                        mZhiHuDailyFrag.hideLoadBar();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        mZhiHuDailyFrag.hideLoadBar();
                         mZhiHuDailyFrag.loadFail(e.getMessage());
                     }
 
                     @Override
                     public void onNext(List<ZhiHuStory> stories) {
-                        mZhiHuDailyFrag.hideLoadBar();
                         mZhiHuDailyFrag.loadSuccessed((ArrayList<ZhiHuStory>) stories);
                     }
                 });

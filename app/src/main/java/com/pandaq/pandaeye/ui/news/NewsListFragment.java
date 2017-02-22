@@ -65,9 +65,9 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
                 if (mNewsRecycler.refreshAble()) {
                     mRefresh.setEnabled(true);
                 }
-//                if (mNewsRecycler.loadAble()) {
-//                    loadMoreNews();
-//                }
+                if (mNewsRecycler.loadAble()) {
+                    loadMoreNews();
+                }
             }
         });
         mRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.white_FFFFFF));
@@ -76,6 +76,7 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+        mRefresh.setRefreshing(true);
         refreshNews();
         mPresenter.loadCache();
         mNewsRecycler.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
@@ -95,7 +96,7 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
             }
         });
         View footer = mNewsRecycler.getFooterView();
-        if (footer!=null){
+        if (footer != null) {
             footer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -113,16 +114,6 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
     @Override
     public void hideRefreshBar() {
         mRefresh.setRefreshing(false);
-    }
-
-    @Override
-    public void showLoadBar() {
-
-    }
-
-    @Override
-    public void hideLoadBar() {
-
     }
 
     @Override
@@ -187,5 +178,12 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
     @Override
     public void onRefresh() {
         refreshNews();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (hidden && mRefresh.isRefreshing()) { // 隐藏的时候停止 SwipeRefreshLayout 转动
+            mRefresh.setRefreshing(false);
+        }
     }
 }

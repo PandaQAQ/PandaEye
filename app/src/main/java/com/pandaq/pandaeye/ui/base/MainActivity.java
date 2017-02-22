@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -95,10 +96,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 .setKeepRipple(false, getResources().getColor(R.color.bottom_nav_ripple_f7065249))
                 .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_RIPPLE)
                 .setMode(BottomNavigationBar.MODE_SHIFTING)
-                .addItem(new BottomNavigationItem(R.drawable.ic_home, "知乎日报").setActiveColorResource(R.color.teal_00796B))
-                .addItem(new BottomNavigationItem(R.drawable.ic_book, "头条新闻").setActiveColorResource(R.color.teal_00796B))
-                .addItem(new BottomNavigationItem(R.drawable.ic_music_note, "泡泡圈").setActiveColorResource(R.color.teal_00796B))
-                .addItem(new BottomNavigationItem(R.drawable.ic_live_tv, "围观豆瓣").setActiveColorResource(R.color.teal_00796B))
+                .addItem(new BottomNavigationItem(R.drawable.ic_home, getString(R.string.nav_00_title)).setActiveColorResource(R.color.teal_00796B))
+                .addItem(new BottomNavigationItem(R.drawable.ic_book, getString(R.string.nav_01_title)).setActiveColorResource(R.color.teal_00796B))
+                .addItem(new BottomNavigationItem(R.drawable.ic_music_note, getString(R.string.nav_02_title)).setActiveColorResource(R.color.teal_00796B))
+                .addItem(new BottomNavigationItem(R.drawable.ic_live_tv, getString(R.string.nav_03_title)).setActiveColorResource(R.color.teal_00796B))
                 .setFirstSelectedPosition(0)
                 .setTabSelectedListener(this)
                 .initialise();

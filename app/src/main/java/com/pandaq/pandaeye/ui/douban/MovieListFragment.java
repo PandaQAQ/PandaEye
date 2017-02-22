@@ -2,6 +2,7 @@ package com.pandaq.pandaeye.ui.douban;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -28,9 +29,11 @@ import butterknife.ButterKnife;
  * email : 767807368@qq.com
  * 豆瓣top250电影列表Fragment
  */
-public class MovieListFragment extends BaseFragment implements IMovieListFrag {
+public class MovieListFragment extends BaseFragment implements IMovieListFrag, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.movie_list)
     MagicRecyclerView mMovieList;
+    @BindView(R.id.srl_refresh)
+    SwipeRefreshLayout mSrlRefresh;
     private ArrayList<MovieSubject> mMovieSubjects;
     private MovieListAdapter mMovieListAdapter;
     private DouBanMoviePresenter mPresenter = new DouBanMoviePresenter(this);
@@ -58,6 +61,12 @@ public class MovieListFragment extends BaseFragment implements IMovieListFrag {
         });
         mMovieList.setItemAnimator(new DefaultItemAnimator());
         mMovieList.setLayoutManager(layoutManager);
+        mSrlRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.white_FFFFFF));
+        mSrlRefresh.setOnRefreshListener(this);
+        mSrlRefresh.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
         refreshData();
         mPresenter.loadCache();
         mMovieList.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
@@ -65,6 +74,10 @@ public class MovieListFragment extends BaseFragment implements IMovieListFrag {
             public void onItemClick(int position, View view) {
             }
         });
+        View footerView = mMovieList.getFooterView();
+        if (footerView != null) {
+            loadMoreData();
+        }
     }
 
     @Override
@@ -133,5 +146,17 @@ public class MovieListFragment extends BaseFragment implements IMovieListFrag {
     public void onPause() {
         super.onPause();
         mPresenter.unsubcription();
+    }
+
+    @Override
+    public void onRefresh() {
+        refreshData();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (hidden && mSrlRefresh.isRefreshing()) { // 隐藏的时候停止 SwipeRefreshLayout 转动
+            mSrlRefresh.setRefreshing(false);
+        }
     }
 }

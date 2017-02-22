@@ -15,6 +15,7 @@
         app:emptyView="@layout/emptyview"
         app:footer_layout="@layout/recycler_footer_layout"
         app:header_layout="@layout/zhihudaily_headerview"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:parallaxMultiplier="0.8"/>
 
 </android.support.v4.widget.SwipeRefreshLayout>

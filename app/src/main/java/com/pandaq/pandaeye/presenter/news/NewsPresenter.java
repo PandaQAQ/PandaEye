@@ -94,7 +94,6 @@ public class NewsPresenter extends BasePresenter {
 
     //两个方法没区别,只是刷新会重新赋值
     public void loadMore() {
-        mNewsListFrag.showLoadBar();
         Subscription subscription = ApiManager.getInstence().getTopNewsServie()
                 .getTopNews("T1348647909107", currentIndex + "")
                 .map(new Func1<TopNewsList, ArrayList<TopNews>>() {
@@ -121,7 +120,6 @@ public class NewsPresenter extends BasePresenter {
                 .subscribe(new Observer<List<TopNews>>() {
                     @Override
                     public void onCompleted() {
-                        mNewsListFrag.hideLoadBar();
                     }
 
                     @Override

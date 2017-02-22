@@ -59,6 +59,7 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
     @Override
     public void onPause() {
         super.onPause();
+        mRefresh.setRefreshing(false);
         mPresenter.unsubcription();
     }
 
@@ -108,15 +109,6 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
     @Override
     public void hideRefreshBar() {
         mRefresh.setRefreshing(false);
-    }
-
-    @Override
-    public void showLoadBar() {
-    }
-
-    @Override
-    public void hideLoadBar() {
-
     }
 
     @Override
@@ -183,4 +175,10 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
         }
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (hidden && mRefresh.isRefreshing()) { // 隐藏的时候停止 SwipeRefreshLayout 转动
+            mRefresh.setRefreshing(false);
+        }
+    }
 }

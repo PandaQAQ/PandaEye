@@ -8,7 +8,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.pandaq.pandaqlib.R;
 
@@ -38,7 +40,6 @@ public class MagicRecyclerView extends RecyclerView {
     private int firstVisibleItemPosition = -1;
 
     private int childCount = -1;
-
     private View headerView;
     private View emptyView;
     private View footerView;
@@ -80,7 +81,10 @@ public class MagicRecyclerView extends RecyclerView {
             emptyView = inflate(context, empty_layout, null);
         }
         if (footer_layout != NULL_VALUE) {
-            footerView = inflate(context, footer_layout, null);
+            footerView = LayoutInflater.from(context).inflate(footer_layout, null, true);
+            RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            footerView.setLayoutParams(lp);
         }
         ta.recycle();
     }
