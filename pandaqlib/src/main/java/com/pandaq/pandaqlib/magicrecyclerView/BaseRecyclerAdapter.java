@@ -120,7 +120,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    return (getItemViewType(position) == TYPE_HEADER||getItemViewType(position) == TYPE_FOOTER)
+                    return (getItemViewType(position) == TYPE_HEADER || getItemViewType(position) == TYPE_FOOTER)
                             ? gridManager.getSpanCount() : 1;
                 }
             });
@@ -130,11 +130,18 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
     @Override
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
-        if (mHeaderView != null || mFooterView != null) { //有header的时候设置header独占一行
+        if (mHeaderView != null) { //有header的时候设置header独占一行
             ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
-            if (lp != null
-                    && lp instanceof StaggeredGridLayoutManager.LayoutParams
+            if (lp != null && lp instanceof StaggeredGridLayoutManager.LayoutParams
                     && holder.getLayoutPosition() == 0) {
+                StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
+                p.setFullSpan(true);
+            }
+        }
+        if (mFooterView != null) {
+            ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
+            if (lp != null && lp instanceof StaggeredGridLayoutManager.LayoutParams
+                    && holder.getLayoutPosition() == getItemCount() - 1) { //最后一个 footerView
                 StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
                 p.setFullSpan(true);
             }
