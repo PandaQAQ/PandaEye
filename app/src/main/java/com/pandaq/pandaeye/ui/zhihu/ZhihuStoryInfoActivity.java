@@ -16,6 +16,7 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -60,7 +61,10 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
     WebView mZhihudailyWebview;
     @BindView(R.id.parentPanel)
     CoordinatorLayout mParentPanel;
+    @BindView(R.id.pb_load_story)
+    ProgressBar mPbLoadStory;
     private String story_id = "";
+    private String mTitle = "";
     private ZhihuStoryInfoPresenter mPresenter = new ZhihuStoryInfoPresenter(this);
     int[] mDeviceInfo;
     int width;
@@ -71,10 +75,10 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_zhihu_story_info);
         ButterKnife.bind(this);
-        setSupportActionBar(mToolbar);
-        mToolbarLayout.setTitle(getString(R.string.zhihustory));
         initView();
         initData();
+        mToolbar.setTitle(mTitle);
+        setSupportActionBar(mToolbar);
     }
 
     private void initView() {
@@ -97,17 +101,18 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
     private void initData() {
         Bundle bundle = getIntent().getExtras();
         story_id = String.valueOf(bundle.getInt(Constants.BUNDLE_KEY_ID));
+        mTitle = bundle.getString(Constants.BUNDLE_KEY_TITLE);
         loadZhihuStory();
     }
 
     @Override
     public void showProgressBar() {
-
+        mPbLoadStory.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgressBar() {
-
+        mPbLoadStory.setVisibility(View.GONE);
     }
 
     @Override
@@ -202,7 +207,7 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
                                             getWindow().setStatusBarColor((int) animation.getAnimatedValue());
                                         }
                                     });
-                                    statusBarColorAnim.setDuration(1000L);
+                                    statusBarColorAnim.setDuration(500L);
                                     statusBarColorAnim.setInterpolator(
                                             new AccelerateInterpolator());
                                     statusBarColorAnim.start();

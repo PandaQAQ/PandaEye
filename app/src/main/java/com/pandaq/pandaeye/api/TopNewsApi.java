@@ -1,8 +1,8 @@
 package com.pandaq.pandaeye.api;
 
-import com.pandaq.pandaeye.entity.NetEasyNews.TopNewsContent;
 import com.pandaq.pandaeye.entity.NetEasyNews.TopNewsList;
 
+import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import rx.Observable;
@@ -17,5 +17,5 @@ public interface TopNewsApi {
     Observable<TopNewsList> getTopNews(@Path("type") String type, @Path("index") String index);
 
     @GET("{id}/full.html")
-    Observable<TopNewsContent> getNewsContent(@Path("id") String id);
+    Observable<ResponseBody> getNewsContent(@Path("id") String id);
 }

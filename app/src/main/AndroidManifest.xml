@@ -29,13 +29,11 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.zhihu.ZhihuStoryInfoActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_zhihu_story_info">
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.news.TopNewsInfoActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_top_news_info">
+            android:screenOrientation="portrait">
         </activity>
         <meta-data
             android:name="com.pandaq.pandaqlib.glide.CustomGlideMoudle"

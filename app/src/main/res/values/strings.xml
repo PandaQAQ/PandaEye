@@ -15,7 +15,7 @@
     <string name="zhihu_story_parent">zhihu_story_parent</string>
     <string name="zhihustory">知乎日报</string>
     <!--新闻头条-->
-    <string name="title_activity_top_news_info">TopNewsInfo</string>
+
     <string name="top_news_img">top_news_img</string>
     <string name="top_news_parent">top_news_parent</string>
     <string name="empty_msg">数据被外星人劫走了~~</string>

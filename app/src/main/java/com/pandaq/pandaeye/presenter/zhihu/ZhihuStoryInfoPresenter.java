@@ -32,17 +32,19 @@ public class ZhihuStoryInfoPresenter extends BasePresenter {
                 .subscribe(new Subscriber<ZhihuStoryContent>() {
                     @Override
                     public void onCompleted() {
-
+                        mActivity.hideProgressBar();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         mActivity.loadFail(e.getMessage());
+                        mActivity.hideProgressBar();
                     }
 
                     @Override
                     public void onNext(ZhihuStoryContent zhihuStoryContent) {
                         mActivity.loadSuccess(zhihuStoryContent);
+                        mActivity.hideProgressBar();
                     }
                 });
 

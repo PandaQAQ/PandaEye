@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -30,6 +31,7 @@ import com.pandaq.pandaeye.utils.ColorUtils;
 import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaeye.utils.GlideUtils;
 import com.pandaq.pandaeye.utils.ViewUtils;
+import com.pandaq.pandaeye.utils.WebUtils;
 import com.pandaq.pandaeye.widget.FiveThreeImageView;
 import com.tencent.smtt.sdk.WebView;
 
@@ -52,19 +54,22 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
     WebView mWvTopnewsContent;
     @BindView(R.id.cl_topnews_content_parent)
     CoordinatorLayout mClTopnewsContentParent;
+    @BindView(R.id.pb_topnews_content)
+    ProgressBar mPbTopnewsContent;
     private int width;
     private int heigh;
     private TopNewsInfoPresenter mPresenter = new TopNewsInfoPresenter(this);
+    private String mTitle = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_news_info);
         ButterKnife.bind(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         initView();
         initData();
+        mToolbar.setTitle(mTitle);
+        setSupportActionBar(mToolbar);
     }
 
     private void initView() {
@@ -76,16 +81,23 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
             public void onClick(View v) {
             }
         });
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishAfterTransition();
+            }
+        });
     }
 
     private void initData() {
         Bundle bundle = getIntent().getExtras();
         String news_id = bundle.getString(Constants.BUNDLE_KEY_ID);
         String newsImg = bundle.getString(Constants.BUNDLE_KEY_IMG_URL);
+        mTitle = bundle.getString(Constants.BUNDLE_KEY_TITLE);
         loadTopNewsInfo(news_id);
         Glide.with(this)
                 .load(newsImg)
-                .override(width,heigh)
+                .override(width, heigh)
                 .listener(new GlideRequestListener())
                 .crossFade()
                 .centerCrop()
@@ -94,12 +106,12 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
 
     @Override
     public void showProgressBar() {
-
+        mPbTopnewsContent.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgressBar() {
-
+        mPbTopnewsContent.setVisibility(View.GONE);
     }
 
     @Override
@@ -109,12 +121,15 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
 
     @Override
     public void loadFail(String errmsg) {
-        showSnackBar(mClTopnewsContentParent, Constants.ERRO+errmsg, Snackbar.LENGTH_SHORT);
+        showSnackBar(mClTopnewsContentParent, Constants.ERRO + errmsg, Snackbar.LENGTH_SHORT);
+
     }
 
     @Override
     public void loadSuccess(TopNewsContent topNewsContent) {
-        topNewsContent.getBody();
+        String htmlBody = topNewsContent.getBody();
+        String url = WebUtils.buildHtmlForIt(htmlBody, false);
+        mWvTopnewsContent.loadDataWithBaseURL(WebUtils.BASE_URL, url, WebUtils.MIME_TYPE, WebUtils.ENCODING, WebUtils.FAIL_URL);
     }
 
     @Override
