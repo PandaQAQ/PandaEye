@@ -53,6 +53,7 @@ public class ZhihuTopPagerAdapter extends PagerAdapter {
         Glide.with(mFragment)
                 .load(mTopStories.get(position).getImage())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .skipMemoryCache(false)
                 .into(mTopStoryImg);
         mTopStoryImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +63,7 @@ public class ZhihuTopPagerAdapter extends PagerAdapter {
                 Intent intent = new Intent(mFragment.getActivity(), ZhihuStoryInfoActivity.class);
                 bundle.putString(Constants.BUNDLE_KEY_TITLE, mTopStories.get(position).getTitle());
                 bundle.putInt(Constants.BUNDLE_KEY_ID, mTopStories.get(position).getId());
-                bundle.putBoolean(Constants.BUNDLE_KEY_TRANSLATION_EXPORD,false);
+                bundle.putBoolean(Constants.BUNDLE_KEY_TRANSLATION_EXPORD, false);
                 intent.putExtras(bundle);
 //                //多个控件共享用pairs
 //                Pair[] pairs = TranslateHelper.createSafeTransitionParticipants(mFragment.getActivity(), false,
@@ -80,4 +81,8 @@ public class ZhihuTopPagerAdapter extends PagerAdapter {
         container.removeView((View) object);
     }
 
+    public void resetData(ArrayList<ZhiHuTopStory> topStories) {
+        mTopStories.clear();
+        mTopStories.addAll(topStories);
+    }
 }

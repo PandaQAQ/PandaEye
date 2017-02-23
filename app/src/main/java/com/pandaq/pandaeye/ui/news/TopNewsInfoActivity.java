@@ -120,7 +120,7 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
     @Override
     protected void onPause() {
         super.onPause();
-        mPresenter.unsubcription();
+        mPresenter.unSubscribe();
     }
 
     class GlideRequestListener implements RequestListener<String, GlideDrawable> {

@@ -10,7 +10,7 @@
         android:id="@+id/top_story_img"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/blue_2196F3"
+        android:background="@color/transparent_00ffffff"
         android:scaleType="fitXY"
         android:transitionName="@string/zhihu_story_img"/>
 

@@ -60,6 +60,8 @@ public class MovieListFragment extends BaseFragment implements IMovieListFrag, S
             }
         });
         mMovieList.setItemAnimator(new DefaultItemAnimator());
+        //屏蔽掉默认的动画，房子刷新时图片闪烁
+        mMovieList.getItemAnimator().setChangeDuration(0);
         mMovieList.setLayoutManager(layoutManager);
         mSrlRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.white_FFFFFF));
         mSrlRefresh.setOnRefreshListener(this);
@@ -83,11 +85,15 @@ public class MovieListFragment extends BaseFragment implements IMovieListFrag, S
     @Override
     public void showProgressBar() {
         //显示加载进度条
+        if (!mSrlRefresh.isRefreshing()) {
+            mSrlRefresh.setRefreshing(true);
+        }
     }
 
     @Override
     public void hideProgressBar() {
         //隐藏加载进度条
+        mSrlRefresh.setRefreshing(false);
     }
 
     @Override
@@ -145,7 +151,8 @@ public class MovieListFragment extends BaseFragment implements IMovieListFrag, S
     @Override
     public void onPause() {
         super.onPause();
-        mPresenter.unsubcription();
+        mSrlRefresh.setRefreshing(false);
+        mPresenter.unSubscribe();
     }
 
     @Override

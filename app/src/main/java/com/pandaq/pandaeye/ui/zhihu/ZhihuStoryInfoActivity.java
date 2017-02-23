@@ -1,7 +1,5 @@
 package com.pandaq.pandaeye.ui.zhihu;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
@@ -15,11 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewAnimationUtils;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 
 import com.bumptech.glide.Glide;
@@ -152,7 +147,7 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
     @Override
     protected void onPause() {
         super.onPause();
-        mPresenter.unsubcription();
+        mPresenter.unSubscribe();
     }
 
     class GlideRequestListener implements RequestListener<String, GlideDrawable> {

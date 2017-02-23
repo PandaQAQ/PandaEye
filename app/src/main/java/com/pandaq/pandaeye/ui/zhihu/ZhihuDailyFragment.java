@@ -45,7 +45,9 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
     private ZhiHuPresenter mPresenter = new ZhiHuPresenter(this);
     private ZhihuDailyAdapter mZhihuDailyAdapter;
     private ArrayList<ZhiHuStory> mZhiHuStories;
-    private boolean loadOrRefreshAble = true;
+    private AutoScrollViewPager scrollViewPager;
+    private ViewGroupIndicator viewGroupIndicator;
+    private ZhihuTopPagerAdapter mTopPagerAdapter;
 
     @Nullable
     @Override
@@ -60,12 +62,13 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
     public void onPause() {
         super.onPause();
         mRefresh.setRefreshing(false);
-        mPresenter.unsubcription();
+        mPresenter.unSubscribe();
     }
 
     private void initView() {
         mZhiHuStories = new ArrayList<>();
         mZhihudailyList.setItemAnimator(new DefaultItemAnimator());
+        mZhihudailyList.getItemAnimator().setChangeDuration(0);
         mZhihudailyList.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mZhihudailyList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -85,6 +88,9 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+        RelativeLayout headerView = (RelativeLayout) mZhihudailyList.getHeaderView();
+        scrollViewPager = (AutoScrollViewPager) headerView.findViewById(R.id.scroll_pager);
+        viewGroupIndicator = (ViewGroupIndicator) headerView.findViewById(R.id.scroll_pager_indicator);
         refreshData();
         mPresenter.loadCache();
         mZhihudailyList.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
@@ -103,7 +109,9 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
 
     @Override
     public void showRefreshBar() {
-        mRefresh.setRefreshing(true);
+        if (!mRefresh.isRefreshing()) {
+            mRefresh.setRefreshing(true);
+        }
     }
 
     @Override
@@ -113,21 +121,21 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
 
     @Override
     public void refreshData() {
-        if (loadOrRefreshAble) {
-            mPresenter.refreshZhihuDaily();
-            loadOrRefreshAble = false;
-        }
+        mPresenter.refreshZhihuDaily();
     }
 
     @Override
     public void refreshSuccessed(ZhiHuDaily stories) {
         mZhiHuStories.clear();
         mZhiHuStories = stories.getStories();
-        RelativeLayout headerView = (RelativeLayout) mZhihudailyList.getHeaderView();
-        AutoScrollViewPager scrollViewPager = (AutoScrollViewPager) headerView.findViewById(R.id.scroll_pager);
-        ViewGroupIndicator viewGroupIndicator = (ViewGroupIndicator) headerView.findViewById(R.id.scroll_pager_indicator);
-//        //配置顶部故事
-        scrollViewPager.setAdapter(new ZhihuTopPagerAdapter(this, stories.getTop_stories()));
+        //配置顶部故事
+        if (mTopPagerAdapter == null) {
+            mTopPagerAdapter = new ZhihuTopPagerAdapter(this, stories.getTop_stories());
+            scrollViewPager.setAdapter(mTopPagerAdapter);
+        } else {
+            mTopPagerAdapter.resetData(stories.getTop_stories());
+            mTopPagerAdapter.notifyDataSetChanged();
+        }
         viewGroupIndicator.setParent(scrollViewPager);
         //配置底部列表故事
         if (mZhihuDailyAdapter == null) {
@@ -139,41 +147,32 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
                 mZhihuDailyAdapter.setDatas(mZhiHuStories);
             }
         }
-        loadOrRefreshAble = true;
     }
 
     @Override
     public void refreshFail(String errMsg) {
-        loadOrRefreshAble = true;
     }
 
     @Override
     public void loadMoreData() {
-        if (loadOrRefreshAble) {
-            mPresenter.loadMoreData();
-            loadOrRefreshAble = false;
-        }
+        mPresenter.loadMoreData();
     }
 
     @Override
     public void loadSuccessed(ArrayList<ZhiHuStory> stories) {
         mZhiHuStories.addAll(stories);
         mZhihuDailyAdapter.addDatas(stories);
-        loadOrRefreshAble = true;
     }
 
     @Override
     public void loadFail(String errMsg) {
-        loadOrRefreshAble = true;
     }
 
     @Override
     public void onRefresh() {
-        if (loadOrRefreshAble) {
-            refreshData();
-            loadOrRefreshAble = false;
-        }
+        refreshData();
     }
+
 
     @Override
     public void onHiddenChanged(boolean hidden) {

@@ -86,6 +86,7 @@ public class NewsPresenter extends BasePresenter {
                         DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_TOPNEWS_FILE);
                         manager.put(Constants.CACHE_TOPNEWS, topNewses);
                         currentIndex += 20;
+                        mNewsListFrag.hideRefreshBar();
                         mNewsListFrag.refreshNewsSuccessed(topNewses);
                     }
                 });

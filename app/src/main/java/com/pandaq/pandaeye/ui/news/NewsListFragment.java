@@ -6,20 +6,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.TopNewsListAdapter;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.entity.NetEasyNews.TopNews;
 import com.pandaq.pandaeye.presenter.news.NewsPresenter;
-import com.pandaq.pandaeye.utils.TranslateHelper;
 import com.pandaq.pandaeye.ui.ImplView.INewsListFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
@@ -37,7 +34,6 @@ import butterknife.ButterKnife;
  */
 public class NewsListFragment extends BaseFragment implements INewsListFrag, SwipeRefreshLayout.OnRefreshListener {
 
-    private boolean loadOrRefrshAble = true;
     @BindView(R.id.testRecycler)
     MagicRecyclerView mNewsRecycler;
     @BindView(R.id.refresh)
@@ -52,6 +48,8 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
         View view = inflater.inflate(R.layout.newslist_fragment, container, false);
         ButterKnife.bind(this, view);
         mNewsRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        //屏蔽掉默认的动画，房子刷新时图片闪烁
+        mNewsRecycler.getItemAnimator().setChangeDuration(0);
         initView();
         return view;
     }
@@ -118,15 +116,12 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
 
     @Override
     public void refreshNews() {
-        if (loadOrRefrshAble) {
-            mPresenter.refreshNews();
-            loadOrRefrshAble = false;
-        }
+        mPresenter.refreshNews();
     }
 
     @Override
     public void refreshNewsFail(String errorMsg) {
-        loadOrRefrshAble = true;
+
     }
 
     @Override
@@ -142,33 +137,29 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
                 mAdapter.setDatas(mTopNewses);
             }
         }
-        loadOrRefrshAble = true;
     }
 
     @Override
     public void loadMoreNews() {
-        if (loadOrRefrshAble) {
-            mPresenter.loadMore();
-            loadOrRefrshAble = false;
-        }
+        mPresenter.loadMore();
     }
 
     @Override
     public void loadMoreFail(String errorMsg) {
-        loadOrRefrshAble = true;
+
     }
 
     @Override
     public void loadMoreSuccessed(ArrayList<TopNews> topNewses) {
         mTopNewses.addAll(topNewses);
         mAdapter.addDatas(topNewses);
-        loadOrRefrshAble = true;
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mPresenter.unsubcription();
+        mRefresh.setRefreshing(false);
+        mPresenter.unSubscribe();
     }
 
     public void setTopNewses(ArrayList<TopNews> topNewses) {

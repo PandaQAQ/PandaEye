@@ -53,11 +53,11 @@ public class ZhiHuPresenter extends BasePresenter {
 
                     @Override
                     public void onNext(ZhiHuDaily zhiHuDaily) {
-                        mZhiHuDailyFrag.hideRefreshBar();
                         date = zhiHuDaily.getDate();
-                        mZhiHuDailyFrag.refreshSuccessed(zhiHuDaily);
                         DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_ZHIHU_FILE);
                         manager.put(Constants.CACHE_ZHIHU_DAILY, zhiHuDaily);
+                        mZhiHuDailyFrag.hideRefreshBar();
+                        mZhiHuDailyFrag.refreshSuccessed(zhiHuDaily);
                     }
                 });
         addSubscription(subscription);
