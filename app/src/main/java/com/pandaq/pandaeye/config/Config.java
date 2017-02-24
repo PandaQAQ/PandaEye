@@ -8,7 +8,6 @@ package com.pandaq.pandaeye.config;
 public class Config {
 
     public static final boolean debug = true;
-
     public static String baseDouBanUrl = "http://api.douban.com/v2/";
     public static String baseZhiHuUrl = "http://news-at.zhihu.com/api/4/";
     public static String baseNewsUrl = "http://c.m.163.com/nc/article/";

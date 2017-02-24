@@ -17,6 +17,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -63,8 +64,9 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
     CoordinatorLayout mParentPanel;
     @BindView(R.id.pb_load_story)
     ProgressBar mPbLoadStory;
+    @BindView(R.id.toolbar_title)
+    TextView mToolbarTitle;
     private String story_id = "";
-    private String mTitle = "";
     private ZhihuStoryInfoPresenter mPresenter = new ZhihuStoryInfoPresenter(this);
     int[] mDeviceInfo;
     int width;
@@ -77,7 +79,7 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
         ButterKnife.bind(this);
         initView();
         initData();
-        mToolbar.setTitle(mTitle);
+        mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
     }
 
@@ -101,8 +103,10 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
     private void initData() {
         Bundle bundle = getIntent().getExtras();
         story_id = String.valueOf(bundle.getInt(Constants.BUNDLE_KEY_ID));
-        mTitle = bundle.getString(Constants.BUNDLE_KEY_TITLE);
+        String title = bundle.getString(Constants.BUNDLE_KEY_TITLE);
         loadZhihuStory();
+        mToolbarTitle.setText(title);
+        mToolbarTitle.setSelected(true);
     }
 
     @Override

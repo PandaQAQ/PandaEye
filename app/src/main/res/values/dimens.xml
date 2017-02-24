@@ -23,5 +23,6 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="floating_button_bmargin">72dp</dimen>
     <dimen name="splash_image_width">80dp</dimen>
+    <dimen name="toolbar_title_width">200dp</dimen>
 </resources>
 

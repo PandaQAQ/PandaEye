@@ -35,7 +35,6 @@ public class DiskCacheManager {
     private static DiskLruCache mDiskLruCache = null;
     private DiskLruCache.Editor mEditor = null;
     private DiskLruCache.Snapshot mSnapshot = null;
-    private Context mContext;
 
     public DiskCacheManager(Context context, String uniqueName) {
         try {

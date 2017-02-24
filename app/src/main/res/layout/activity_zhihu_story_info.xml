@@ -39,7 +39,22 @@
                 android:background="@color/colorPrimary"
                 app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/ic_arrow_back"
-                app:popupTheme="@style/AppTheme.PopupOverlay"/>
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="@dimen/toolbar_title_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/margin_8dp"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical"
+                    android:marqueeRepeatLimit="1"
+                    android:singleLine="true"
+                    android:textColor="@color/white_FFFFFF"
+                    android:textSize="@dimen/text_size_big"/>
+            </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 

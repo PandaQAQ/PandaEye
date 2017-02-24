@@ -16,6 +16,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -56,10 +57,11 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
     CoordinatorLayout mClTopnewsContentParent;
     @BindView(R.id.pb_topnews_content)
     ProgressBar mPbTopnewsContent;
+    @BindView(R.id.toolbar_title)
+    TextView mToolbarTitle;
     private int width;
     private int heigh;
     private TopNewsInfoPresenter mPresenter = new TopNewsInfoPresenter(this);
-    private String mTitle = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,7 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
         ButterKnife.bind(this);
         initView();
         initData();
-        mToolbar.setTitle(mTitle);
+        mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
     }
 
@@ -93,7 +95,7 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
         Bundle bundle = getIntent().getExtras();
         String news_id = bundle.getString(Constants.BUNDLE_KEY_ID);
         String newsImg = bundle.getString(Constants.BUNDLE_KEY_IMG_URL);
-        mTitle = bundle.getString(Constants.BUNDLE_KEY_TITLE);
+        String title = bundle.getString(Constants.BUNDLE_KEY_TITLE);
         loadTopNewsInfo(news_id);
         Glide.with(this)
                 .load(newsImg)
@@ -102,6 +104,8 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
                 .crossFade()
                 .centerCrop()
                 .into(mNewsImg);
+        mToolbarTitle.setText(title);
+        mToolbarTitle.setSelected(true);
     }
 
     @Override
