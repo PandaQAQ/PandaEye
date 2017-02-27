@@ -23,7 +23,6 @@
                 android:layout_width="@dimen/news_image_width"
                 android:layout_height="@dimen/news_image_height"
                 android:layout_margin="@dimen/margin_8dp"
-                android:background="@color/colorAccent"
                 android:elevation="2dp"
                 android:transitionName="@string/top_news_img"
                 android:scaleType="centerCrop"/>

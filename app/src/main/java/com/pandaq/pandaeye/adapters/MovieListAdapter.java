@@ -9,11 +9,10 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.entity.DouBan.MovieSubject;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,9 +42,8 @@ public class MovieListAdapter extends BaseRecyclerAdapter<MovieSubject> {
         float rate = data.getRating().getAverage();
         holder.mMovieRate.setText(toString(rate));
         holder.mMovieStarts.setRating(rate / 2);
-        Glide.with(mFragment)
+        Picasso.with(mFragment.getContext())
                 .load(data.getImages().getMedium())
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(holder.mMoviePic);
     }
 
@@ -64,6 +62,7 @@ public class MovieListAdapter extends BaseRecyclerAdapter<MovieSubject> {
             ButterKnife.bind(this, view);
         }
     }
+
     protected String toString(Object string) {
         return string + "";
     }

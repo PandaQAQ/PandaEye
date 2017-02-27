@@ -3,6 +3,7 @@ package com.pandaq.pandaeye.ui.zhihu;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -19,11 +20,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.entity.ZhiHu.ZhihuStoryContent;
@@ -31,10 +27,11 @@ import com.pandaq.pandaeye.presenter.zhihu.ZhihuStoryInfoPresenter;
 import com.pandaq.pandaeye.ui.ImplView.IZhihuStoryInfoActivity;
 import com.pandaq.pandaeye.utils.ColorUtils;
 import com.pandaq.pandaeye.utils.DensityUtil;
-import com.pandaq.pandaeye.utils.GlideUtils;
 import com.pandaq.pandaeye.utils.ViewUtils;
 import com.pandaq.pandaeye.utils.WebUtils;
 import com.pandaq.pandaeye.widget.FiveThreeImageView;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.tencent.smtt.sdk.WebView;
 
 import butterknife.BindView;
@@ -131,14 +128,14 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
 
     @Override
     public void loadSuccess(ZhihuStoryContent zhihuStory) {
-        Glide.with(this)
+        final Target target = new PicassoTarget();
+        //不设置的话会有时候不加载图片
+        mStoryImg.setTag(target);
+        Picasso.with(this)
                 .load(zhihuStory.getImage())
-                .listener(new GlideRequestListener())
-                .override(width, heigh)
+                .resize(width, heigh)
                 .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .crossFade()
-                .into(mStoryImg);
+                .into(target);
         startPostponedEnterTransition();
         String url = zhihuStory.getShare_url();
         boolean isEmpty = TextUtils.isEmpty(zhihuStory.getBody());
@@ -159,16 +156,11 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
         mPresenter.unSubscribe();
     }
 
-    class GlideRequestListener implements RequestListener<String, GlideDrawable> {
+    class PicassoTarget implements Target {
 
         @Override
-        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-            return false;
-        }
-
-        @Override
-        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-            final Bitmap bitmap = GlideUtils.getBitmap(resource);
+        public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+            mStoryImg.setImageBitmap(bitmap);
             final int twentyFourDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     24, ZhihuStoryInfoActivity.this.getResources().getDisplayMetrics());
             assert bitmap != null;
@@ -219,7 +211,17 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
                             }
                         }
                     });
-            return false;
+            System.out.println("加载成功");
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+            System.out.println("加载失败");
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+            System.out.println("加载中。。。。");
         }
     }
 }

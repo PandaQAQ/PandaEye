@@ -1,6 +1,8 @@
 package com.pandaq.pandaeye.adapters;
 
+import android.app.Activity;
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,12 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.entity.ZhiHu.ZhiHuTopStory;
 import com.pandaq.pandaeye.ui.zhihu.ZhihuStoryInfoActivity;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -27,11 +28,13 @@ import java.util.ArrayList;
 public class ZhihuTopPagerAdapter extends PagerAdapter {
 
     private ArrayList<ZhiHuTopStory> mTopStories;
-    private Fragment mFragment;
+    private Context mContext;
+    private Activity mActivity;
 
     public ZhihuTopPagerAdapter(Fragment fragment, ArrayList<ZhiHuTopStory> topStories) {
         this.mTopStories = topStories;
-        this.mFragment = fragment;
+        mActivity = fragment.getActivity();
+        mContext = fragment.getContext();
     }
 
     @Override
@@ -50,17 +53,15 @@ public class ZhihuTopPagerAdapter extends PagerAdapter {
         final ImageView mTopStoryImg = (ImageView) view.findViewById(R.id.top_story_img);
         TextView mTopStoryTitle = (TextView) view.findViewById(R.id.top_story_title);
         mTopStoryTitle.setText(mTopStories.get(position).getTitle());
-        Glide.with(mFragment)
+        Picasso.with(mContext)
                 .load(mTopStories.get(position).getImage())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .skipMemoryCache(false)
                 .into(mTopStoryImg);
         mTopStoryImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //跳转到其他界面
                 Bundle bundle = new Bundle();
-                Intent intent = new Intent(mFragment.getActivity(), ZhihuStoryInfoActivity.class);
+                Intent intent = new Intent(mContext, ZhihuStoryInfoActivity.class);
                 bundle.putString(Constants.BUNDLE_KEY_TITLE, mTopStories.get(position).getTitle());
                 bundle.putInt(Constants.BUNDLE_KEY_ID, mTopStories.get(position).getId());
                 bundle.putBoolean(Constants.BUNDLE_KEY_TRANSLATION_EXPORD, false);
@@ -69,7 +70,7 @@ public class ZhihuTopPagerAdapter extends PagerAdapter {
 //                Pair[] pairs = TranslateHelper.createSafeTransitionParticipants(mFragment.getActivity(), false,
 //                        new Pair<>(mTopStoryImg, mFragment.getString(R.string.zhihu_story_img)));
 //                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(mFragment.getActivity(), pairs);
-                mFragment.getActivity().startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(mFragment.getActivity()).toBundle());
+                mContext.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(mActivity).toBundle());
             }
         });
         container.addView(view);

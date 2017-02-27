@@ -49,6 +49,8 @@ dependencies {
     compile 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.7.7.1'
     compile 'tv.danmaku.ijk.media:ijkplayer-armv5:0.7.7.1'
     compile 'tv.danmaku.ijk.media:ijkplayer-x86:0.7.7.1'
+    //picasso 图片加载库 （Glide 中有些bug）
+    compile 'com.squareup.picasso:picasso:2.5.2'
     //内存泄露检测
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'

@@ -1,5 +1,6 @@
 package com.pandaq.pandaeye.adapters;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,11 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.entity.NetEasyNews.TopNews;
+import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,15 +25,20 @@ import butterknife.ButterKnife;
 
 public class TopNewsListAdapter extends BaseRecyclerAdapter<TopNews> {
 
-    private Fragment mFragment;
+    private Context mContext;
+    private int widthPx;
+    private int heighPx;
 
     public TopNewsListAdapter(Fragment fragment) {
-        mFragment = fragment;
+        mContext = fragment.getContext();
+        float width = mContext.getResources().getDimension(R.dimen.news_image_width);
+        widthPx = DensityUtil.dip2px(mContext, width);
+        heighPx = widthPx * 3 / 4;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreate(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mFragment.getContext()).inflate(R.layout.topnews_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.topnews_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -42,10 +48,9 @@ public class TopNewsListAdapter extends BaseRecyclerAdapter<TopNews> {
             ((ViewHolder) holder).mNewsTitle.setText(data.getTitle());
             ((ViewHolder) holder).mSource.setText(data.getSource());
             String image = data.getImgsrc();
-            Glide.with(mFragment)
+            Picasso.with(mContext)
                     .load(image)
-                    .crossFade()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .resize(widthPx,heighPx)
                     .into(((ViewHolder) holder).mNewsImage);
         }
     }

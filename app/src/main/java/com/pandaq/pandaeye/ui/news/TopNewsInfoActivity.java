@@ -3,6 +3,7 @@ package com.pandaq.pandaeye.ui.news;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -18,22 +19,20 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.entity.NetEasyNews.TopNewsContent;
 import com.pandaq.pandaeye.presenter.news.TopNewsInfoPresenter;
 import com.pandaq.pandaeye.ui.ImplView.ITopNewsInfoActivity;
 import com.pandaq.pandaeye.ui.base.BaseActivity;
+import com.pandaq.pandaeye.ui.zhihu.ZhihuStoryInfoActivity;
 import com.pandaq.pandaeye.utils.ColorUtils;
 import com.pandaq.pandaeye.utils.DensityUtil;
-import com.pandaq.pandaeye.utils.GlideUtils;
 import com.pandaq.pandaeye.utils.ViewUtils;
 import com.pandaq.pandaeye.utils.WebUtils;
 import com.pandaq.pandaeye.widget.FiveThreeImageView;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.tencent.smtt.sdk.WebView;
 
 import butterknife.BindView;
@@ -81,6 +80,7 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
             }
         });
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -97,13 +97,13 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
         String newsImg = bundle.getString(Constants.BUNDLE_KEY_IMG_URL);
         String title = bundle.getString(Constants.BUNDLE_KEY_TITLE);
         loadTopNewsInfo(news_id);
-        Glide.with(this)
+        final Target target = new PicassoTarget();
+        //不设置的话会有时候不加载图片
+        mNewsImg.setTag(target);
+        Picasso.with(this)
                 .load(newsImg)
-                .override(width, heigh)
-                .listener(new GlideRequestListener())
-                .crossFade()
-                .centerCrop()
-                .into(mNewsImg);
+                .resize(width, heigh)
+                .into(target);
         mToolbarTitle.setText(title);
         mToolbarTitle.setSelected(true);
     }
@@ -142,16 +142,11 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
         mPresenter.unSubscribe();
     }
 
-    class GlideRequestListener implements RequestListener<String, GlideDrawable> {
+    class PicassoTarget implements Target {
 
         @Override
-        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-            return false;
-        }
-
-        @Override
-        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-            final Bitmap bitmap = GlideUtils.getBitmap(resource);
+        public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+            mNewsImg.setImageBitmap(bitmap);
             final int twentyFourDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     24, TopNewsInfoActivity.this.getResources().getDisplayMetrics());
             assert bitmap != null;
@@ -194,7 +189,7 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
                                             getWindow().setStatusBarColor((int) animation.getAnimatedValue());
                                         }
                                     });
-                                    statusBarColorAnim.setDuration(1000L);
+                                    statusBarColorAnim.setDuration(500L);
                                     statusBarColorAnim.setInterpolator(
                                             new AccelerateInterpolator());
                                     statusBarColorAnim.start();
@@ -202,7 +197,17 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
                             }
                         }
                     });
-            return false;
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
         }
     }
+
 }
