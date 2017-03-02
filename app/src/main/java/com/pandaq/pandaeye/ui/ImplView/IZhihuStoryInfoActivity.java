@@ -1,6 +1,6 @@
 package com.pandaq.pandaeye.ui.ImplView;
 
-import com.pandaq.pandaeye.entity.ZhiHu.ZhihuStoryContent;
+import com.pandaq.pandaeye.entity.zhihu.ZhihuStoryContent;
 
 /**
  * Created by PandaQ on 2016/10/10.

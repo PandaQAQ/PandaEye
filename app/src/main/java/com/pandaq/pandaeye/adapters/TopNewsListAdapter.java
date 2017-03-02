@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
-import com.pandaq.pandaeye.entity.NetEasyNews.TopNews;
+import com.pandaq.pandaeye.entity.neteasynews.TopNews;
 import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.squareup.picasso.Picasso;

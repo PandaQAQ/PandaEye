@@ -1,7 +1,7 @@
 package com.pandaq.pandaeye.api;
 
-import com.pandaq.pandaeye.entity.ZhiHu.ZhiHuDaily;
-import com.pandaq.pandaeye.entity.ZhiHu.ZhihuStoryContent;
+import com.pandaq.pandaeye.entity.zhihu.ZhiHuDaily;
+import com.pandaq.pandaeye.entity.zhihu.ZhihuStoryContent;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;

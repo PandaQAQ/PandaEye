@@ -11,6 +11,7 @@
 
     <include
         layout="@layout/app_bar_main"
+        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
@@ -20,7 +21,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@color/nav_bg_ed25c6db"
-        android:fitsSystemWindows="true"
         app:elevation="2dp"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu"/>

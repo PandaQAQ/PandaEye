@@ -34,4 +34,13 @@ public class Constants {
 
     public static final String CACHE_DOUBAN_FILE = "douban_cache_file";
     public static final String CACHE_DOUBAN_MOVIE = "douban_movie_cache";
+
+    public static final String CACHE_VIDEO_FILE = "video_cache_file";
+    public static final String CACHE_VIDEO = "video_cache";
+
+    /**
+     * video
+     */
+    public static final String SHOW_TYPE_IN = "IN";
+    public static final String SHOW_TYPE_BANNER = "banner";
 }

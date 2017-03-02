@@ -1,6 +1,6 @@
 package com.pandaq.pandaeye.ui.ImplView;
 
-import com.pandaq.pandaeye.entity.NetEasyNews.TopNewsContent;
+import com.pandaq.pandaeye.entity.neteasynews.TopNewsContent;
 
 /**
  * Created by PandaQ on 2016/10/10.

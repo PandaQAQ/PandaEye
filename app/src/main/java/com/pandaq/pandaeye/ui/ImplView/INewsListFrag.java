@@ -1,6 +1,6 @@
 package com.pandaq.pandaeye.ui.ImplView;
 
-import com.pandaq.pandaeye.entity.NetEasyNews.TopNews;
+import com.pandaq.pandaeye.entity.neteasynews.TopNews;
 
 import java.util.ArrayList;
 

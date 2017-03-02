@@ -2,20 +2,16 @@
 <android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/refresh"
+    android:id="@+id/srl_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    app:slopValue="50">
+    android:orientation="vertical">
 
     <com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView
-        android:id="@+id/zhihudaily_list"
+        android:id="@+id/mrv_video"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:emptyView="@layout/emptyview"
-        app:footer_layout="@layout/recycler_footer_layout"
         app:header_layout="@layout/recycler_header_layout"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:parallaxMultiplier="0.8"/>
-
+        app:parallaxMultiplier="0"
+        />
 </android.support.v4.widget.SwipeRefreshLayout>

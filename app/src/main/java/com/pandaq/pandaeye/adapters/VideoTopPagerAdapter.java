@@ -15,36 +15,27 @@ import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
-import com.pandaq.pandaeye.entity.zhihu.ZhiHuTopStory;
+import com.pandaq.pandaeye.entity.movie.RetDataBean;
 import com.pandaq.pandaeye.ui.zhihu.ZhihuStoryInfoActivity;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by PandaQ on 2016/9/14.
- * email : 767807368@qq.com
+ * Created by PandaQ on 2017/3/1.
+ * 视频 fragment 顶部的 ViewPager 适配器
  */
-public class ZhihuTopPagerAdapter extends PagerAdapter {
 
-    private ArrayList<ZhiHuTopStory> mTopStories;
+public class VideoTopPagerAdapter extends PagerAdapter {
+
+    private List<RetDataBean.ListBean.ChildListBean> mBanders;
     private Context mContext;
     private Activity mActivity;
 
-    public ZhihuTopPagerAdapter(Fragment fragment, ArrayList<ZhiHuTopStory> topStories) {
-        this.mTopStories = topStories;
-        mActivity = fragment.getActivity();
+    public VideoTopPagerAdapter(Fragment fragment, List<RetDataBean.ListBean.ChildListBean> banders) {
         mContext = fragment.getContext();
-    }
-
-    @Override
-    public int getCount() {
-        return mTopStories != null ? mTopStories.size() : 0;
-    }
-
-    @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return view == object;
+        mActivity = fragment.getActivity();
+        mBanders = banders;
     }
 
     @Override
@@ -52,9 +43,9 @@ public class ZhihuTopPagerAdapter extends PagerAdapter {
         View view = LayoutInflater.from(container.getContext()).inflate(R.layout.zhihutop_item, container, false);
         final ImageView mTopStoryImg = (ImageView) view.findViewById(R.id.top_story_img);
         TextView mTopStoryTitle = (TextView) view.findViewById(R.id.top_story_title);
-        mTopStoryTitle.setText(mTopStories.get(position).getTitle());
+        mTopStoryTitle.setText(mBanders.get(position).getTitle());
         Picasso.with(mContext)
-                .load(mTopStories.get(position).getImage())
+                .load(mBanders.get(position).getPic())
                 .into(mTopStoryImg);
         mTopStoryImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,9 +53,8 @@ public class ZhihuTopPagerAdapter extends PagerAdapter {
                 //跳转到其他界面
                 Bundle bundle = new Bundle();
                 Intent intent = new Intent(mContext, ZhihuStoryInfoActivity.class);
-                bundle.putString(Constants.BUNDLE_KEY_TITLE, mTopStories.get(position).getTitle());
-                bundle.putInt(Constants.BUNDLE_KEY_ID, mTopStories.get(position).getId());
-                bundle.putBoolean(Constants.BUNDLE_KEY_TRANSLATION_EXPORD, false);
+                bundle.putString(Constants.BUNDLE_KEY_TITLE, mBanders.get(position).getTitle());
+                bundle.putString(Constants.BUNDLE_KEY_ID, mBanders.get(position).getDataId());
                 intent.putExtras(bundle);
 //                //多个控件共享用pairs
 //                Pair[] pairs = TranslateHelper.createSafeTransitionParticipants(mFragment.getActivity(), false,
@@ -78,12 +68,22 @@ public class ZhihuTopPagerAdapter extends PagerAdapter {
     }
 
     @Override
+    public int getCount() {
+        return mBanders != null ? mBanders.size() : 0;
+    }
+
+    @Override
+    public boolean isViewFromObject(View view, Object object) {
+        return view == object;
+    }
+
+    @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
     }
 
-    public void resetData(ArrayList<ZhiHuTopStory> topStories) {
-        mTopStories.clear();
-        mTopStories.addAll(topStories);
+    public void resetData(List<RetDataBean.ListBean.ChildListBean> banders) {
+        mBanders.clear();
+        mBanders.addAll(banders);
     }
 }

@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.TopNewsListAdapter;
 import com.pandaq.pandaeye.config.Constants;
-import com.pandaq.pandaeye.entity.NetEasyNews.TopNews;
+import com.pandaq.pandaeye.entity.neteasynews.TopNews;
 import com.pandaq.pandaeye.presenter.news.NewsPresenter;
 import com.pandaq.pandaeye.ui.ImplView.INewsListFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;

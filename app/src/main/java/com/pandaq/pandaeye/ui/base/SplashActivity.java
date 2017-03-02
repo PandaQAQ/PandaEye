@@ -20,6 +20,8 @@ import butterknife.ButterKnife;
 public class SplashActivity extends BaseActivity {
     @BindView(R.id.iv_splash_image)
     ImageView mIvSplashImage;
+    private boolean wheelRunning = false;
+    private int wheelProgress = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

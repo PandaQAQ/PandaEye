@@ -1,17 +1,7 @@
 package com.pandaq.pandaeye.api;
 
-import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.config.Config;
-import com.pandaq.pandaqlib.okhttp.CustomInterceptor;
-import com.pandaq.pandaqlib.okhttp.CustomNetWorkInterceptor;
-import com.pandaq.pandaqlib.okhttp.HttpsUtil;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
-import okhttp3.Cache;
-import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -20,13 +10,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by PandaQ on 2016/9/8.
  * email : 767807368@qq.com
  * 集中处理Api相关配置的Manager类
+ *
  */
 public class ApiManager {
 
     private DouBanApi mDouBanApi;
     private ZhihuDailyApi mDailyApi;
     private TopNewsApi mNewsApi;
+    private MovieApi mMovieApi;
     private static ApiManager sApiManager;
+
+    private ApiManager() {
+
+    }
 
     public static ApiManager getInstence() {
         if (sApiManager == null) {
@@ -45,7 +41,7 @@ public class ApiManager {
     public DouBanApi getDoubanService() {
         if (mDouBanApi == null) {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(Config.baseDouBanUrl)
+                    .baseUrl(Config.DOUBAN_API_URL)
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
@@ -60,7 +56,7 @@ public class ApiManager {
     public ZhihuDailyApi getZhihuService() {
         if (mDailyApi == null) {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(Config.baseZhiHuUrl)
+                    .baseUrl(Config.ZHIHU_API_URL)
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
@@ -75,7 +71,7 @@ public class ApiManager {
     public TopNewsApi getTopNewsServie() {
         if (mNewsApi == null) {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(Config.baseNewsUrl)
+                    .baseUrl(Config.NETEASY_NEWS_API)
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
@@ -85,23 +81,17 @@ public class ApiManager {
     }
 
     /**
-     * POST测试API封装
+     * 封装视频 API
      */
-    public TestPostApi loginService(InputStream inputStream) throws IOException {
-        TestPostApi testPostApi;
-        OkHttpClient mOkHttpClient = new HttpsUtil()
-//                .getTrustAllClient()
-                .getTrusClient(inputStream)
-                .newBuilder()
-                .addInterceptor(new CustomInterceptor(CustomApplication.getContext()))
-                .build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Config.baseTestUrl)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(mOkHttpClient)
-                .build();
-        testPostApi = retrofit.create(TestPostApi.class);
-        return testPostApi;
+    public MovieApi getMovieService() {
+        if (mMovieApi == null) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(Config.MOVIE_API_URL)
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            mMovieApi = retrofit.create(MovieApi.class);
+        }
+        return mMovieApi;
     }
 }

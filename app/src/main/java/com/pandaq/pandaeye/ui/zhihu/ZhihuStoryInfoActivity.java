@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
-import com.pandaq.pandaeye.entity.ZhiHu.ZhihuStoryContent;
+import com.pandaq.pandaeye.entity.zhihu.ZhihuStoryContent;
 import com.pandaq.pandaeye.presenter.zhihu.ZhihuStoryInfoPresenter;
 import com.pandaq.pandaeye.ui.ImplView.IZhihuStoryInfoActivity;
 import com.pandaq.pandaeye.utils.ColorUtils;

@@ -1,4 +1,4 @@
-package com.pandaq.pandaeye.entity.ZhiHu;
+package com.pandaq.pandaeye.entity.zhihu;
 
 import com.google.gson.annotations.SerializedName;
 

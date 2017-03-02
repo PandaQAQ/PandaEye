@@ -1,7 +1,7 @@
 package com.pandaq.pandaeye.ui.ImplView;
 
-import com.pandaq.pandaeye.entity.ZhiHu.ZhiHuDaily;
-import com.pandaq.pandaeye.entity.ZhiHu.ZhiHuStory;
+import com.pandaq.pandaeye.entity.zhihu.ZhiHuDaily;
+import com.pandaq.pandaeye.entity.zhihu.ZhiHuStory;
 
 import java.util.ArrayList;
 

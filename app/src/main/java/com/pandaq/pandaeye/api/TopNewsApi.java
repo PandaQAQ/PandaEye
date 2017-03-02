@@ -1,6 +1,6 @@
 package com.pandaq.pandaeye.api;
 
-import com.pandaq.pandaeye.entity.NetEasyNews.TopNewsList;
+import com.pandaq.pandaeye.entity.neteasynews.TopNewsList;
 
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;

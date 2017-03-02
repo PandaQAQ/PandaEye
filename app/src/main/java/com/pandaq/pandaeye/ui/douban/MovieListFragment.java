@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.MovieListAdapter;
-import com.pandaq.pandaeye.entity.DouBan.MovieSubject;
+import com.pandaq.pandaeye.entity.douban.MovieSubject;
 import com.pandaq.pandaeye.presenter.douban.DouBanMoviePresenter;
-import com.pandaq.pandaeye.ui.ImplView.IMovieListFrag;
+import com.pandaq.pandaeye.ui.ImplView.IDoubanFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView;
@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
  * email : 767807368@qq.com
  * 豆瓣top250电影列表Fragment
  */
-public class MovieListFragment extends BaseFragment implements IMovieListFrag, SwipeRefreshLayout.OnRefreshListener {
+public class MovieListFragment extends BaseFragment implements IDoubanFrag, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.movie_list)
     MagicRecyclerView mMovieList;
     @BindView(R.id.srl_refresh)

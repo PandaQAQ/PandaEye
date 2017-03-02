@@ -18,7 +18,7 @@ public class LogWritter extends Logger {
     }
 
     public static void LogStr(String string) {
-        if (Config.debug) {
+        if (Config.DEBUG) {
             Log.i("PandaEye", string);
         }
     }

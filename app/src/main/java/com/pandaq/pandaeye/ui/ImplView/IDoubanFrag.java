@@ -1,6 +1,6 @@
 package com.pandaq.pandaeye.ui.ImplView;
 
-import com.pandaq.pandaeye.entity.DouBan.MovieSubject;
+import com.pandaq.pandaeye.entity.douban.MovieSubject;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * email : 767807368@qq.com
  * 豆瓣电影列表界面的绑定接口
  */
-public interface IMovieListFrag {
+public interface IDoubanFrag {
 
     void showProgressBar();
 

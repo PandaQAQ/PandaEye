@@ -1,11 +1,9 @@
 package com.pandaq.pandaeye.ui.base;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -13,16 +11,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.pandaq.pandaeye.R;
+import com.pandaq.pandaeye.ui.video.VideoCircleFragment;
 import com.pandaq.pandaeye.utils.BlurImageUtils;
 import com.pandaq.pandaeye.utils.LogWritter;
-import com.pandaq.pandaeye.ui.bubble.BubblCircleFragment;
 import com.pandaq.pandaeye.ui.douban.MovieListFragment;
 import com.pandaq.pandaeye.ui.news.NewsListFragment;
 import com.pandaq.pandaeye.ui.zhihu.ZhihuDailyFragment;
@@ -41,8 +38,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, BottomNavigationBar.OnTabSelectedListener {
 
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
     @BindView(R.id.fab)
     FloatingActionButton mFab;
     @BindView(R.id.navigation)
@@ -64,8 +59,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         fm = getSupportFragmentManager();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         //用于显示toolbar上的侧滑开关动画的
 //        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
 //                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -81,7 +74,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
          */
         mMovieFragment = new MovieListFragment();
         mZhihuFragment = new ZhihuDailyFragment();
-        mBubbleFragment = new BubblCircleFragment();
+        mBubbleFragment = new VideoCircleFragment();
         mNewsFragment = new NewsListFragment();
         LinearLayout linearLayout = (LinearLayout) mNavigation.getHeaderView(0);
         CircleImageView imageView = (CircleImageView) linearLayout.findViewById(R.id.userimage);

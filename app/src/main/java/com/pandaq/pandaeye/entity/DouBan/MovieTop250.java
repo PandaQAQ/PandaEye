@@ -1,4 +1,4 @@
-package com.pandaq.pandaeye.entity.DouBan;
+package com.pandaq.pandaeye.entity.douban;
 
 import com.google.gson.annotations.SerializedName;
 

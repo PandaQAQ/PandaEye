@@ -1,7 +1,7 @@
 package com.pandaq.pandaeye.presenter.zhihu;
 
 import com.pandaq.pandaeye.api.ApiManager;
-import com.pandaq.pandaeye.entity.ZhiHu.ZhihuStoryContent;
+import com.pandaq.pandaeye.entity.zhihu.ZhihuStoryContent;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.IZhihuStoryInfoActivity;
 

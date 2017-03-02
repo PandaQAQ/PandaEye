@@ -4,10 +4,10 @@ import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.api.ApiManager;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
-import com.pandaq.pandaeye.entity.DouBan.MovieSubject;
-import com.pandaq.pandaeye.entity.DouBan.MovieTop250;
+import com.pandaq.pandaeye.entity.douban.MovieSubject;
+import com.pandaq.pandaeye.entity.douban.MovieTop250;
 import com.pandaq.pandaeye.presenter.BasePresenter;
-import com.pandaq.pandaeye.ui.ImplView.IMovieListFrag;
+import com.pandaq.pandaeye.ui.ImplView.IDoubanFrag;
 
 import java.util.ArrayList;
 
@@ -24,11 +24,11 @@ import rx.schedulers.Schedulers;
  */
 public class DouBanMoviePresenter extends BasePresenter {
 
-    private IMovieListFrag mMovieListFrag;
+    private IDoubanFrag mMovieListFrag;
     private int start;
     private boolean loadAllCompleted = false;
 
-    public DouBanMoviePresenter(IMovieListFrag mMovieListFrag) {
+    public DouBanMoviePresenter(IDoubanFrag mMovieListFrag) {
         this.mMovieListFrag = mMovieListFrag;
     }
 

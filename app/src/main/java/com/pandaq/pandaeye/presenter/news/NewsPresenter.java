@@ -4,8 +4,8 @@ import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.api.ApiManager;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
-import com.pandaq.pandaeye.entity.NetEasyNews.TopNews;
-import com.pandaq.pandaeye.entity.NetEasyNews.TopNewsList;
+import com.pandaq.pandaeye.entity.neteasynews.TopNews;
+import com.pandaq.pandaeye.entity.neteasynews.TopNewsList;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.INewsListFrag;
 

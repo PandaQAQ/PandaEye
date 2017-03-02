@@ -1,6 +1,7 @@
 package com.pandaq.pandaeye.adapters;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,56 +11,56 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
-import com.pandaq.pandaeye.entity.zhihu.ZhiHuStory;
+import com.pandaq.pandaeye.entity.movie.RetDataBean;
 import com.pandaq.pandaeye.utils.DensityUtil;
+import com.pandaq.pandaeye.utils.LogWritter;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by PandaQ on 2016/9/13.
- * email : 767807368@qq.com
+ * Created by PandaQ on 2017/3/1.
+ * 视频主界面 recyclerView 的 adapter
  */
-public class ZhihuDailyAdapter extends BaseRecyclerAdapter<ZhiHuStory> {
+
+public class VideoListAdapter extends BaseRecyclerAdapter<RetDataBean.ListBean> {
 
     private Context mContext;
     private int image_width;
     private int image_height;
-    private ArrayList<ZhiHuStory> mDatas = new ArrayList<>();
 
-    public ZhihuDailyAdapter(Fragment fragment) {
+    public VideoListAdapter(Fragment fragment) {
         mContext = fragment.getContext();
-        float width = fragment.getResources().getDimension(R.dimen.news_image_width);
-        image_width = DensityUtil.dip2px(mContext, width);
-        image_height = image_width * 3 / 4;
+        float height = fragment.getResources().getDimension(R.dimen.video_type_image_width);
+        image_height = DensityUtil.dip2px(mContext, height);
+        image_width = image_height * 4 / 3;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreate(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.zhihu_story_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.video_type_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBind(RecyclerView.ViewHolder viewHolder, int RealPosition, ZhiHuStory data) {
+    public void onBind(RecyclerView.ViewHolder viewHolder, int RealPosition, RetDataBean.ListBean data) {
         ViewHolder holder = (ViewHolder) viewHolder;
-        holder.mNewsTitle.setText(data.getTitle());
+        String pic = data.getChildList().get(0).getPic();
         Picasso.with(mContext)
-                .load(data.getImages().get(0)) //加载第一张图
+                .load(pic) //加载第一张图
                 .centerCrop()
                 .resize(image_width, image_height)
-                .into(holder.mNewsImage);
+                .into(holder.mIvVideoType);
+        holder.mTvVideoType.setText(data.getTitle());
     }
 
-    class ViewHolder extends BaseRecyclerAdapter.Holder {
-        @BindView(R.id.news_image)
-        ImageView mNewsImage;
-        @BindView(R.id.news_title)
-        TextView mNewsTitle;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.iv_video_type)
+        ImageView mIvVideoType;
+        @BindView(R.id.tv_video_type)
+        TextView mTvVideoType;
 
         ViewHolder(View view) {
             super(view);

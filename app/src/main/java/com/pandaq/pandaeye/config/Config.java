@@ -7,11 +7,9 @@ package com.pandaq.pandaeye.config;
  */
 public class Config {
 
-    public static final boolean debug = true;
-    public static String baseDouBanUrl = "http://api.douban.com/v2/";
-    public static String baseZhiHuUrl = "http://news-at.zhihu.com/api/4/";
-    public static String baseNewsUrl = "http://c.m.163.com/nc/article/";
-    //    public static String baseTestUrl = "https://dolphins.seuic.info/v1/";
-    public static String baseTestUrl = "https://kyfw.12306.cn/otn/index/init/";
-
+    public static final boolean DEBUG = true;
+    public static String DOUBAN_API_URL = "http://api.douban.com/v2/";
+    public static String ZHIHU_API_URL = "http://news-at.zhihu.com/api/4/";
+    public static String NETEASY_NEWS_API = "http://c.m.163.com/nc/article/";
+    public static String MOVIE_API_URL = "http://api.svipmovie.com/front/";
 }
