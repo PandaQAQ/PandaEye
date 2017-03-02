@@ -1,10 +1,10 @@
 package com.pandaq.pandaeye.api;
 
-import com.pandaq.pandaeye.entity.movie.CommentBean;
-import com.pandaq.pandaeye.entity.movie.MovieInfo;
-import com.pandaq.pandaeye.entity.movie.MovieResponse;
-import com.pandaq.pandaeye.entity.movie.RetDataBean;
-import com.pandaq.pandaeye.entity.movie.SearchData;
+import com.pandaq.pandaeye.entity.video.CommentBean;
+import com.pandaq.pandaeye.entity.video.MovieInfo;
+import com.pandaq.pandaeye.entity.video.MovieResponse;
+import com.pandaq.pandaeye.entity.video.RetDataBean;
+import com.pandaq.pandaeye.entity.video.SearchData;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;

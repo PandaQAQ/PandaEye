@@ -15,7 +15,8 @@ import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
-import com.pandaq.pandaeye.entity.movie.RetDataBean;
+import com.pandaq.pandaeye.entity.video.RetDataBean;
+import com.pandaq.pandaeye.ui.video.VedioInfoActivity;
 import com.pandaq.pandaeye.ui.zhihu.ZhihuStoryInfoActivity;
 import com.squareup.picasso.Picasso;
 
@@ -52,9 +53,10 @@ public class VideoTopPagerAdapter extends PagerAdapter {
             public void onClick(View view) {
                 //跳转到其他界面
                 Bundle bundle = new Bundle();
-                Intent intent = new Intent(mContext, ZhihuStoryInfoActivity.class);
-                bundle.putString(Constants.BUNDLE_KEY_TITLE, mBanders.get(position).getTitle());
+                Intent intent = new Intent(mContext, VedioInfoActivity.class);
                 bundle.putString(Constants.BUNDLE_KEY_ID, mBanders.get(position).getDataId());
+                bundle.putString(Constants.BUNDLE_KEY_TITLE, mBanders.get(position).getTitle());
+                bundle.putString(Constants.BUNDLE_KEY_IMG_URL, mBanders.get(position).getPic());
                 intent.putExtras(bundle);
 //                //多个控件共享用pairs
 //                Pair[] pairs = TranslateHelper.createSafeTransitionParticipants(mFragment.getActivity(), false,

@@ -75,7 +75,7 @@ public class MagicRecyclerView extends RecyclerView {
             multiplier = 1;
         }
         if (header_layout != NULL_VALUE) {
-            headerView = inflate(context, header_layout, null);
+            headerView = LayoutInflater.from(context).inflate(header_layout, null, true);
         }
         if (empty_layout != NULL_VALUE) {
             emptyView = inflate(context, empty_layout, null);

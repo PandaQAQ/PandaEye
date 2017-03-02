@@ -32,7 +32,7 @@ public class TopNewsListAdapter extends BaseRecyclerAdapter<TopNews> {
     public TopNewsListAdapter(Fragment fragment) {
         mContext = fragment.getContext();
         float width = mContext.getResources().getDimension(R.dimen.news_image_width);
-        widthPx = DensityUtil.dip2px(mContext, width);
+        widthPx = (int) width;
         heighPx = widthPx * 3 / 4;
     }
 
@@ -50,7 +50,7 @@ public class TopNewsListAdapter extends BaseRecyclerAdapter<TopNews> {
             String image = data.getImgsrc();
             Picasso.with(mContext)
                     .load(image)
-                    .resize(widthPx,heighPx)
+                    .resize(widthPx, heighPx)
                     .into(((ViewHolder) holder).mNewsImage);
         }
     }

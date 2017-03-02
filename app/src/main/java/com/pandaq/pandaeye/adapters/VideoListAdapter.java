@@ -1,7 +1,6 @@
 package com.pandaq.pandaeye.adapters;
 
 import android.content.Context;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,9 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
-import com.pandaq.pandaeye.entity.movie.RetDataBean;
-import com.pandaq.pandaeye.utils.DensityUtil;
-import com.pandaq.pandaeye.utils.LogWritter;
+import com.pandaq.pandaeye.entity.video.RetDataBean;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -33,9 +30,9 @@ public class VideoListAdapter extends BaseRecyclerAdapter<RetDataBean.ListBean> 
 
     public VideoListAdapter(Fragment fragment) {
         mContext = fragment.getContext();
-        float height = fragment.getResources().getDimension(R.dimen.video_type_image_width);
-        image_height = DensityUtil.dip2px(mContext, height);
-        image_width = image_height * 4 / 3;
+        float value = fragment.getResources().getDimension(R.dimen.video_type_image_height);
+        image_height = (int) value;
+        image_width = (int) value * 4 / 3;
     }
 
     @Override
@@ -50,7 +47,6 @@ public class VideoListAdapter extends BaseRecyclerAdapter<RetDataBean.ListBean> 
         String pic = data.getChildList().get(0).getPic();
         Picasso.with(mContext)
                 .load(pic) //加载第一张图
-                .centerCrop()
                 .resize(image_width, image_height)
                 .into(holder.mIvVideoType);
         holder.mTvVideoType.setText(data.getTitle());

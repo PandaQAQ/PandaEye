@@ -4,9 +4,8 @@ import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.api.ApiManager;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
-import com.pandaq.pandaeye.entity.movie.MovieResponse;
-import com.pandaq.pandaeye.entity.movie.RetDataBean;
-import com.pandaq.pandaeye.entity.neteasynews.TopNews;
+import com.pandaq.pandaeye.entity.video.MovieResponse;
+import com.pandaq.pandaeye.entity.video.RetDataBean;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.IVideoListFrag;
 
@@ -25,11 +24,11 @@ import rx.schedulers.Schedulers;
  * 视频 fragment Presenter
  */
 
-public class VideoPresenter extends BasePresenter {
+public class VideoFragPresenter extends BasePresenter {
 
     private IVideoListFrag mFrag;
 
-    public VideoPresenter(IVideoListFrag frag) {
+    public VideoFragPresenter(IVideoListFrag frag) {
         mFrag = frag;
     }
 

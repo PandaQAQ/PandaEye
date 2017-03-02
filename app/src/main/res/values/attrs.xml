@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="clockBackground" format="color" />
-    <attr name="clockTextColor" format="color" />
+    <attr name="clockBackground" format="color"/>
+    <attr name="clockTextColor" format="color"/>
+
+    <declare-styleable name="ViewPagerIndicator">
+        <attr name="titleCount" format="integer"/>
+    </declare-styleable>
 </resources>

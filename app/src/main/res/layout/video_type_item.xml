@@ -3,19 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/margin_8dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/margin_8dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/video_type_image_width"
+        android:layout_height="@dimen/video_type_card_height"
         android:padding="@dimen/margin_8dp">
 
         <ImageView
             android:id="@+id/iv_video_type"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/video_type_image_width"
-            android:scaleType="centerCrop"
+            android:layout_height="@dimen/video_type_image_height"
+            android:scaleType="fitXY"
             android:src="@drawable/userimage"/>
 
         <TextView

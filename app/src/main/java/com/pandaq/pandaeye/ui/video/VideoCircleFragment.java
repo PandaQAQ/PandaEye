@@ -4,21 +4,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.FrameLayout;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.VideoListAdapter;
 import com.pandaq.pandaeye.adapters.VideoTopPagerAdapter;
-import com.pandaq.pandaeye.adapters.ZhihuDailyAdapter;
-import com.pandaq.pandaeye.adapters.ZhihuTopPagerAdapter;
 import com.pandaq.pandaeye.config.Constants;
-import com.pandaq.pandaeye.entity.movie.RetDataBean;
-import com.pandaq.pandaeye.presenter.video.VideoPresenter;
+import com.pandaq.pandaeye.entity.video.RetDataBean;
+import com.pandaq.pandaeye.presenter.video.VideoFragPresenter;
 import com.pandaq.pandaeye.ui.ImplView.IVideoListFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
 import com.pandaq.pandaeye.utils.DensityUtil;
@@ -48,7 +45,7 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
     private ViewGroupIndicator viewGroupIndicator;
     private VideoTopPagerAdapter mPagerAdapter;
     private VideoListAdapter mAdapter;
-    private VideoPresenter mPresenter = new VideoPresenter(this);
+    private VideoFragPresenter mPresenter = new VideoFragPresenter(this);
     private List<RetDataBean.ListBean.ChildListBean> mBanders;
 
     @Override
@@ -69,7 +66,7 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
         itemDecoration.setPaddingStart(true);
         itemDecoration.setPaddingHeaderFooter(false);
         mMrvVideo.addItemDecoration(itemDecoration);
-        RelativeLayout headerView = (RelativeLayout) mMrvVideo.getHeaderView();
+        FrameLayout headerView = (FrameLayout) mMrvVideo.getHeaderView();
         scrollViewPager = (AutoScrollViewPager) headerView.findViewById(R.id.scroll_pager);
         viewGroupIndicator = (ViewGroupIndicator) headerView.findViewById(R.id.scroll_pager_indicator);
         mSrlRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.white_FFFFFF));

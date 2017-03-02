@@ -34,7 +34,7 @@ public class ZhihuDailyAdapter extends BaseRecyclerAdapter<ZhiHuStory> {
     public ZhihuDailyAdapter(Fragment fragment) {
         mContext = fragment.getContext();
         float width = fragment.getResources().getDimension(R.dimen.news_image_width);
-        image_width = DensityUtil.dip2px(mContext, width);
+        image_width = (int) width;
         image_height = image_width * 3 / 4;
     }
 

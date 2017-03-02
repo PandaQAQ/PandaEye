@@ -12,10 +12,10 @@
     <dimen name="text_size_small">16sp</dimen>
     <dimen name="text_size_min">14sp</dimen>
     <dimen name="userimage_border_width">2dp</dimen>
-    <dimen name="zhihu_header_height">220dp</dimen>
-    <dimen name="zhihu_header_indi_bottom_margin">8dp</dimen>
-    <dimen name="distance_from_tow_indicator">3dp</dimen>
-    <dimen name="indicator_radius">3dp</dimen>
+    <dimen name="recycler_header_height">220dp</dimen>
+    <dimen name="recycler_header_indi_height">32dp</dimen>
+    <dimen name="distance_from_tow_indicator">4dp</dimen>
+    <dimen name="indicator_radius">4dp</dimen>
     <dimen name="news_image_width">80dp</dimen>
     <dimen name="news_image_height">64dp</dimen>
     <dimen name="news_item_height">86dp</dimen>
@@ -23,9 +23,10 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="floating_button_bmargin">72dp</dimen>
     <dimen name="splash_image_width">88dp</dimen>
-    <dimen name="toolbar_title_width">200dp</dimen>
+    <dimen name="toolbar_title_width">240dp</dimen>
     <dimen name="splash_image_top_margin">160dp</dimen>
-    <dimen name="video_type_text_height">40dp</dimen>
-    <dimen name="video_type_image_width">160dp</dimen>
+    <dimen name="video_type_text_height">32dp</dimen>
+    <dimen name="video_type_image_height">96dp</dimen>
+    <dimen name="video_type_card_height">112dp</dimen>
 </resources>
 

@@ -1,12 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:layout_collapseMode="pin"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="@dimen/toolbar_title_width"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/margin_8dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_vertical"
+            android:marqueeRepeatLimit="1"
+            android:singleLine="true"
+            android:textColor="@color/white_FFFFFF"
+            android:textSize="@dimen/text_size_big"/>
+    </android.support.v7.widget.Toolbar>
 
     <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
         android:id="@+id/jc_video_player"
         android:layout_width="match_parent"
         android:layout_height="240dp"/>
+
+    <com.pandaq.pandaeye.widget.viewpager.ViewPagerIndicator
+        android:id="@+id/vpi_video_info"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_video_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

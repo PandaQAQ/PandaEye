@@ -1,4 +1,4 @@
-package com.pandaq.pandaeye.entity.movie;
+package com.pandaq.pandaeye.entity.video;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -45,7 +45,7 @@ public class RetDataBean implements Serializable{
         private String loadType;
         @SerializedName("changeOpenFlag")
         private String changeOpenFlag;
-        @SerializedName("libe")
+        @SerializedName("line")
         private int line;
         @SerializedName("showType")
         private String showType;

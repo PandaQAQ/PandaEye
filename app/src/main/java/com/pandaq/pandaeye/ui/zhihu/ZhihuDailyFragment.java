@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.pandaq.pandaeye.R;
@@ -88,7 +89,7 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-        RelativeLayout headerView = (RelativeLayout) mZhihudailyList.getHeaderView();
+        FrameLayout headerView = (FrameLayout) mZhihudailyList.getHeaderView();
         scrollViewPager = (AutoScrollViewPager) headerView.findViewById(R.id.scroll_pager);
         viewGroupIndicator = (ViewGroupIndicator) headerView.findViewById(R.id.scroll_pager_indicator);
         refreshData();
