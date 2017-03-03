@@ -60,70 +60,70 @@ public class VideoInfoPresenter extends BasePresenter {
         addSubscription(subscription);
     }
 
-    /**
-     * 获取视频评论
-     */
-    private void loadVideoComment() {
-        Subscription subscription = ApiManager.getInstence()
-                .getMovieService()
-                .getCommentList(mInfoActivity.getDataId(), String.valueOf(currentPage))
-                .map(new Func1<MovieResponse<CommentBean>, ArrayList<CommentBean.ListBean>>() {
-                    @Override
-                    public ArrayList<CommentBean.ListBean> call(MovieResponse<CommentBean> response) {
-                        currentPage = response.getData().getPnum();
-                        int totalPum = response.getData().getTotalPnum();
-                        if (currentPage == totalPum) { //加载完所有的评论后
-                            mInfoActivity.noMoreComment();
-                        }
-                        ArrayList<CommentBean.ListBean> comments = new ArrayList<>();
-                        comments.addAll(response.getData().getList());
-                        return comments;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ArrayList<CommentBean.ListBean>>() {
-                    @Override
-                    public void onCompleted() {
+//    /**
+//     * 获取视频评论
+//     */
+//    private void loadVideoComment() {
+//        Subscription subscription = ApiManager.getInstence()
+//                .getMovieService()
+//                .getCommentList(mInfoActivity.getDataId(), String.valueOf(currentPage))
+//                .map(new Func1<MovieResponse<CommentBean>, ArrayList<CommentBean.ListBean>>() {
+//                    @Override
+//                    public ArrayList<CommentBean.ListBean> call(MovieResponse<CommentBean> response) {
+//                        currentPage = response.getData().getPnum();
+//                        int totalPum = response.getData().getTotalPnum();
+//                        if (currentPage == totalPum) { //加载完所有的评论后
+//                            mInfoActivity.noMoreComment();
+//                        }
+//                        ArrayList<CommentBean.ListBean> comments = new ArrayList<>();
+//                        comments.addAll(response.getData().getList());
+//                        return comments;
+//                    }
+//                })
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Subscriber<ArrayList<CommentBean.ListBean>>() {
+//                    @Override
+//                    public void onCompleted() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        if (refreshComment) {
+//                            mInfoActivity.refreshCommentFail(Constants.ERRO, e.getMessage());
+//                        } else {
+//                            mInfoActivity.loadCommentFail(Constants.ERRO, e.getMessage());
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onNext(ArrayList<CommentBean.ListBean> listBeen) {
+//                        if (refreshComment) {
+//                            mInfoActivity.refreshCommentSuccess(listBeen);
+//                        } else {
+//                            mInfoActivity.loadCommentSuccess(listBeen);
+//                        }
+//                    }
+//                });
+//        addSubscription(subscription);
+//
+//    }
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        if (refreshComment) {
-                            mInfoActivity.refreshCommentFail(Constants.ERRO, e.getMessage());
-                        } else {
-                            mInfoActivity.loadCommentFail(Constants.ERRO, e.getMessage());
-                        }
-                    }
-
-                    @Override
-                    public void onNext(ArrayList<CommentBean.ListBean> listBeen) {
-                        if (refreshComment) {
-                            mInfoActivity.refreshCommentSuccess(listBeen);
-                        } else {
-                            mInfoActivity.loadCommentSuccess(listBeen);
-                        }
-                    }
-                });
-        addSubscription(subscription);
-
-    }
-
-    /**
-     * 刷新评论
-     */
-    public void refreshComment() {
-        refreshComment = true;
-        currentPage = 1;
-        loadVideoComment();
-    }
-
-    /**
-     * 加载更多评论
-     */
-    public void loadMoreComment() {
-        refreshComment = false;
-        loadVideoComment();
-    }
+//    /**
+//     * 刷新评论
+//     */
+//    public void refreshComment() {
+//        refreshComment = true;
+//        currentPage = 1;
+//        loadVideoComment();
+//    }
+//
+//    /**
+//     * 加载更多评论
+//     */
+//    public void loadMoreComment() {
+//        refreshComment = false;
+//        loadVideoComment();
+//    }
 }

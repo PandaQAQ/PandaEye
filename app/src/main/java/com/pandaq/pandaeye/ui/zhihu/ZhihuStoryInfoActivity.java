@@ -27,6 +27,7 @@ import com.pandaq.pandaeye.presenter.zhihu.ZhihuStoryInfoPresenter;
 import com.pandaq.pandaeye.ui.ImplView.IZhihuStoryInfoActivity;
 import com.pandaq.pandaeye.utils.ColorUtils;
 import com.pandaq.pandaeye.utils.DensityUtil;
+import com.pandaq.pandaeye.utils.PicassoTarget;
 import com.pandaq.pandaeye.utils.ViewUtils;
 import com.pandaq.pandaeye.utils.WebUtils;
 import com.pandaq.pandaeye.widget.FiveThreeImageView;
@@ -128,7 +129,7 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
 
     @Override
     public void loadSuccess(ZhihuStoryContent zhihuStory) {
-        final Target target = new PicassoTarget();
+        Target target = new PicassoTarget(this, mStoryImg, mToolbarLayout, mToolbar);
         //不设置的话会有时候不加载图片
         mStoryImg.setTag(target);
         Picasso.with(this)
@@ -154,74 +155,5 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
     protected void onPause() {
         super.onPause();
         mPresenter.unSubscribe();
-    }
-
-    class PicassoTarget implements Target {
-
-        @Override
-        public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-            mStoryImg.setImageBitmap(bitmap);
-            final int twentyFourDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                    24, ZhihuStoryInfoActivity.this.getResources().getDisplayMetrics());
-            assert bitmap != null;
-            Palette.from(bitmap)
-                    .maximumColorCount(16)
-                    .clearFilters()
-                    .setRegion(0, 0, bitmap.getWidth() - 1, twentyFourDip)
-                    .generate(new Palette.PaletteAsyncListener() {
-                        @TargetApi(Build.VERSION_CODES.M)
-                        @Override
-                        public void onGenerated(Palette palette) {
-                            boolean isDark;
-                            int lightness = ColorUtils.isDark(palette);
-                            if (lightness == ColorUtils.LIGHTNESS_UNKNOWN) {
-                                isDark = ColorUtils.isDark(bitmap, bitmap.getWidth() / 2, 0);
-                            } else {
-                                isDark = lightness == ColorUtils.IS_DARK;
-                            }
-                            // color the status bar. Set a complementary dark color on L,
-                            // light or dark color on M (with matching status bar icons)
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                int statusBarColor = getWindow().getStatusBarColor();
-                                final Palette.Swatch topColor = ColorUtils.getMostPopulousSwatch(palette);
-                                if (topColor != null && (isDark || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)) {
-                                    statusBarColor = ColorUtils.scrimify(topColor.getRgb(), isDark, SCRIM_ADJUSTMENT);
-                                    // set a light status bar on M+
-                                    if (!isDark && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                        ViewUtils.setLightStatusBar(mStoryImg);
-                                    }
-                                }
-                                if (statusBarColor != getWindow().getStatusBarColor()) {
-                                    mToolbarLayout.setContentScrimColor(statusBarColor);
-                                    mToolbar.setBackgroundColor(getResources().getColor(R.color.trans_toolbar_7c424141, null));
-                                    ValueAnimator statusBarColorAnim = ValueAnimator.ofArgb(
-                                            getWindow().getStatusBarColor(), statusBarColor);
-                                    statusBarColorAnim.addUpdateListener(new ValueAnimator
-                                            .AnimatorUpdateListener() {
-                                        @Override
-                                        public void onAnimationUpdate(ValueAnimator animation) {
-                                            getWindow().setStatusBarColor((int) animation.getAnimatedValue());
-                                        }
-                                    });
-                                    statusBarColorAnim.setDuration(500L);
-                                    statusBarColorAnim.setInterpolator(
-                                            new AccelerateInterpolator());
-                                    statusBarColorAnim.start();
-                                }
-                            }
-                        }
-                    });
-            System.out.println("加载成功");
-        }
-
-        @Override
-        public void onBitmapFailed(Drawable errorDrawable) {
-            System.out.println("加载失败");
-        }
-
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-            System.out.println("加载中。。。。");
-        }
     }
 }

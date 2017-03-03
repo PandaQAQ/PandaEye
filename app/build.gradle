@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 android {
     compileSdkVersion 25
-    buildToolsVersion "24.0.3"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "com.pandaq.pandaeye"
@@ -10,6 +10,7 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -50,7 +51,8 @@ dependencies {
 //    compile 'tv.danmaku.ijk.media:ijkplayer-armv5:0.7.7.1'
 //    compile 'tv.danmaku.ijk.media:ijkplayer-x86:0.7.7.1'
     //ijkplayer 需要进行编译比较麻烦，这里直接使用 jiecao 播放器
-    compile 'fm.jiecao:jiecaovideoplayer:5.5'
+//    compile 'fm.jiecao:jiecaovideoplayer:5.5' //不懂为毛5.5播不了
+    compile 'fm.jiecao:jiecaovideoplayer:4.7.1_preview'
     //picasso 图片加载库 （Glide 中有些bug）
     compile 'com.squareup.picasso:picasso:2.5.2'
     //内存泄露检测

@@ -38,8 +38,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, BottomNavigationBar.OnTabSelectedListener {
 
 
-    @BindView(R.id.fab)
-    FloatingActionButton mFab;
     @BindView(R.id.navigation)
     NavigationView mNavigation;
     @BindView(R.id.drawer_layout)
@@ -133,17 +131,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
         }
         return true;
-    }
-
-    @OnClick({R.id.fab})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.fab:
-                Snackbar.make(mFab, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                break;
-        }
-
     }
 
     @Override

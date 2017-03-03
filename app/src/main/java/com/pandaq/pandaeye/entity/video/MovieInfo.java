@@ -1,13 +1,16 @@
 package com.pandaq.pandaeye.entity.video;
 
+import android.text.TextUtils;
+
 import java.io.Serializable;
+import java.io.StreamCorruptedException;
 
 /**
  * Created by PandaQ on 2017/2/28.
  * 电影详情页的实体类，去掉了相关和猜你喜欢
  */
 
-public class MovieInfo implements Serializable{
+public class MovieInfo implements Serializable {
 
     /**
      * airTime : 2016
@@ -215,6 +218,17 @@ public class MovieInfo implements Serializable{
 
     public void setVipFlag(String vipFlag) {
         this.vipFlag = vipFlag;
+    }
+
+    public String getVideoUrl() {
+        if (!TextUtils.isEmpty(HDURL))
+            return HDURL;
+        else if (!TextUtils.isEmpty(SDURL))
+            return SDURL;
+        else if (!TextUtils.isEmpty(smoothURL))
+            return smoothURL;
+        else
+            return "";
     }
 
 }

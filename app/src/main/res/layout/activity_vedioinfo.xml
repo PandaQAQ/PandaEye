@@ -35,10 +35,37 @@
         android:layout_width="match_parent"
         android:layout_height="240dp"/>
 
-    <com.pandaq.pandaeye.widget.viewpager.ViewPagerIndicator
-        android:id="@+id/vpi_video_info"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"/>
+        android:layout_height="@dimen/video_info_tab_height"
+        android:background="@color/trans_toolbar_7c424141"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_tab_description"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/video_description"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_size_mid"
+            android:visibility="visible"/>
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="10dp"/>
+
+        <TextView
+            android:id="@+id/tv_tab_comment"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/video_comment"
+            android:textColor="@color/white_FFFFFF"
+            android:textSize="@dimen/text_size_min"
+            android:visibility="visible"/>
+    </LinearLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_video_info"
