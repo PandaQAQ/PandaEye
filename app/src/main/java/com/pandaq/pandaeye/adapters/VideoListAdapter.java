@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.entity.video.RetDataBean;
+import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
  * 视频主界面 recyclerView 的 adapter
  */
 
-public class VideoListAdapter extends BaseRecyclerAdapter<RetDataBean.ListBean> {
+public class VideoListAdapter extends BaseRecyclerAdapter {
 
     private Context mContext;
     private int image_width;
@@ -42,14 +43,15 @@ public class VideoListAdapter extends BaseRecyclerAdapter<RetDataBean.ListBean> 
     }
 
     @Override
-    public void onBind(RecyclerView.ViewHolder viewHolder, int RealPosition, RetDataBean.ListBean data) {
+    public void onBind(RecyclerView.ViewHolder viewHolder, int RealPosition, BaseItem data) {
         ViewHolder holder = (ViewHolder) viewHolder;
-        String pic = data.getChildList().get(0).getPic();
+        RetDataBean.ListBean listBean = (RetDataBean.ListBean) data.getData();
+        String pic = listBean.getChildList().get(0).getPic();
         Picasso.with(mContext)
                 .load(pic) //加载第一张图
                 .resize(image_width, image_height)
                 .into(holder.mIvVideoType);
-        holder.mTvVideoType.setText(data.getTitle());
+        holder.mTvVideoType.setText(listBean.getTitle());
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

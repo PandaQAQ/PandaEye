@@ -19,6 +19,7 @@ import com.pandaq.pandaeye.entity.neteasynews.TopNews;
 import com.pandaq.pandaeye.presenter.news.NewsPresenter;
 import com.pandaq.pandaeye.ui.ImplView.INewsListFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
+import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView;
 
@@ -39,7 +40,6 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
     @BindView(R.id.refresh)
     SwipeRefreshLayout mRefresh;
     private NewsPresenter mPresenter = new NewsPresenter(this);
-    private ArrayList<TopNews> mTopNewses;
     private TopNewsListAdapter mAdapter;
 
     @Nullable
@@ -55,7 +55,6 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
     }
 
     private void initView() {
-        mTopNewses = new ArrayList<>();
         mNewsRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -77,15 +76,16 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
         mRefresh.setRefreshing(true);
         refreshNews();
         mPresenter.loadCache();
-        mNewsRecycler.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+        mNewsRecycler.addOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position, View view) {
+            public void onItemClick(int position, BaseItem baseItem, View view) {
                 //跳转到其他界面
+                TopNews topNews = (TopNews) baseItem.getData();
                 Bundle bundle = new Bundle();
                 Intent intent = new Intent(NewsListFragment.this.getActivity(), TopNewsInfoActivity.class);
-                bundle.putString(Constants.BUNDLE_KEY_TITLE, mTopNewses.get(position).getTitle());
-                bundle.putString(Constants.BUNDLE_KEY_ID, mTopNewses.get(position).getDocid());
-                bundle.putString(Constants.BUNDLE_KEY_IMG_URL, mTopNewses.get(position).getImgsrc());
+                bundle.putString(Constants.BUNDLE_KEY_TITLE, topNews.getTitle());
+                bundle.putString(Constants.BUNDLE_KEY_ID, topNews.getDocid());
+                bundle.putString(Constants.BUNDLE_KEY_IMG_URL, topNews.getImgsrc());
                 intent.putExtras(bundle);
                 String transitionName = getString(R.string.top_news_img);
                 Pair pairImg = new Pair<>(view.findViewById(R.id.news_image), transitionName);
@@ -125,17 +125,13 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
     }
 
     @Override
-    public void refreshNewsSuccessed(ArrayList<TopNews> topNews) {
-        mTopNewses.clear();
-        setTopNewses(topNews);
+    public void refreshNewsSuccessed(ArrayList<BaseItem> topNews) {
         if (mAdapter == null) {
             mAdapter = new TopNewsListAdapter(this);
-            mAdapter.setDatas(mTopNewses);
+            mAdapter.setBaseDatas(topNews);
             mNewsRecycler.setAdapter(mAdapter);
         } else {
-            if (mTopNewses.size() != 0) {
-                mAdapter.setDatas(mTopNewses);
-            }
+            mAdapter.setBaseDatas(topNews);
         }
     }
 
@@ -150,9 +146,8 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
     }
 
     @Override
-    public void loadMoreSuccessed(ArrayList<TopNews> topNewses) {
-        mTopNewses.addAll(topNewses);
-        mAdapter.addDatas(topNewses);
+    public void loadMoreSuccessed(ArrayList<BaseItem> topNewses) {
+        mAdapter.addBaseDatas(topNewses);
     }
 
     @Override
@@ -160,10 +155,6 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
         super.onPause();
         mRefresh.setRefreshing(false);
         mPresenter.unSubscribe();
-    }
-
-    public void setTopNewses(ArrayList<TopNews> topNewses) {
-        mTopNewses = topNewses;
     }
 
     @Override

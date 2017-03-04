@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.entity.neteasynews.TopNews;
-import com.pandaq.pandaeye.utils.DensityUtil;
+import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
  * email : 767807368@qq.com
  */
 
-public class TopNewsListAdapter extends BaseRecyclerAdapter<TopNews> {
+public class TopNewsListAdapter extends BaseRecyclerAdapter {
 
     private Context mContext;
     private int widthPx;
@@ -43,11 +43,12 @@ public class TopNewsListAdapter extends BaseRecyclerAdapter<TopNews> {
     }
 
     @Override
-    public void onBind(RecyclerView.ViewHolder holder, int RealPosition, TopNews data) {
+    public void onBind(RecyclerView.ViewHolder holder, int RealPosition, BaseItem data) {
         if (holder instanceof ViewHolder) {
-            ((ViewHolder) holder).mNewsTitle.setText(data.getTitle());
-            ((ViewHolder) holder).mSource.setText(data.getSource());
-            String image = data.getImgsrc();
+            TopNews topNews = (TopNews) data.getData();
+            ((ViewHolder) holder).mNewsTitle.setText(topNews.getTitle());
+            ((ViewHolder) holder).mSource.setText(topNews.getSource());
+            String image = topNews.getImgsrc();
             Picasso.with(mContext)
                     .load(image)
                     .resize(widthPx, heighPx)

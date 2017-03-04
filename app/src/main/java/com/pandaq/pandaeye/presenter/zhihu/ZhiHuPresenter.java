@@ -8,6 +8,7 @@ import com.pandaq.pandaeye.entity.zhihu.ZhiHuDaily;
 import com.pandaq.pandaeye.entity.zhihu.ZhiHuStory;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.IZhiHuDailyFrag;
+import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,18 +81,20 @@ public class ZhiHuPresenter extends BasePresenter {
                         return Observable.from(zhiHuStories);
                     }
                 })
-                .map(new Func1<ZhiHuStory, ZhiHuStory>() {
+                .map(new Func1<ZhiHuStory, BaseItem>() {
                     @Override
-                    public ZhiHuStory call(ZhiHuStory zhiHuStory) {
+                    public BaseItem call(ZhiHuStory zhiHuStory) {
                         //将日期值设置到 story 中
                         zhiHuStory.setDate(date);
-                        return zhiHuStory;
+                        BaseItem<ZhiHuStory> baseItem = new BaseItem<>();
+                        baseItem.setData(zhiHuStory);
+                        return baseItem;
                     }
                 })
                 .toList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<ZhiHuStory>>() {
+                .subscribe(new Subscriber<List<BaseItem>>() {
                     @Override
                     public void onCompleted() {
                     }
@@ -102,8 +105,8 @@ public class ZhiHuPresenter extends BasePresenter {
                     }
 
                     @Override
-                    public void onNext(List<ZhiHuStory> stories) {
-                        mZhiHuDailyFrag.loadSuccessed((ArrayList<ZhiHuStory>) stories);
+                    public void onNext(List<BaseItem> baseitems) {
+                        mZhiHuDailyFrag.loadSuccessed((ArrayList<BaseItem>) baseitems);
                     }
                 });
         addSubscription(subscription);

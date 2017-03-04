@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.entity.douban.MovieSubject;
+import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -21,7 +22,7 @@ import butterknife.ButterKnife;
  * Created by PandaQ on 2016/9/12.
  * email : 767807368@qq.com
  */
-public class MovieListAdapter extends BaseRecyclerAdapter<MovieSubject> {
+public class MovieListAdapter extends BaseRecyclerAdapter {
 
     private Fragment mFragment;
 
@@ -36,14 +37,15 @@ public class MovieListAdapter extends BaseRecyclerAdapter<MovieSubject> {
     }
 
     @Override
-    public void onBind(RecyclerView.ViewHolder viewHolder, int RealPosition, MovieSubject data) {
+    public void onBind(RecyclerView.ViewHolder viewHolder, int RealPosition, BaseItem data) {
+        MovieSubject movieSubject = (MovieSubject) data.getData();
         ViewHolder holder = (ViewHolder) viewHolder;
-        holder.mMovieName.setText(data.getTitle());
-        float rate = data.getRating().getAverage();
+        holder.mMovieName.setText(movieSubject.getTitle());
+        float rate = movieSubject.getRating().getAverage();
         holder.mMovieRate.setText(toString(rate));
         holder.mMovieStarts.setRating(rate / 2);
         Picasso.with(mFragment.getContext())
-                .load(data.getImages().getMedium())
+                .load(movieSubject.getImages().getMedium())
                 .into(holder.mMoviePic);
     }
 

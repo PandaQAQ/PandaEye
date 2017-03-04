@@ -1,6 +1,6 @@
 package com.pandaq.pandaeye.ui.ImplView;
 
-import com.pandaq.pandaeye.entity.douban.MovieSubject;
+import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;
 
@@ -23,11 +23,11 @@ public interface IDoubanFrag {
 
     void refreshData();
 
-    void loadSuccessed(ArrayList<MovieSubject> movieSubjects);
+    void loadSuccessed(ArrayList<BaseItem> movieSubjects);
 
     void loadFail(String errMsg);
 
-    void refreshSucceed(ArrayList<MovieSubject> movieSubjects);
+    void refreshSucceed(ArrayList<BaseItem> movieSubjects);
 
     void refreshFail(String errMsg);
 }

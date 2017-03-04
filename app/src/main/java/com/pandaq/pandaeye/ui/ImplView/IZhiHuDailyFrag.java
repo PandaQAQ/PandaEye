@@ -2,6 +2,7 @@ package com.pandaq.pandaeye.ui.ImplView;
 
 import com.pandaq.pandaeye.entity.zhihu.ZhiHuDaily;
 import com.pandaq.pandaeye.entity.zhihu.ZhiHuStory;
+import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;
 
@@ -23,7 +24,7 @@ public interface IZhiHuDailyFrag {
 
     void loadMoreData();
 
-    void loadSuccessed(ArrayList<ZhiHuStory> stories);
+    void loadSuccessed(ArrayList<BaseItem> stories);
 
     void loadFail(String errMsg);
 }

@@ -12,7 +12,6 @@
         android:id="@+id/zhihudaily_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:emptyView="@layout/emptyview"
         app:footer_layout="@layout/recycler_footer_layout"
         app:header_layout="@layout/recycler_header_layout"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"

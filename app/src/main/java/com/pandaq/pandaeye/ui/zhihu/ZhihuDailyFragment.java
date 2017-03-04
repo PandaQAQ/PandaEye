@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.ZhihuDailyAdapter;
@@ -24,6 +23,7 @@ import com.pandaq.pandaeye.ui.ImplView.IZhiHuDailyFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
 import com.pandaq.pandaqlib.loopbander.AutoScrollViewPager;
 import com.pandaq.pandaqlib.loopbander.ViewGroupIndicator;
+import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView;
 
@@ -45,7 +45,7 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
     SwipeRefreshLayout mRefresh;
     private ZhiHuPresenter mPresenter = new ZhiHuPresenter(this);
     private ZhihuDailyAdapter mZhihuDailyAdapter;
-    private ArrayList<ZhiHuStory> mZhiHuStories;
+    private ArrayList<BaseItem> mBaseItems;
     private AutoScrollViewPager scrollViewPager;
     private ViewGroupIndicator viewGroupIndicator;
     private ZhihuTopPagerAdapter mTopPagerAdapter;
@@ -67,7 +67,7 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
     }
 
     private void initView() {
-        mZhiHuStories = new ArrayList<>();
+        mBaseItems = new ArrayList<>();
         mZhihudailyList.setItemAnimator(new DefaultItemAnimator());
         mZhihudailyList.getItemAnimator().setChangeDuration(0);
         mZhihudailyList.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -94,14 +94,15 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
         viewGroupIndicator = (ViewGroupIndicator) headerView.findViewById(R.id.scroll_pager_indicator);
         refreshData();
         mPresenter.loadCache();
-        mZhihudailyList.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+        mZhihudailyList.addOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(final int position, View view) {
+            public void onItemClick(final int position, BaseItem baseItem, View view) {
                 //跳转到其他界面
+                ZhiHuStory story = (ZhiHuStory) baseItem.getData();
                 Bundle bundle = new Bundle();
                 Intent intent = new Intent(ZhihuDailyFragment.this.getActivity(), ZhihuStoryInfoActivity.class);
-                bundle.putString(Constants.BUNDLE_KEY_TITLE, mZhiHuStories.get(position).getTitle());
-                bundle.putInt(Constants.BUNDLE_KEY_ID, mZhiHuStories.get(position).getId());
+                bundle.putString(Constants.BUNDLE_KEY_TITLE, story.getTitle());
+                bundle.putInt(Constants.BUNDLE_KEY_ID, story.getId());
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -127,8 +128,7 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
 
     @Override
     public void refreshSuccessed(ZhiHuDaily stories) {
-        mZhiHuStories.clear();
-        mZhiHuStories = stories.getStories();
+        mBaseItems.clear();
         //配置顶部故事
         if (mTopPagerAdapter == null) {
             mTopPagerAdapter = new ZhihuTopPagerAdapter(this, stories.getTop_stories());
@@ -139,13 +139,18 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
         }
         viewGroupIndicator.setParent(scrollViewPager);
         //配置底部列表故事
+        for (ZhiHuStory story : stories.getStories()) {
+            BaseItem<ZhiHuStory> baseItem = new BaseItem<>();
+            baseItem.setData(story);
+            mBaseItems.add(baseItem);
+        }
         if (mZhihuDailyAdapter == null) {
             mZhihuDailyAdapter = new ZhihuDailyAdapter(this);
-            mZhihuDailyAdapter.setDatas(mZhiHuStories);
+            mZhihuDailyAdapter.setBaseDatas(mBaseItems);
             mZhihudailyList.setAdapter(mZhihuDailyAdapter);
         } else {
-            if (mZhiHuStories.size() != 0) {
-                mZhihuDailyAdapter.setDatas(mZhiHuStories);
+            if (mBaseItems.size() != 0) {
+                mZhihuDailyAdapter.setBaseDatas(mBaseItems);
             }
         }
     }
@@ -160,9 +165,9 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
     }
 
     @Override
-    public void loadSuccessed(ArrayList<ZhiHuStory> stories) {
-        mZhiHuStories.addAll(stories);
-        mZhihuDailyAdapter.addDatas(stories);
+    public void loadSuccessed(ArrayList<BaseItem> stories) {
+        mBaseItems.addAll(stories);
+        mZhihuDailyAdapter.addBaseDatas(stories);
     }
 
     @Override

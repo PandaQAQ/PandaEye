@@ -8,9 +8,12 @@ import com.pandaq.pandaeye.entity.douban.MovieSubject;
 import com.pandaq.pandaeye.entity.douban.MovieTop250;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.IDoubanFrag;
+import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -41,15 +44,33 @@ public class DouBanMoviePresenter extends BasePresenter {
                 .getTop250(0, 20)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<MovieTop250, ArrayList<MovieSubject>>() {
+                .flatMap(new Func1<MovieTop250, Observable<MovieSubject>>() {
                     @Override
-                    public ArrayList<MovieSubject> call(MovieTop250 movieTop250) {
+                    public Observable<MovieSubject> call(MovieTop250 movieTop250) {
                         //刷新后下一次加载的起点为
                         start = movieTop250.getCount();
-                        return movieTop250.getMovieSubjects();
+                        return Observable.from(movieTop250.getMovieSubjects());
                     }
                 })
-                .subscribe(new Subscriber<ArrayList<MovieSubject>>() {
+                .map(new Func1<MovieSubject, BaseItem>() {
+                    @Override
+                    public BaseItem call(MovieSubject movieSubject) {
+                        BaseItem<MovieSubject> baseItem = new BaseItem<>();
+                        baseItem.setData(movieSubject);
+                        return baseItem;
+                    }
+                })
+                .toList()
+                //将 List 转为ArrayList 缓存存储 ArrayList Serializable对象
+                .map(new Func1<List<BaseItem>, ArrayList<BaseItem>>() {
+                    @Override
+                    public ArrayList<BaseItem> call(List<BaseItem> baseItems) {
+                        ArrayList<BaseItem> items = new ArrayList<>();
+                        items.addAll(baseItems);
+                        return items;
+                    }
+                })
+                .subscribe(new Subscriber<ArrayList<BaseItem>>() {
                     @Override
                     public void onCompleted() {
                         mMovieListFrag.hideProgressBar();
@@ -62,11 +83,11 @@ public class DouBanMoviePresenter extends BasePresenter {
                     }
 
                     @Override
-                    public void onNext(ArrayList<MovieSubject> movieSubjects) {
+                    public void onNext(ArrayList<BaseItem> baseItems) {
                         mMovieListFrag.hideProgressBar();
-                        mMovieListFrag.refreshSucceed(movieSubjects);
+                        mMovieListFrag.refreshSucceed(baseItems);
                         DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_DOUBAN_FILE);
-                        manager.put(Constants.CACHE_DOUBAN_MOVIE,movieSubjects);
+                        manager.put(Constants.CACHE_DOUBAN_MOVIE, baseItems);
                     }
                 });
         addSubscription(subscription);
@@ -90,18 +111,32 @@ public class DouBanMoviePresenter extends BasePresenter {
                 .getTop250(start, 20)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<MovieTop250, ArrayList<MovieSubject>>() {
+                .flatMap(new Func1<MovieTop250, Observable<MovieSubject>>() {
                     @Override
-                    public ArrayList<MovieSubject> call(MovieTop250 movieTop250) {
-                        //赋值下一次刷新的起始位置
+                    public Observable<MovieSubject> call(MovieTop250 movieTop250) {
+                        //刷新后下一次加载的起点为
                         start += movieTop250.getCount();
-                        //下一次刷新的起始位置如果大于了总的item则不再刷新
-                        if (start > movieTop250.getTotal()) {
-                            loadAllCompleted = true;
-                        }
-                        return movieTop250.getMovieSubjects();
+                        return Observable.from(movieTop250.getMovieSubjects());
                     }
-                }).subscribe(new Subscriber<ArrayList<MovieSubject>>() {
+                })
+                .map(new Func1<MovieSubject, BaseItem>() {
+                    @Override
+                    public BaseItem call(MovieSubject movieSubject) {
+                        BaseItem<MovieSubject> baseItem = new BaseItem<>();
+                        baseItem.setData(movieSubject);
+                        return baseItem;
+                    }
+                })
+                .toList()
+                .map(new Func1<List<BaseItem>, ArrayList<BaseItem>>() {
+                    @Override
+                    public ArrayList<BaseItem> call(List<BaseItem> baseItems) {
+                        ArrayList<BaseItem> items = new ArrayList<>();
+                        items.addAll(baseItems);
+                        return items;
+                    }
+                })
+                .subscribe(new Subscriber<ArrayList<BaseItem>>() {
                     @Override
                     public void onCompleted() {
                         mMovieListFrag.hideProgressBar();
@@ -114,7 +149,7 @@ public class DouBanMoviePresenter extends BasePresenter {
                     }
 
                     @Override
-                    public void onNext(ArrayList<MovieSubject> movieSubjects) {
+                    public void onNext(ArrayList<BaseItem> movieSubjects) {
                         mMovieListFrag.hideProgressBar();
                         mMovieListFrag.loadSuccessed(movieSubjects);
                     }
@@ -125,10 +160,10 @@ public class DouBanMoviePresenter extends BasePresenter {
     /**
      * 加载缓存
      */
-    public void loadCache(){
+    public void loadCache() {
         DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_DOUBAN_FILE);
-        ArrayList<MovieSubject> movieSubjects = manager.getSerializable(Constants.CACHE_DOUBAN_MOVIE);
-        if (movieSubjects!=null){
+        ArrayList<BaseItem> movieSubjects = manager.getSerializable(Constants.CACHE_DOUBAN_MOVIE);
+        if (movieSubjects != null) {
             mMovieListFrag.refreshSucceed(movieSubjects);
         }
     }

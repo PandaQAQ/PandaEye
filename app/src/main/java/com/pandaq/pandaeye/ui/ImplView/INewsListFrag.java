@@ -1,6 +1,7 @@
 package com.pandaq.pandaeye.ui.ImplView;
 
 import com.pandaq.pandaeye.entity.neteasynews.TopNews;
+import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;
 
@@ -19,11 +20,11 @@ public interface INewsListFrag {
 
     void refreshNewsFail(String errorMsg);
 
-    void refreshNewsSuccessed(ArrayList<TopNews> topNews);
+    void refreshNewsSuccessed(ArrayList<BaseItem> topNews);
 
     void loadMoreNews();
 
     void loadMoreFail(String errorMsg);
 
-    void loadMoreSuccessed(ArrayList<TopNews> topNewses);
+    void loadMoreSuccessed(ArrayList<BaseItem> topNewses);
 }

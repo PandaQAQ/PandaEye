@@ -15,12 +15,14 @@ import com.pandaq.pandaeye.adapters.VideoListAdapter;
 import com.pandaq.pandaeye.adapters.VideoTopPagerAdapter;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.entity.video.RetDataBean;
+import com.pandaq.pandaeye.entity.zhihu.ZhiHuStory;
 import com.pandaq.pandaeye.presenter.video.VideoFragPresenter;
 import com.pandaq.pandaeye.ui.ImplView.IVideoListFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
 import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaqlib.loopbander.AutoScrollViewPager;
 import com.pandaq.pandaqlib.loopbander.ViewGroupIndicator;
+import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 import com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView;
 import com.pandaq.pandaqlib.magicrecyclerView.SpaceDecoration;
 
@@ -46,7 +48,7 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
     private VideoTopPagerAdapter mPagerAdapter;
     private VideoListAdapter mAdapter;
     private VideoFragPresenter mPresenter = new VideoFragPresenter(this);
-    private List<RetDataBean.ListBean.ChildListBean> mBanders;
+    private ArrayList<BaseItem> mBaseItems;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,7 +59,7 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
     }
 
     private void initView() {
-        mBanders = new ArrayList<>();
+        mBaseItems = new ArrayList<>();
         mMrvVideo.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mMrvVideo.setItemAnimator(new DefaultItemAnimator());
         mMrvVideo.getItemAnimator().setChangeDuration(0);
@@ -86,30 +88,34 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
 
     @Override
     public void refreshSuccess(ArrayList<RetDataBean.ListBean> listBeen) {
-        for (RetDataBean.ListBean listBean : listBeen) {
+        for (RetDataBean.ListBean listBean : listBeen) { //事实上只会执行一次，Banner 为第一个 item
             if (Constants.SHOW_TYPE_BANNER.equals(listBean.getShowType())) { //判断是否为 banner
-                mBanders = listBean.getChildList();
+                //配置顶部故事
+                if (mPagerAdapter == null) {
+                    mPagerAdapter = new VideoTopPagerAdapter(this, listBean.getChildList());
+                    scrollViewPager.setAdapter(mPagerAdapter);
+                } else {
+                    mPagerAdapter.resetData(listBean.getChildList());
+                    mPagerAdapter.notifyDataSetChanged();
+                }
+                viewGroupIndicator.setParent(scrollViewPager);
                 listBeen.remove(listBean);
                 break;
             }
         }
-        //配置顶部故事
-        if (mPagerAdapter == null) {
-            mPagerAdapter = new VideoTopPagerAdapter(this, mBanders);
-            scrollViewPager.setAdapter(mPagerAdapter);
-        } else {
-            mPagerAdapter.resetData(mBanders);
-            mPagerAdapter.notifyDataSetChanged();
-        }
-        viewGroupIndicator.setParent(scrollViewPager);
         //配置底部列表故事
+        for (RetDataBean.ListBean listBean : listBeen) {
+            BaseItem<RetDataBean.ListBean> baseItem = new BaseItem<>();
+            baseItem.setData(listBean);
+            mBaseItems.add(baseItem);
+        }
         if (mAdapter == null) {
             mAdapter = new VideoListAdapter(this);
-            mAdapter.setDatas(listBeen);
+            mAdapter.setBaseDatas(mBaseItems);
             mMrvVideo.setAdapter(mAdapter);
         } else {
             if (listBeen.size() != 0) {
-                mAdapter.setDatas(listBeen);
+                mAdapter.setBaseDatas(mBaseItems);
             }
         }
     }

@@ -14,41 +14,37 @@ import android.view.ViewGroup;
 
 import com.pandaq.pandaqlib.R;
 
+import static com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter.RecyclerItemType.TYPE_TAGS;
+
 /**
  * Created by PandaQ on 2016/9/18.
  * email : 767807368@qq.com
- * 自带 header 和 footer 的 RecyclerView
  */
 public class MagicRecyclerView extends RecyclerView {
+    private static final int NULL_VALUE = 0;
 
-    public enum LAYOUT_MANAGER_TYPE {
+    private enum LAYOUT_MANAGER_TYPE {
         LINEAR,
         GRID,
         STAGGERED_GRID
     }
 
-    private static final int NULL_VALUE = 0;
     /**
      * 布局类型
      */
     private LAYOUT_MANAGER_TYPE layoutManagerType;
     private int[] positions;
-    /**
-     * 最后一个可见的item的位置
-     */
-    private int lastVisibleItemPosition = -1;
     private int firstVisibleItemPosition = -1;
-
-    private int childCount = -1;
     private View headerView;
-    private View emptyView;
     private View footerView;
+    private int childCount = -1;
     //当前的头部视图底部外边距
     private int scrolledMargin = 0; //滑动结束时的margin
     private int distance = 0; // 每次滑动的距离
     private float multiplier = 1;//视差因子，默认值为1
     private BaseRecyclerAdapter mRecyclerAdapter;
-    private BaseRecyclerAdapter.OnItemClickListener mItemClickListener;
+    private OnTagChangeListener mOnTagChangeListener;
+    private boolean postChange = true; //避免标签滑动期间多次触发接口回调
 
     public MagicRecyclerView(Context context) {
         super(context);
@@ -66,9 +62,8 @@ public class MagicRecyclerView extends RecyclerView {
 
     private void init(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.MagicRecyclerView);
-        int header_layout = ta.getResourceId(R.styleable.MagicRecyclerView_header_layout, NULL_VALUE);
-        int empty_layout = ta.getResourceId(R.styleable.MagicRecyclerView_emptyView, NULL_VALUE);
-        int footer_layout = ta.getResourceId(R.styleable.MagicRecyclerView_footer_layout, NULL_VALUE);
+        int header_layout = ta.getResourceId(R.styleable.MagicRecyclerView_header_layout, 0);
+        int footer_layout = ta.getResourceId(R.styleable.MagicRecyclerView_footer_layout, 0);
         multiplier = ta.getFloat(R.styleable.MagicRecyclerView_parallaxMultiplier, multiplier);
         //取值范围为0-1
         if (multiplier > 1) {
@@ -77,9 +72,6 @@ public class MagicRecyclerView extends RecyclerView {
         if (header_layout != NULL_VALUE) {
             headerView = LayoutInflater.from(context).inflate(header_layout, null, true);
         }
-        if (empty_layout != NULL_VALUE) {
-            emptyView = inflate(context, empty_layout, null);
-        }
         if (footer_layout != NULL_VALUE) {
             footerView = LayoutInflater.from(context).inflate(footer_layout, null, true);
             RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -87,6 +79,11 @@ public class MagicRecyclerView extends RecyclerView {
             footerView.setLayoutParams(lp);
         }
         ta.recycle();
+    }
+
+    @Override
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+        super.onScrollChanged(l, t, oldl, oldt);
     }
 
     @Override
@@ -106,11 +103,9 @@ public class MagicRecyclerView extends RecyclerView {
         switch (layoutManagerType) {
             case LINEAR:
                 firstVisibleItemPosition = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
-                lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
                 break;
             case GRID:
                 firstVisibleItemPosition = ((GridLayoutManager) layoutManager).findFirstVisibleItemPosition();
-                lastVisibleItemPosition = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
                 break;
             case STAGGERED_GRID:
                 StaggeredGridLayoutManager staggeredGridLayoutManager = (StaggeredGridLayoutManager) layoutManager;
@@ -118,8 +113,6 @@ public class MagicRecyclerView extends RecyclerView {
                     positions = new int[staggeredGridLayoutManager.getSpanCount()];
                 }
                 staggeredGridLayoutManager.findLastVisibleItemPositions(positions);
-                //获取到最后一页的最后一个控件的position
-                lastVisibleItemPosition = findMax(positions);
                 staggeredGridLayoutManager.findFirstVisibleItemPositions(positions);
                 //获取到第一页的第一个可见控件
                 firstVisibleItemPosition = findMin(positions);
@@ -127,23 +120,30 @@ public class MagicRecyclerView extends RecyclerView {
         }
         //当前显示的子item的个数
         childCount = layoutManager.getChildCount();
-        //当添加了头部视图的时候给头部视图添加滚动视差效果
-        if (headerView != null) {
-            if (firstVisibleItemPosition == 0) {
-                if (distance <= headerView.getHeight()) {
-                    distance = dy;
-                } else {
-                    distance = headerView.getHeight();
-                }
-                LayoutParams layoutParams = (LayoutParams) headerView.getLayoutParams();
-                //重新赋值给底部边距
-                scrolledMargin = -distance + scrolledMargin;
-                if (scrolledMargin > 0) {
-                    scrolledMargin = 0;
-                }
-                layoutParams.setMargins(0, 0, 0, (int) (multiplier * scrolledMargin));
-                headerView.setLayoutParams(layoutParams);
+        //当添加了头部视图且当前头部视图可见的时候给头部视图添加滚动视差效果
+        if (headerView != null && firstVisibleItemPosition == 0) {
+            if (distance <= headerView.getHeight()) {
+                distance = dy;
+            } else {
+                distance = headerView.getHeight();
             }
+            LayoutParams layoutParams = (LayoutParams) headerView.getLayoutParams();
+            //重新赋值给底部边距
+            scrolledMargin = -distance + scrolledMargin;
+            if (scrolledMargin > 0) {
+                scrolledMargin = 0;
+            }
+            layoutParams.setMargins(0, 0, 0, (int) (multiplier * scrolledMargin));
+            headerView.setLayoutParams(layoutParams);
+        }
+        int firstItemType = getAdapter().getItemViewType(firstVisibleItemPosition);
+        if (firstItemType == TYPE_TAGS.getiNum()) { //当第一个可见 Item 是 Tag 时触发接口
+            if (mOnTagChangeListener != null && postChange) {
+                mOnTagChangeListener.onChange(mRecyclerAdapter.getTag(firstVisibleItemPosition));
+                postChange = false;
+            }
+        } else {
+            postChange = true;
         }
     }
 
@@ -167,6 +167,7 @@ public class MagicRecyclerView extends RecyclerView {
         return min;
     }
 
+
     public void setAdapter(BaseRecyclerAdapter adapter) {
         if (mRecyclerAdapter == null) {
             mRecyclerAdapter = adapter;
@@ -177,9 +178,6 @@ public class MagicRecyclerView extends RecyclerView {
         }
         if (footerView != null) {
             mRecyclerAdapter.setFooterView(footerView);
-        }
-        if (mItemClickListener != null) {
-            mRecyclerAdapter.setOnItemClickListener(mItemClickListener);
         }
     }
 
@@ -200,10 +198,38 @@ public class MagicRecyclerView extends RecyclerView {
         return footerView;
     }
 
-    public void setOnItemClickListener(BaseRecyclerAdapter.OnItemClickListener li) {
-        mItemClickListener = li;
+    public void addOnItemClickListener(BaseRecyclerAdapter.OnItemClickListener mItemClickListener) {
         if (mRecyclerAdapter != null) {
             mRecyclerAdapter.setOnItemClickListener(mItemClickListener);
         }
+    }
+
+    public void addOnTagChangeListener(OnTagChangeListener listener) {
+        this.mOnTagChangeListener = listener;
+    }
+
+//    @Override
+//    protected void dispatchDraw(Canvas canvas) {
+//        super.dispatchDraw(canvas);
+//        Bitmap titleView = mCurrentSection.view;
+//        if (titleView != null) {
+//            // draw child
+//            canvas.save();
+//            int clipHeight = titleView.getHeight();
+//            int clipWidth = titleView.getWidth();
+//            canvas.clipRect(0, 0, clipWidth, clipHeight);
+//            //把view中的内容绘制在画布上
+//            if (falag) {
+//                canvas.translate(0, -mTranslateY + clipHeight);
+//            } else {
+//                canvas.translate(0, -mTranslateY);
+//            }
+//            canvas.drawBitmap(titleView, 0, 0, new Paint());
+//            canvas.restore();
+//        }
+//    }
+
+    public interface OnTagChangeListener {
+        void onChange(String newTag);
     }
 }

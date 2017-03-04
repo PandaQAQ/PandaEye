@@ -16,6 +16,7 @@ import com.pandaq.pandaeye.entity.douban.MovieSubject;
 import com.pandaq.pandaeye.presenter.douban.DouBanMoviePresenter;
 import com.pandaq.pandaeye.ui.ImplView.IDoubanFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
+import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView;
 
@@ -34,7 +35,6 @@ public class MovieListFragment extends BaseFragment implements IDoubanFrag, Swip
     MagicRecyclerView mMovieList;
     @BindView(R.id.srl_refresh)
     SwipeRefreshLayout mSrlRefresh;
-    private ArrayList<MovieSubject> mMovieSubjects;
     private MovieListAdapter mMovieListAdapter;
     private DouBanMoviePresenter mPresenter = new DouBanMoviePresenter(this);
 
@@ -49,7 +49,6 @@ public class MovieListFragment extends BaseFragment implements IDoubanFrag, Swip
 
     private void initView() {
         RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        mMovieSubjects = new ArrayList<>();
         mMovieList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -71,9 +70,9 @@ public class MovieListFragment extends BaseFragment implements IDoubanFrag, Swip
                 android.R.color.holo_red_light);
         refreshData();
         mPresenter.loadCache();
-        mMovieList.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+        mMovieList.addOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position, View view) {
+            public void onItemClick(int position, BaseItem baseItem, View view) {
             }
         });
         View footerView = mMovieList.getFooterView();
@@ -119,8 +118,8 @@ public class MovieListFragment extends BaseFragment implements IDoubanFrag, Swip
     }
 
     @Override
-    public void loadSuccessed(ArrayList<MovieSubject> movieSubjects) {
-        mMovieListAdapter.addDatas(movieSubjects);
+    public void loadSuccessed(ArrayList<BaseItem> movieSubjects) {
+        mMovieListAdapter.addBaseDatas(movieSubjects);
     }
 
     @Override
@@ -129,13 +128,11 @@ public class MovieListFragment extends BaseFragment implements IDoubanFrag, Swip
     }
 
     @Override
-    public void refreshSucceed(ArrayList<MovieSubject> movieSubjects) {
-        mMovieSubjects.clear();
-        mMovieSubjects = movieSubjects;
+    public void refreshSucceed(ArrayList<BaseItem> movieSubjects) {
         //如果是刚进入时刷新则新建一个Adapter，否则只是更新数据源
         if (mMovieListAdapter == null) {
             mMovieListAdapter = new MovieListAdapter(this);
-            mMovieListAdapter.setDatas(movieSubjects);
+            mMovieListAdapter.setBaseDatas(movieSubjects);
             mMovieList.setAdapter(mMovieListAdapter);
         } else {
             mMovieListAdapter.notifyDataSetChanged();

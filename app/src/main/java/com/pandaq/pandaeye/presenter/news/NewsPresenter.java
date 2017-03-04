@@ -6,8 +6,10 @@ import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
 import com.pandaq.pandaeye.entity.neteasynews.TopNews;
 import com.pandaq.pandaeye.entity.neteasynews.TopNewsList;
+import com.pandaq.pandaeye.entity.zhihu.ZhiHuStory;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.INewsListFrag;
+import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,19 +59,27 @@ public class NewsPresenter extends BasePresenter {
                         return topNews.getUrl() != null;
                     }
                 })
+                .map(new Func1<TopNews, BaseItem>() {
+                    @Override
+                    public BaseItem call(TopNews topNews) {
+                        BaseItem<TopNews> baseItem = new BaseItem<>();
+                        baseItem.setData(topNews);
+                        return baseItem;
+                    }
+                })
                 .toList()
                 //将 List 转为ArrayList 缓存存储 ArrayList Serializable对象
-                .map(new Func1<List<TopNews>, ArrayList<TopNews>>() {
+                .map(new Func1<List<BaseItem>, ArrayList<BaseItem>>() {
                     @Override
-                    public ArrayList<TopNews> call(List<TopNews> topNewses) {
-                        ArrayList<TopNews> news = new ArrayList<>();
-                        news.addAll(topNewses);
-                        return news;
+                    public ArrayList<BaseItem> call(List<BaseItem> baseItems) {
+                        ArrayList<BaseItem> items = new ArrayList<>();
+                        items.addAll(baseItems);
+                        return items;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ArrayList<TopNews>>() {
+                .subscribe(new Subscriber<ArrayList<BaseItem>>() {
                     @Override
                     public void onCompleted() {
                         mNewsListFrag.hideRefreshBar();
@@ -82,7 +92,7 @@ public class NewsPresenter extends BasePresenter {
                     }
 
                     @Override
-                    public void onNext(ArrayList<TopNews> topNewses) {
+                    public void onNext(ArrayList<BaseItem> topNewses) {
                         DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_TOPNEWS_FILE);
                         manager.put(Constants.CACHE_TOPNEWS, topNewses);
                         currentIndex += 20;
@@ -115,10 +125,18 @@ public class NewsPresenter extends BasePresenter {
                         return topNews.getUrl() != null;
                     }
                 })
+                .map(new Func1<TopNews, BaseItem>() {
+                    @Override
+                    public BaseItem call(TopNews topNews) {
+                        BaseItem<TopNews> baseItem = new BaseItem<>();
+                        baseItem.setData(topNews);
+                        return baseItem;
+                    }
+                })
                 .toList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<TopNews>>() {
+                .subscribe(new Observer<List<BaseItem>>() {
                     @Override
                     public void onCompleted() {
                     }
@@ -129,10 +147,10 @@ public class NewsPresenter extends BasePresenter {
                     }
 
                     @Override
-                    public void onNext(List<TopNews> topNews) {
+                    public void onNext(List<BaseItem> topNews) {
                         //每刷新成功一次多加载20条
                         currentIndex += 20;
-                        mNewsListFrag.loadMoreSuccessed((ArrayList<TopNews>) topNews);
+                        mNewsListFrag.loadMoreSuccessed((ArrayList<BaseItem>) topNews);
                     }
                 });
         addSubscription(subscription);
@@ -143,7 +161,7 @@ public class NewsPresenter extends BasePresenter {
      */
     public void loadCache() {
         DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_TOPNEWS_FILE);
-        ArrayList<TopNews> topNews = manager.getSerializable(Constants.CACHE_TOPNEWS);
+        ArrayList<BaseItem> topNews = manager.getSerializable(Constants.CACHE_TOPNEWS);
         if (topNews != null) {
             mNewsListFrag.refreshNewsSuccessed(topNews);
         }
