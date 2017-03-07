@@ -1,7 +1,6 @@
 package com.pandaq.pandaeye.ui.ImplView;
 
-import com.pandaq.pandaeye.entity.zhihu.ZhiHuDaily;
-import com.pandaq.pandaeye.entity.zhihu.ZhiHuStory;
+import com.pandaq.pandaeye.model.zhihu.ZhiHuDaily;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;

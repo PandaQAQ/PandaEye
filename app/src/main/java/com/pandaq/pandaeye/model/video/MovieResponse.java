@@ -1,4 +1,4 @@
-package com.pandaq.pandaeye.entity.video;
+package com.pandaq.pandaeye.model.video;
 
 import com.google.gson.annotations.SerializedName;
 

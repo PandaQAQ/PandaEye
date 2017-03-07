@@ -1,6 +1,6 @@
 package com.pandaq.pandaeye.ui.ImplView;
 
-import com.pandaq.pandaeye.entity.video.RetDataBean;
+import com.pandaq.pandaeye.model.video.RetDataBean;
 
 import java.util.ArrayList;
 

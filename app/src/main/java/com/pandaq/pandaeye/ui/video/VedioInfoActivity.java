@@ -14,12 +14,10 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
-import com.pandaq.pandaeye.entity.video.CommentBean;
-import com.pandaq.pandaeye.entity.video.MovieInfo;
+import com.pandaq.pandaeye.model.video.MovieInfo;
 import com.pandaq.pandaeye.presenter.video.VideoInfoPresenter;
 import com.pandaq.pandaeye.ui.ImplView.IVedioInfoActivity;
 import com.pandaq.pandaeye.ui.base.BaseActivity;

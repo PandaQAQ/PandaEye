@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
-import com.pandaq.pandaeye.entity.zhihu.ZhiHuTopStory;
+import com.pandaq.pandaeye.model.zhihu.ZhiHuTopStory;
 import com.pandaq.pandaeye.ui.zhihu.ZhihuStoryInfoActivity;
 import com.squareup.picasso.Picasso;
 

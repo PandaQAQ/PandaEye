@@ -1,4 +1,4 @@
-package com.pandaq.pandaeye.entity.video;
+package com.pandaq.pandaeye.model.video;
 
 import java.io.Serializable;
 import java.util.List;

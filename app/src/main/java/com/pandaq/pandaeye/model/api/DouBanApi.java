@@ -1,6 +1,6 @@
-package com.pandaq.pandaeye.api;
+package com.pandaq.pandaeye.model.api;
 
-import com.pandaq.pandaeye.entity.douban.MovieTop250;
+import com.pandaq.pandaeye.model.douban.MovieTop250;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;

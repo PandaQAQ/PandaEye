@@ -37,4 +37,24 @@
     <declare-styleable name="SlopRefreshLayout">
         <attr name="slopValue" format="integer"/>
     </declare-styleable>
+
+    <declare-styleable name="FoldableTextView">
+        <!--正文颜色-->
+        <attr name="textColor" format="color"/>
+        <!--正文文字大小-->
+        <attr name="textSize" format="dimension"/>
+        <!--展开状态文字颜色-->
+        <attr name="flagColor" format="dimension"/>
+        <!--展开状态文字大小-->
+        <attr name="flagSize" format="dimension"/>
+        <!--展开状态图片资源-->
+        <attr name="toggleSrc" format="reference"/>
+        <!--默认是否折叠-->
+        <attr name="folded" format="boolean"/>
+        <!--折叠标示的显示位置，只有中和右两种选择-->
+        <attr name="flagGravity" format="enum">
+            <enum name="center" value="0"/>
+            <enum name="end" value="1"/>
+        </attr>
+    </declare-styleable>
 </resources>

@@ -1,4 +1,4 @@
-package com.pandaq.pandaeye.entity.neteasynews;
+package com.pandaq.pandaeye.model.neteasynews;
 
 /**
  * Created by PandaQ on 2016/9/20.

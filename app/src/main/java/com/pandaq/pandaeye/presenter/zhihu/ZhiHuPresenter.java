@@ -1,11 +1,11 @@
 package com.pandaq.pandaeye.presenter.zhihu;
 
 import com.pandaq.pandaeye.CustomApplication;
-import com.pandaq.pandaeye.api.ApiManager;
+import com.pandaq.pandaeye.model.api.ApiManager;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
-import com.pandaq.pandaeye.entity.zhihu.ZhiHuDaily;
-import com.pandaq.pandaeye.entity.zhihu.ZhiHuStory;
+import com.pandaq.pandaeye.model.zhihu.ZhiHuDaily;
+import com.pandaq.pandaeye.model.zhihu.ZhiHuStory;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.IZhiHuDailyFrag;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;

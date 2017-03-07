@@ -1,34 +1,24 @@
 package com.pandaq.pandaeye.ui.zhihu;
 
-import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
-import com.pandaq.pandaeye.entity.zhihu.ZhihuStoryContent;
+import com.pandaq.pandaeye.model.zhihu.ZhihuStoryContent;
 import com.pandaq.pandaeye.presenter.zhihu.ZhihuStoryInfoPresenter;
 import com.pandaq.pandaeye.ui.ImplView.IZhihuStoryInfoActivity;
-import com.pandaq.pandaeye.utils.ColorUtils;
 import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaeye.utils.PicassoTarget;
-import com.pandaq.pandaeye.utils.ViewUtils;
 import com.pandaq.pandaeye.utils.WebUtils;
 import com.pandaq.pandaeye.widget.FiveThreeImageView;
 import com.squareup.picasso.Picasso;

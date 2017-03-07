@@ -1,4 +1,4 @@
-package com.pandaq.pandaeye.entity.douban;
+package com.pandaq.pandaeye.model.douban;
 
 import java.io.Serializable;
 import java.util.List;

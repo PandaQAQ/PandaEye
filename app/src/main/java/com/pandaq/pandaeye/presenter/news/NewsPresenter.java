@@ -1,12 +1,11 @@
 package com.pandaq.pandaeye.presenter.news;
 
 import com.pandaq.pandaeye.CustomApplication;
-import com.pandaq.pandaeye.api.ApiManager;
+import com.pandaq.pandaeye.model.api.ApiManager;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
-import com.pandaq.pandaeye.entity.neteasynews.TopNews;
-import com.pandaq.pandaeye.entity.neteasynews.TopNewsList;
-import com.pandaq.pandaeye.entity.zhihu.ZhiHuStory;
+import com.pandaq.pandaeye.model.neteasynews.TopNews;
+import com.pandaq.pandaeye.model.neteasynews.TopNewsList;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.INewsListFrag;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;

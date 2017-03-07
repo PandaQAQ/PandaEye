@@ -1,6 +1,5 @@
 package com.pandaq.pandaeye.ui.ImplView;
 
-import com.pandaq.pandaeye.entity.neteasynews.TopNews;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;

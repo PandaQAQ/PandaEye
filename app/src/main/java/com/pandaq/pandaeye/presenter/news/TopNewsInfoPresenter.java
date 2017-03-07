@@ -1,7 +1,7 @@
 package com.pandaq.pandaeye.presenter.news;
 
-import com.pandaq.pandaeye.api.ApiManager;
-import com.pandaq.pandaeye.entity.neteasynews.TopNewsContent;
+import com.pandaq.pandaeye.model.api.ApiManager;
+import com.pandaq.pandaeye.model.neteasynews.TopNewsContent;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.ITopNewsInfoActivity;
 import com.pandaq.pandaeye.utils.JsonUtils;

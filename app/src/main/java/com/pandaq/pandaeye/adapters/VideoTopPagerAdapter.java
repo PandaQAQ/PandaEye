@@ -15,9 +15,8 @@ import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
-import com.pandaq.pandaeye.entity.video.RetDataBean;
+import com.pandaq.pandaeye.model.video.RetDataBean;
 import com.pandaq.pandaeye.ui.video.VedioInfoActivity;
-import com.pandaq.pandaeye.ui.zhihu.ZhihuStoryInfoActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

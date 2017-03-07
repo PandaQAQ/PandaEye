@@ -1,6 +1,6 @@
 package com.pandaq.pandaeye.ui.ImplView;
 
-import com.pandaq.pandaeye.entity.video.MovieInfo;
+import com.pandaq.pandaeye.model.video.MovieInfo;
 
 /**
  * Created by PandaQ on 2017/3/2.

@@ -1,20 +1,15 @@
 package com.pandaq.pandaeye.presenter.video;
 
-import com.pandaq.pandaeye.api.ApiManager;
+import com.pandaq.pandaeye.model.api.ApiManager;
 import com.pandaq.pandaeye.config.Constants;
-import com.pandaq.pandaeye.entity.video.CommentBean;
-import com.pandaq.pandaeye.entity.video.MovieInfo;
-import com.pandaq.pandaeye.entity.video.MovieResponse;
+import com.pandaq.pandaeye.model.video.MovieInfo;
+import com.pandaq.pandaeye.model.video.MovieResponse;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.IVedioInfoActivity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**

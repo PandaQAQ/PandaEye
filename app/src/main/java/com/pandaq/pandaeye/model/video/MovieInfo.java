@@ -1,9 +1,8 @@
-package com.pandaq.pandaeye.entity.video;
+package com.pandaq.pandaeye.model.video;
 
 import android.text.TextUtils;
 
 import java.io.Serializable;
-import java.io.StreamCorruptedException;
 
 /**
  * Created by PandaQ on 2017/2/28.

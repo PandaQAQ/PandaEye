@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
-import com.pandaq.pandaeye.entity.neteasynews.TopNewsContent;
+import com.pandaq.pandaeye.model.neteasynews.TopNewsContent;
 import com.pandaq.pandaeye.presenter.news.TopNewsInfoPresenter;
 import com.pandaq.pandaeye.ui.ImplView.ITopNewsInfoActivity;
 import com.pandaq.pandaeye.ui.base.BaseActivity;

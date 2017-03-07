@@ -52,7 +52,6 @@
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
                     android:marqueeRepeatLimit="1"
-                    android:singleLine="true"
                     android:textColor="@color/white_FFFFFF"
                     android:textSize="@dimen/text_size_big"/>
             </android.support.v7.widget.Toolbar>

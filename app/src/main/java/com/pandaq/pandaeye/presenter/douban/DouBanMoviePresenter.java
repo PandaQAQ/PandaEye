@@ -1,11 +1,11 @@
 package com.pandaq.pandaeye.presenter.douban;
 
 import com.pandaq.pandaeye.CustomApplication;
-import com.pandaq.pandaeye.api.ApiManager;
+import com.pandaq.pandaeye.model.api.ApiManager;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
-import com.pandaq.pandaeye.entity.douban.MovieSubject;
-import com.pandaq.pandaeye.entity.douban.MovieTop250;
+import com.pandaq.pandaeye.model.douban.MovieSubject;
+import com.pandaq.pandaeye.model.douban.MovieTop250;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.IDoubanFrag;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
@@ -106,7 +106,6 @@ public class DouBanMoviePresenter extends BasePresenter {
      * 加载更多
      */
     private void loadMore() {
-        mMovieListFrag.showProgressBar();
         Subscription subscription = ApiManager.getInstence().getDoubanService()
                 .getTop250(start, 20)
                 .subscribeOn(Schedulers.io())
@@ -116,6 +115,9 @@ public class DouBanMoviePresenter extends BasePresenter {
                     public Observable<MovieSubject> call(MovieTop250 movieTop250) {
                         //刷新后下一次加载的起点为
                         start += movieTop250.getCount();
+                        if (start == movieTop250.getTotal()) {
+                            loadAllCompleted = true;
+                        }
                         return Observable.from(movieTop250.getMovieSubjects());
                     }
                 })

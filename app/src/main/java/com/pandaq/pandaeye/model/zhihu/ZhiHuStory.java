@@ -1,4 +1,4 @@
-package com.pandaq.pandaeye.entity.zhihu;
+package com.pandaq.pandaeye.model.zhihu;
 
 import java.io.Serializable;
 import java.util.List;

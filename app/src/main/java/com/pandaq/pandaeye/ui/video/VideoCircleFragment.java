@@ -14,8 +14,7 @@ import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.VideoListAdapter;
 import com.pandaq.pandaeye.adapters.VideoTopPagerAdapter;
 import com.pandaq.pandaeye.config.Constants;
-import com.pandaq.pandaeye.entity.video.RetDataBean;
-import com.pandaq.pandaeye.entity.zhihu.ZhiHuStory;
+import com.pandaq.pandaeye.model.video.RetDataBean;
 import com.pandaq.pandaeye.presenter.video.VideoFragPresenter;
 import com.pandaq.pandaeye.ui.ImplView.IVideoListFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
@@ -27,7 +26,6 @@ import com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView;
 import com.pandaq.pandaqlib.magicrecyclerView.SpaceDecoration;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -104,6 +102,7 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
             }
         }
         //配置底部列表故事
+        mBaseItems.clear();
         for (RetDataBean.ListBean listBean : listBeen) {
             BaseItem<RetDataBean.ListBean> baseItem = new BaseItem<>();
             baseItem.setData(listBean);

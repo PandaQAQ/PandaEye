@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.MovieListAdapter;
-import com.pandaq.pandaeye.entity.douban.MovieSubject;
 import com.pandaq.pandaeye.presenter.douban.DouBanMoviePresenter;
 import com.pandaq.pandaeye.ui.ImplView.IDoubanFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
@@ -135,7 +134,7 @@ public class MovieListFragment extends BaseFragment implements IDoubanFrag, Swip
             mMovieListAdapter.setBaseDatas(movieSubjects);
             mMovieList.setAdapter(mMovieListAdapter);
         } else {
-            mMovieListAdapter.notifyDataSetChanged();
+            mMovieListAdapter.setBaseDatas(movieSubjects);
         }
     }
 

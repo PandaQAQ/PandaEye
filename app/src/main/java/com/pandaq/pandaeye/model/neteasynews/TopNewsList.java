@@ -1,4 +1,4 @@
-package com.pandaq.pandaeye.entity.neteasynews;
+package com.pandaq.pandaeye.model.neteasynews;
 
 import com.google.gson.annotations.SerializedName;
 
