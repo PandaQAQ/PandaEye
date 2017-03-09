@@ -5,6 +5,7 @@ import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.model.video.MovieInfo;
 import com.pandaq.pandaeye.model.video.MovieResponse;
 import com.pandaq.pandaeye.presenter.BasePresenter;
+import com.pandaq.pandaeye.rxbus.RxBus;
 import com.pandaq.pandaeye.ui.ImplView.IVedioInfoActivity;
 
 import rx.Subscriber;
@@ -50,6 +51,8 @@ public class VideoInfoPresenter extends BasePresenter {
                     @Override
                     public void onNext(MovieResponse<MovieInfo> movieInfo) {
                         mInfoActivity.loadVideoInfoSuccess(movieInfo.getData());
+                        //发送数据到 fragment 中
+                        RxBus.getDefault().post(movieInfo.getData());
                     }
                 });
         addSubscription(subscription);

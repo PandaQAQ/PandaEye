@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_FFFFFF"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.pandaq.pandaeye.ui.zhihu.ZhihuStoryInfoActivity"
     tools:showIn="@layout/activity_zhihu_story_info">
@@ -12,6 +13,8 @@
     <com.tencent.smtt.sdk.WebView
         android:id="@+id/zhihudaily_webview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:background="@color/white_FFFFFF"
+        android:paddingTop="@dimen/base_margin"/>
 
 </android.support.v4.widget.NestedScrollView>

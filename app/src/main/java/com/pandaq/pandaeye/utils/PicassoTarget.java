@@ -3,11 +3,14 @@ package com.pandaq.pandaeye.utils;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.TintableBackgroundView;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
@@ -30,18 +33,18 @@ public class PicassoTarget implements Target {
     private ImageView mImageView;
     private CollapsingToolbarLayout mToolbarLayout;
     private Toolbar mToolbar;
-    //着色器
-    private TintableBackgroundView tint;
+    private FloatingActionButton mFloatingActionButton;
 
     public PicassoTarget(Activity activity, ImageView imageView, Toolbar toolbar) {
-        this(activity, imageView, null, toolbar);
+        this(activity, imageView, null, toolbar, null);
     }
 
-    public PicassoTarget(Activity activity, ImageView imageView, @Nullable CollapsingToolbarLayout toolbarLayout, Toolbar toolbar) {
+    public PicassoTarget(Activity activity, ImageView imageView, @Nullable CollapsingToolbarLayout toolbarLayout, Toolbar toolbar, @Nullable FloatingActionButton fab) {
         mActivity = activity;
         mImageView = imageView;
         mToolbarLayout = toolbarLayout;
         mToolbar = toolbar;
+        mFloatingActionButton = fab;
     }
 
     @Override
@@ -78,12 +81,6 @@ public class PicassoTarget implements Target {
                                 }
                             }
                             if (statusBarColor != mActivity.getWindow().getStatusBarColor()) {
-                                if (mToolbarLayout != null) {
-                                    mToolbarLayout.setContentScrimColor(ColorUtils.blendColors(statusBarColor,mActivity.getResources().getColor(R.color.black_000000),0.4f));
-                                    mToolbar.setBackgroundColor(ColorUtils.modifyAlpha(statusBarColor, 0.4f));
-                                } else { //无toolbarlayout时保持toolbar颜色与状态栏一致
-                                    mToolbar.setBackgroundColor(ColorUtils.modifyAlpha(statusBarColor, 0.8f));
-                                }
                                 ValueAnimator statusBarColorAnim = ValueAnimator.ofArgb(
                                         mActivity.getWindow().getStatusBarColor(), statusBarColor);
                                 statusBarColorAnim.addUpdateListener(new ValueAnimator
@@ -97,6 +94,18 @@ public class PicassoTarget implements Target {
                                 statusBarColorAnim.setInterpolator(
                                         new AccelerateInterpolator());
                                 statusBarColorAnim.start();
+                                if (ColorUtils.compareColors(Color.WHITE, statusBarColor) > 0.8) {
+                                    statusBarColor = ColorUtils.blendColors(statusBarColor, mActivity.getResources().getColor(R.color.black_000000), 0.2f);
+                                }
+                                if (mToolbarLayout != null) {
+                                    mToolbarLayout.setContentScrimColor(statusBarColor);
+                                    mToolbar.setBackgroundColor(ColorUtils.modifyAlpha(statusBarColor, 0.5f));
+                                } else { //无toolbarlayout时保持toolbar颜色与状态栏一致
+                                    mToolbar.setBackgroundColor(ColorUtils.modifyAlpha(statusBarColor, 0.8f));
+                                }
+                                if (mFloatingActionButton != null) {
+                                    mFloatingActionButton.setBackgroundTintList(ColorStateList.valueOf(statusBarColor));
+                                }
                             }
                         }
                     }

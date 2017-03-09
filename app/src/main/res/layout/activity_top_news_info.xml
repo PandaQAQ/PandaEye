@@ -52,15 +52,13 @@
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
                     android:marqueeRepeatLimit="1"
+                    android:singleLine="true"
                     android:textColor="@color/white_FFFFFF"
                     android:textSize="@dimen/text_size_big"/>
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
-
-    <include
-        layout="@layout/content_top_news_info"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -78,4 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         />
+
+    <include
+        layout="@layout/content_top_news_info"/>
 </android.support.design.widget.CoordinatorLayout>

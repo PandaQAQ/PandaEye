@@ -28,4 +28,5 @@
     <string name="nav_03_title">围观豆瓣</string>
     <string name="video_comment">评论</string>
     <string name="video_description">简介</string>
+    <string name="back_again_exit">再按一次退出程序</string>
 </resources>

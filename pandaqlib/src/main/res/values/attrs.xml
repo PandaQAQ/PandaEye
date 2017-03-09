@@ -39,6 +39,8 @@
     </declare-styleable>
 
     <declare-styleable name="FoldableTextView">
+        <!--展开收缩动画的持续时间-->
+        <attr name="animDuration" format="integer"/>
         <!--正文颜色-->
         <attr name="textColor" format="color"/>
         <!--正文文字大小-->
@@ -48,9 +50,11 @@
         <!--展开状态文字大小-->
         <attr name="flagSize" format="dimension"/>
         <!--展开状态图片资源-->
-        <attr name="toggleSrc" format="reference"/>
-        <!--默认是否折叠-->
-        <attr name="folded" format="boolean"/>
+        <attr name="toggleSrcOpen" format="reference"/>
+        <!--折叠状态图片资源-->
+        <attr name="toggleSrcClose" format="reference"/>
+        <!--折叠时显示的最大行数-->
+        <attr name="minLines" format="integer"/>
         <!--折叠标示的显示位置，只有中和右两种选择-->
         <attr name="flagGravity" format="enum">
             <enum name="center" value="0"/>

@@ -15,7 +15,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.ui.video.VideoCircleFragment;
 import com.pandaq.pandaeye.utils.BlurImageUtils;
@@ -182,4 +184,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
+    private Long firstTime = 0L;
+
+    @Override
+    public void onBackPressed() {
+        long secondTime = System.currentTimeMillis();
+        if (secondTime - firstTime > 1500) {
+            showLongToast(this, getString(R.string.back_again_exit));
+            firstTime = secondTime;
+        } else {
+            System.exit(0);
+        }
+    }
 }

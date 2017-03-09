@@ -42,8 +42,6 @@ public class VideoTopPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = LayoutInflater.from(container.getContext()).inflate(R.layout.zhihutop_item, container, false);
         final ImageView mTopStoryImg = (ImageView) view.findViewById(R.id.top_story_img);
-        TextView mTopStoryTitle = (TextView) view.findViewById(R.id.top_story_title);
-        mTopStoryTitle.setText(mBanders.get(position).getTitle());
         Picasso.with(mContext)
                 .load(mBanders.get(position).getPic())
                 .into(mTopStoryImg);

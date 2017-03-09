@@ -17,6 +17,7 @@ import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.model.zhihu.ZhihuStoryContent;
 import com.pandaq.pandaeye.presenter.zhihu.ZhihuStoryInfoPresenter;
 import com.pandaq.pandaeye.ui.ImplView.IZhihuStoryInfoActivity;
+import com.pandaq.pandaeye.ui.base.BaseActivity;
 import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaeye.utils.PicassoTarget;
 import com.pandaq.pandaeye.utils.WebUtils;
@@ -33,7 +34,7 @@ import butterknife.ButterKnife;
  * email : 767807368@qq.com
  * 知乎日报打开详情页面
  */
-public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuStoryInfoActivity {
+public class ZhihuStoryInfoActivity extends BaseActivity implements IZhihuStoryInfoActivity {
 
     private static final float SCRIM_ADJUSTMENT = 0.075f;
     @BindView(R.id.toolbar)
@@ -65,10 +66,10 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_zhihu_story_info);
         ButterKnife.bind(this);
-        initView();
-        initData();
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
+        initView();
+        initData();
     }
 
     private void initView() {
@@ -119,7 +120,7 @@ public class ZhihuStoryInfoActivity extends AppCompatActivity implements IZhihuS
 
     @Override
     public void loadSuccess(ZhihuStoryContent zhihuStory) {
-        Target target = new PicassoTarget(this, mStoryImg, mToolbarLayout, mToolbar);
+        Target target = new PicassoTarget(this, mStoryImg, mToolbarLayout, mToolbar,mFab);
         //不设置的话会有时候不加载图片
         mStoryImg.setTag(target);
         Picasso.with(this)

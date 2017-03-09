@@ -100,6 +100,12 @@ public class VedioInfoActivity extends BaseActivity implements IVedioInfoActivit
         mVpVideoInfo.setCurrentItem(0);
         argbEvaluator = new ArgbEvaluator();
         floatEvaluator = new FloatEvaluator();
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishAfterTransition();
+            }
+        });
     }
 
     @Override
@@ -124,7 +130,6 @@ public class VedioInfoActivity extends BaseActivity implements IVedioInfoActivit
     @Override
     public void loadVideoInfoSuccess(MovieInfo info) {
         mJcVideoPlayer.setUp(info.getVideoUrl(), JCVideoPlayerStandard.SCREEN_LAYOUT_LIST, info.getTitle());
-//        mJcVideoPlayer.onClick(mJcVideoPlayer.thumbImageView);
     }
 
     @Override

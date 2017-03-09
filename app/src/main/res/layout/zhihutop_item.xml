@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/recycler_header_indi_height"
         android:textColor="@color/white_FFFFFF"
         android:textSize="@dimen/text_size_big"/>
 </RelativeLayout>

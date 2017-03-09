@@ -2,4 +2,6 @@
 <resources>
     <string name="icon">icon</string>
     <string name="app_name">PandaQLib</string>
+    <string name="expand_text">展开</string>
+    <string name="close_text">折叠</string>
 </resources>

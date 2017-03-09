@@ -57,10 +57,10 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_news_info);
         ButterKnife.bind(this);
-        initView();
-        initData();
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
+        initView();
+        initData();
     }
 
     private void initView() {
@@ -87,7 +87,7 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
         String newsImg = bundle.getString(Constants.BUNDLE_KEY_IMG_URL);
         String title = bundle.getString(Constants.BUNDLE_KEY_TITLE);
         loadTopNewsInfo(news_id);
-        Target target = new PicassoTarget(this,mNewsImg,mToolbarLayout,mToolbar);
+        Target target = new PicassoTarget(this,mNewsImg,mToolbarLayout,mToolbar,mFab);
         //不设置的话会有时候不加载图片
         mNewsImg.setTag(target);
         Picasso.with(this)
