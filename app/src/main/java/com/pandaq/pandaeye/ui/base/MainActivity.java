@@ -86,13 +86,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void initNavigation() {
         mBottomNavgation
-                .setKeepRipple(false, getResources().getColor(R.color.bottom_nav_ripple_f7065249))
+                .setKeepRipple(false, getResources().getColor(R.color.colorPrimaryDark))
                 .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_RIPPLE)
                 .setMode(BottomNavigationBar.MODE_SHIFTING)
-                .addItem(new BottomNavigationItem(R.drawable.ic_home, getString(R.string.nav_00_title)).setActiveColorResource(R.color.teal_00796B))
-                .addItem(new BottomNavigationItem(R.drawable.ic_book, getString(R.string.nav_01_title)).setActiveColorResource(R.color.teal_00796B))
-                .addItem(new BottomNavigationItem(R.drawable.ic_music_note, getString(R.string.nav_02_title)).setActiveColorResource(R.color.teal_00796B))
-                .addItem(new BottomNavigationItem(R.drawable.ic_live_tv, getString(R.string.nav_03_title)).setActiveColorResource(R.color.teal_00796B))
+                .addItem(new BottomNavigationItem(R.drawable.ic_home, getString(R.string.nav_00_title)).setActiveColorResource(R.color.colorPrimary))
+                .addItem(new BottomNavigationItem(R.drawable.ic_book, getString(R.string.nav_01_title)).setActiveColorResource(R.color.colorPrimary))
+                .addItem(new BottomNavigationItem(R.drawable.ic_music_note, getString(R.string.nav_02_title)).setActiveColorResource(R.color.colorPrimary))
+                .addItem(new BottomNavigationItem(R.drawable.ic_live_tv, getString(R.string.nav_03_title)).setActiveColorResource(R.color.colorPrimary))
                 .setFirstSelectedPosition(0)
                 .setTabSelectedListener(this)
                 .initialise();

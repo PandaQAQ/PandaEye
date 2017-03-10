@@ -34,8 +34,13 @@ public class RxBus {
     }
 
     // 发送一个新的事件
-    public void post(Object o) {
-        bus.onNext(o);
+    public void post(Action action) {
+        //如果发送的是一个异常的话，直接触发监听者的异常
+        if (action.getActionData() instanceof Throwable) {
+            bus.onError((Throwable) action.getActionData());
+        } else {
+            bus.onNext(action);
+        }
     }
 
     // 根据传递的 eventType 类型返回特定类型(eventType)的 被观察者

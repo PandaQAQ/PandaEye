@@ -208,27 +208,6 @@ public class MagicRecyclerView extends RecyclerView {
         this.mOnTagChangeListener = listener;
     }
 
-//    @Override
-//    protected void dispatchDraw(Canvas canvas) {
-//        super.dispatchDraw(canvas);
-//        Bitmap titleView = mCurrentSection.view;
-//        if (titleView != null) {
-//            // draw child
-//            canvas.save();
-//            int clipHeight = titleView.getHeight();
-//            int clipWidth = titleView.getWidth();
-//            canvas.clipRect(0, 0, clipWidth, clipHeight);
-//            //把view中的内容绘制在画布上
-//            if (falag) {
-//                canvas.translate(0, -mTranslateY + clipHeight);
-//            } else {
-//                canvas.translate(0, -mTranslateY);
-//            }
-//            canvas.drawBitmap(titleView, 0, 0, new Paint());
-//            canvas.restore();
-//        }
-//    }
-
     public interface OnTagChangeListener {
         void onChange(String newTag);
     }

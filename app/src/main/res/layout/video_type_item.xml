@@ -3,10 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:foreground="@drawable/ripple_item"
     android:orientation="vertical"
     android:padding="@dimen/margin_8dp">
 
     <RelativeLayout
+        android:id="@+id/rl_parent"
         android:layout_width="match_parent"
         android:layout_height="@dimen/video_type_card_height"
         android:padding="@dimen/margin_8dp">
@@ -14,7 +16,7 @@
         <ImageView
             android:id="@+id/iv_video_type"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/video_type_image_height"
+            android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:src="@drawable/userimage"/>
 

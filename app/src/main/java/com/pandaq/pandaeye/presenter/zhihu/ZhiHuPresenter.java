@@ -17,6 +17,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -38,6 +39,14 @@ public class ZhiHuPresenter extends BasePresenter {
         Subscription subscription = ApiManager.getInstence()
                 .getZhihuService()
                 .getLatestZhihuDaily()
+                .map(new Func1<ZhiHuDaily, ZhiHuDaily>() { //io 线程存储缓存
+                    @Override
+                    public ZhiHuDaily call(ZhiHuDaily zhiHuDaily) {
+                        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_ZHIHU_FILE);
+                        manager.put(Constants.CACHE_ZHIHU_DAILY, zhiHuDaily);
+                        return zhiHuDaily;
+                    }
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ZhiHuDaily>() {
@@ -55,8 +64,6 @@ public class ZhiHuPresenter extends BasePresenter {
                     @Override
                     public void onNext(ZhiHuDaily zhiHuDaily) {
                         date = zhiHuDaily.getDate();
-                        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_ZHIHU_FILE);
-                        manager.put(Constants.CACHE_ZHIHU_DAILY, zhiHuDaily);
                         mZhiHuDailyFrag.hideRefreshBar();
                         mZhiHuDailyFrag.refreshSuccessed(zhiHuDaily);
                     }
@@ -116,10 +123,21 @@ public class ZhiHuPresenter extends BasePresenter {
      * 加载缓存
      */
     public void loadCache() {
-        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_ZHIHU_FILE);
-        ZhiHuDaily zhiHuDaily = manager.getSerializable(Constants.CACHE_ZHIHU_DAILY);
-        if (zhiHuDaily != null) {
-            mZhiHuDailyFrag.refreshSuccessed(zhiHuDaily);
-        }
+        final DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_ZHIHU_FILE);
+        Subscription subscription = Observable.create(new Observable.OnSubscribe<ZhiHuDaily>() {
+            @Override
+            public void call(Subscriber<? super ZhiHuDaily> subscriber) {
+                ZhiHuDaily zhiHuDaily = manager.getSerializable(Constants.CACHE_ZHIHU_DAILY);
+                subscriber.onNext(zhiHuDaily);
+            }
+        }).subscribe(new Action1<ZhiHuDaily>() {
+            @Override
+            public void call(ZhiHuDaily zhiHuDaily) {
+                if (zhiHuDaily != null) {
+                    mZhiHuDailyFrag.refreshSuccessed(zhiHuDaily);
+                }
+            }
+        });
+        addSubscription(subscription);
     }
 }

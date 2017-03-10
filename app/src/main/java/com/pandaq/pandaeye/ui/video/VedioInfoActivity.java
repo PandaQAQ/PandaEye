@@ -17,8 +17,11 @@ import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
+import com.pandaq.pandaeye.model.video.CommentBean;
 import com.pandaq.pandaeye.model.video.MovieInfo;
 import com.pandaq.pandaeye.presenter.video.VideoInfoPresenter;
+import com.pandaq.pandaeye.rxbus.Action;
+import com.pandaq.pandaeye.rxbus.RxBus;
 import com.pandaq.pandaeye.ui.ImplView.IVedioInfoActivity;
 import com.pandaq.pandaeye.ui.base.BaseActivity;
 import com.pandaq.pandaeye.utils.PicassoTarget;
@@ -30,6 +33,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * Created by PandaQ on 2017/2/28.
@@ -37,6 +42,11 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
  */
 
 public class VedioInfoActivity extends BaseActivity implements IVedioInfoActivity, ViewPager.OnPageChangeListener {
+
+    private final static int ACTION_RELOADINFO = 0;
+    private final static int ACTION_REFRESH_COMMENT = 1;
+    private final static int ACTION_LOAD_COMMENT = 2;
+    private Subscription subscription;
     @BindView(R.id.jc_video_player)
     JCVideoPlayerStandard mJcVideoPlayer;
     @BindView(R.id.toolbar_title)
@@ -63,6 +73,7 @@ public class VedioInfoActivity extends BaseActivity implements IVedioInfoActivit
         setSupportActionBar(mToolbar);
         initView();
         initData();
+        initRxBus();
     }
 
     private void initData() {
@@ -108,6 +119,29 @@ public class VedioInfoActivity extends BaseActivity implements IVedioInfoActivit
         });
     }
 
+    private void initRxBus() {
+        subscription = RxBus
+                .getDefault()
+                .toObservable(Action.class)
+                .subscribe(new Action1<Action>() {
+                    @Override
+                    public void call(Action action) {
+                        int actionData = (int) action.getActionData();
+                        switch (actionData) {
+                            case 0:
+                                mPresenter.loadVideoInfo();
+                                break;
+                            case 1:
+                                refreshComment();
+                                break;
+                            case 2:
+                                loadCommentMore();
+                                break;
+                        }
+                    }
+                });
+    }
+
     @Override
     public void onBackPressed() {
         if (JCVideoPlayer.backPress()) {
@@ -118,6 +152,7 @@ public class VedioInfoActivity extends BaseActivity implements IVedioInfoActivit
 
     @Override
     protected void onPause() {
+        subscription.unsubscribe();
         super.onPause();
         JCVideoPlayer.releaseAllVideos();
     }
@@ -133,8 +168,13 @@ public class VedioInfoActivity extends BaseActivity implements IVedioInfoActivit
     }
 
     @Override
-    public void loadVideoInfoFail(String errCode, String errMsg) {
-        showSnackBar(mVpVideoInfo, errMsg, Snackbar.LENGTH_SHORT);
+    public void refreshComment() {
+        mPresenter.refreshComment();
+    }
+
+    @Override
+    public void loadCommentMore() {
+        mPresenter.loadMoreComment();
     }
 
     @Override
@@ -155,13 +195,13 @@ public class VedioInfoActivity extends BaseActivity implements IVedioInfoActivit
     private void changePage(int position, float positionOffset) {
         if (position == 0) {
             // 字体颜色
-            mTvTabDescription.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-            int stepsColor = (int) argbEvaluator.evaluate(positionOffset, ContextCompat.getColor(this, R.color.colorPrimary),
-                    ContextCompat.getColor(this, R.color.white_FFFFFF));
+            mTvTabDescription.setTextColor(ContextCompat.getColor(this, R.color.white_FFFFFF));
+            int stepsColor = (int) argbEvaluator.evaluate(positionOffset, ContextCompat.getColor(this, R.color.white_FFFFFF),
+                    ContextCompat.getColor(this, R.color.grey_607D8B));
             mTvTabDescription.setTextColor(stepsColor);
-            mTvTabComment.setTextColor(ContextCompat.getColor(this, R.color.white_FFFFFF));
-            int sleepColor = (int) argbEvaluator.evaluate(positionOffset, ContextCompat.getColor(this, R.color.white_FFFFFF),
-                    ContextCompat.getColor(this, R.color.colorPrimary));
+            mTvTabComment.setTextColor(ContextCompat.getColor(this, R.color.grey_607D8B));
+            int sleepColor = (int) argbEvaluator.evaluate(positionOffset, ContextCompat.getColor(this, R.color.grey_607D8B),
+                    ContextCompat.getColor(this, R.color.white_FFFFFF));
             mTvTabComment.setTextColor(sleepColor);
             // 字体大小
             mTvTabDescription.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
@@ -172,13 +212,13 @@ public class VedioInfoActivity extends BaseActivity implements IVedioInfoActivit
             mTvTabComment.setTextSize(TypedValue.COMPLEX_UNIT_SP, sleepSize);
         } else {
             // 字体颜色
-            mTvTabDescription.setTextColor(ContextCompat.getColor(this, R.color.white_FFFFFF));
-            int stepsColor = (int) argbEvaluator.evaluate(positionOffset, ContextCompat.getColor(this, R.color.white_FFFFFF),
-                    ContextCompat.getColor(this, R.color.colorPrimary));
-            mTvTabDescription.setTextColor(stepsColor);
-            mTvTabComment.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-            int sleepColor = (int) argbEvaluator.evaluate(positionOffset, ContextCompat.getColor(this, R.color.colorPrimary),
+            mTvTabDescription.setTextColor(ContextCompat.getColor(this, R.color.grey_607D8B));
+            int stepsColor = (int) argbEvaluator.evaluate(positionOffset, ContextCompat.getColor(this, R.color.grey_607D8B),
                     ContextCompat.getColor(this, R.color.white_FFFFFF));
+            mTvTabDescription.setTextColor(stepsColor);
+            mTvTabComment.setTextColor(ContextCompat.getColor(this, R.color.white_FFFFFF));
+            int sleepColor = (int) argbEvaluator.evaluate(positionOffset, ContextCompat.getColor(this, R.color.white_FFFFFF),
+                    ContextCompat.getColor(this, R.color.grey_607D8B));
             mTvTabComment.setTextColor(sleepColor);
             // 字体大小
             mTvTabDescription.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);

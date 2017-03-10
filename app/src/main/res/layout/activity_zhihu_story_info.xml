@@ -6,6 +6,7 @@
     android:id="@+id/parentPanel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_FFFFFF"
     tools:context="com.pandaq.pandaeye.ui.zhihu.ZhihuStoryInfoActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -58,9 +59,6 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include
-        layout="@layout/content_zhihu_story_info"/>
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -78,4 +76,6 @@
         android:layout_height="48dp"
         android:layout_gravity="center"/>
 
+    <include
+        layout="@layout/content_zhihu_story_info"/>
 </android.support.design.widget.CoordinatorLayout>

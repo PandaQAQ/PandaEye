@@ -43,4 +43,9 @@ public class Constants {
      */
     public static final String SHOW_TYPE_IN = "IN";
     public static final String SHOW_TYPE_BANNER = "banner";
+
+    /**
+     * RxBus
+     */
+    public static final String NOMORE_COMMENT = "nomore_comment";
 }

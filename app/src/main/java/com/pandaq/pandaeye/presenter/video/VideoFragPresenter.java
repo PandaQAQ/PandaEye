@@ -16,6 +16,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -61,6 +62,8 @@ public class VideoFragPresenter extends BasePresenter {
                     public ArrayList<RetDataBean.ListBean> call(List<RetDataBean.ListBean> listBeen) {
                         ArrayList<RetDataBean.ListBean> arr = new ArrayList<RetDataBean.ListBean>();
                         arr.addAll(listBeen);
+                        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_VIDEO_FILE);
+                        manager.put(Constants.CACHE_VIDEO, arr);
                         return arr;
                     }
                 })
@@ -80,8 +83,6 @@ public class VideoFragPresenter extends BasePresenter {
 
                     @Override
                     public void onNext(ArrayList<RetDataBean.ListBean> listBeen) {
-                        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_VIDEO_FILE);
-                        manager.put(Constants.CACHE_VIDEO, listBeen);
                         mFrag.refreshSuccess(listBeen);
                         mFrag.hideProgressBar();
                     }
@@ -93,11 +94,21 @@ public class VideoFragPresenter extends BasePresenter {
      * 读取缓存
      */
     public void loadCache() {
-        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_VIDEO_FILE);
-
-        ArrayList<RetDataBean.ListBean> arrbean = manager.getSerializable(Constants.CACHE_VIDEO);
-        if (arrbean != null) {
-            mFrag.refreshSuccess(arrbean);
-        }
+        final DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_VIDEO_FILE);
+        Subscription subscription = Observable.create(new Observable.OnSubscribe<ArrayList<RetDataBean.ListBean>>() {
+            @Override
+            public void call(Subscriber<? super ArrayList<RetDataBean.ListBean>> subscriber) {
+                ArrayList<RetDataBean.ListBean> arrbean = manager.getSerializable(Constants.CACHE_VIDEO);
+                subscriber.onNext(arrbean);
+            }
+        }).subscribe(new Action1<ArrayList<RetDataBean.ListBean>>() {
+            @Override
+            public void call(ArrayList<RetDataBean.ListBean> listBeen) {
+                if (listBeen != null) {
+                    mFrag.refreshSuccess(listBeen);
+                }
+            }
+        });
+        addSubscription(subscription);
     }
 }

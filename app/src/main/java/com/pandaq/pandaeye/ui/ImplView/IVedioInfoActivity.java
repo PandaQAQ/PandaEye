@@ -8,10 +8,13 @@ import com.pandaq.pandaeye.model.video.MovieInfo;
  */
 
 public interface IVedioInfoActivity {
+
     String getDataId();
 
     void loadVideoInfoSuccess(MovieInfo info);
 
-    void loadVideoInfoFail(String errCode, String errMsg);
+    void refreshComment();
+
+    void loadCommentMore();
 
 }

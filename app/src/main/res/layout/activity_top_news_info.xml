@@ -6,6 +6,7 @@
     android:id="@+id/cl_topnews_content_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_FFFFFF"
     tools:context="com.pandaq.pandaeye.ui.news.TopNewsInfoActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -64,7 +65,7 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
+        android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@drawable/ic_share"/>
@@ -72,8 +73,8 @@
     <ProgressBar
         android:id="@+id/pb_topnews_content"
         style="@style/Base.Widget.AppCompat.ProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="center"
         />
 

@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -38,7 +39,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/video_info_tab_height"
-        android:background="@color/trans_toolbar_7c424141"
+        android:background="@color/transparent_3cffffff"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -46,9 +47,10 @@
             android:id="@+id/tv_tab_description"
             android:layout_width="50dp"
             android:layout_height="match_parent"
+            android:background="@color/transparent_00ffffff"
             android:gravity="center"
             android:text="@string/video_description"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/white_FFFFFF"
             android:textSize="@dimen/text_size_mid"
             android:visibility="visible"/>
 
@@ -60,9 +62,10 @@
             android:id="@+id/tv_tab_comment"
             android:layout_width="50dp"
             android:layout_height="match_parent"
+            android:background="@color/transparent_00ffffff"
             android:gravity="center"
             android:text="@string/video_comment"
-            android:textColor="@color/white_FFFFFF"
+            android:textColor="@color/grey_607D8B"
             android:textSize="@dimen/text_size_min"
             android:visibility="visible"/>
     </LinearLayout>
@@ -70,5 +73,6 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_video_info"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="@color/transparent_00ffffff"/>
 </LinearLayout>

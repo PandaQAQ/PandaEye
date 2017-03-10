@@ -2,15 +2,21 @@ package com.pandaq.pandaeye.presenter.video;
 
 import com.pandaq.pandaeye.model.api.ApiManager;
 import com.pandaq.pandaeye.config.Constants;
+import com.pandaq.pandaeye.model.video.CommentBean;
 import com.pandaq.pandaeye.model.video.MovieInfo;
 import com.pandaq.pandaeye.model.video.MovieResponse;
 import com.pandaq.pandaeye.presenter.BasePresenter;
+import com.pandaq.pandaeye.rxbus.Action;
 import com.pandaq.pandaeye.rxbus.RxBus;
+import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.ImplView.IVedioInfoActivity;
+
+import java.util.ArrayList;
 
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -45,83 +51,95 @@ public class VideoInfoPresenter extends BasePresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        mInfoActivity.loadVideoInfoFail(Constants.ERRO, e.getMessage());
+                        Action<Throwable> action = new Action<>();
+                        action.setActionCode(RxConstants.UNEXPECTED_ERR);
+                        action.setActionMsg(e.getMessage());
+                        action.setActionData(e);
+                        RxBus.getDefault().post(action);
                     }
 
                     @Override
                     public void onNext(MovieResponse<MovieInfo> movieInfo) {
                         mInfoActivity.loadVideoInfoSuccess(movieInfo.getData());
                         //发送数据到 fragment 中
-                        RxBus.getDefault().post(movieInfo.getData());
+                        Action<MovieInfo> action = new Action<>();
+                        action.setActionCode(RxConstants.OK_CODE);
+                        action.setActionMsg(RxConstants.OK_MSG);
+                        action.setActionData(movieInfo.getData());
+                        RxBus.getDefault().post(action);
                     }
                 });
         addSubscription(subscription);
     }
 
-//    /**
-//     * 获取视频评论
-//     */
-//    private void loadVideoComment() {
-//        Subscription subscription = ApiManager.getInstence()
-//                .getMovieService()
-//                .getCommentList(mInfoActivity.getDataId(), String.valueOf(currentPage))
-//                .map(new Func1<MovieResponse<CommentBean>, ArrayList<CommentBean.ListBean>>() {
-//                    @Override
-//                    public ArrayList<CommentBean.ListBean> call(MovieResponse<CommentBean> response) {
-//                        currentPage = response.getData().getPnum();
-//                        int totalPum = response.getData().getTotalPnum();
-//                        if (currentPage == totalPum) { //加载完所有的评论后
-//                            mInfoActivity.noMoreComment();
-//                        }
-//                        ArrayList<CommentBean.ListBean> comments = new ArrayList<>();
-//                        comments.addAll(response.getData().getList());
-//                        return comments;
-//                    }
-//                })
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Subscriber<ArrayList<CommentBean.ListBean>>() {
-//                    @Override
-//                    public void onCompleted() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        if (refreshComment) {
-//                            mInfoActivity.refreshCommentFail(Constants.ERRO, e.getMessage());
-//                        } else {
-//                            mInfoActivity.loadCommentFail(Constants.ERRO, e.getMessage());
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onNext(ArrayList<CommentBean.ListBean> listBeen) {
-//                        if (refreshComment) {
-//                            mInfoActivity.refreshCommentSuccess(listBeen);
-//                        } else {
-//                            mInfoActivity.loadCommentSuccess(listBeen);
-//                        }
-//                    }
-//                });
-//        addSubscription(subscription);
-//
-//    }
+    /**
+     * 获取视频评论
+     */
+    private void loadVideoComment() {
+        Subscription subscription = ApiManager.getInstence()
+                .getMovieService()
+                .getCommentList(mInfoActivity.getDataId(), String.valueOf(currentPage))
+                .map(new Func1<MovieResponse<CommentBean>, ArrayList<CommentBean.ListBean>>() {
+                    @Override
+                    public ArrayList<CommentBean.ListBean> call(MovieResponse<CommentBean> response) {
+                        currentPage = response.getData().getPnum();
+                        int totalPum = response.getData().getTotalPnum();
+                        if (currentPage == totalPum) { //加载完所有的评论后
+                            Action<String> action = new Action<String>();
+                            action.setActionCode(RxConstants.OK_CODE);
+                            action.setActionMsg(RxConstants.OK_MSG);
+                            action.setActionData(Constants.NOMORE_COMMENT);
+                            RxBus.getDefault().post(action);
+                        }
+                        ArrayList<CommentBean.ListBean> comments = new ArrayList<>();
+                        comments.addAll(response.getData().getList());
+                        return comments;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ArrayList<CommentBean.ListBean>>() {
+                    @Override
+                    public void onCompleted() {
 
-//    /**
-//     * 刷新评论
-//     */
-//    public void refreshComment() {
-//        refreshComment = true;
-//        currentPage = 1;
-//        loadVideoComment();
-//    }
-//
-//    /**
-//     * 加载更多评论
-//     */
-//    public void loadMoreComment() {
-//        refreshComment = false;
-//        loadVideoComment();
-//    }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Action<Throwable> action = new Action<>();
+                        action.setActionCode(RxConstants.UNEXPECTED_ERR);
+                        action.setActionMsg(e.getMessage());
+                        action.setActionData(e);
+                        RxBus.getDefault().post(action);
+                    }
+
+                    @Override
+                    public void onNext(ArrayList<CommentBean.ListBean> listBeen) {
+                        Action<ArrayList<CommentBean.ListBean>> action = new Action<>();
+                        action.setActionCode(RxConstants.OK_CODE);
+                        action.setActionMsg(RxConstants.OK_MSG);
+                        action.setActionData(listBeen);
+                        RxBus.getDefault().post(action);
+                    }
+                });
+        addSubscription(subscription);
+
+    }
+
+    /**
+     * 刷新评论
+     */
+    public void refreshComment() {
+        refreshComment = true;
+        currentPage = 1;
+        loadVideoComment();
+    }
+
+    /**
+     * 加载更多评论
+     */
+    public void loadMoreComment() {
+        refreshComment = false;
+        loadVideoComment();
+    }
 }
