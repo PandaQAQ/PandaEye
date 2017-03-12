@@ -9,6 +9,7 @@ import com.pandaq.pandaeye.model.zhihu.ZhiHuStory;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.IZhiHuDailyFrag;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
+import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +100,17 @@ public class ZhiHuPresenter extends BasePresenter {
                     }
                 })
                 .toList()
+                // 在所有的数据 list 前面加上当天的 tag
+                .map(new Func1<List<BaseItem>, List<BaseItem>>() {
+                    @Override
+                    public List<BaseItem> call(List<BaseItem> baseItems) {
+                        BaseItem<String> baseItem = new BaseItem<>();
+                        baseItem.setItemType(BaseRecyclerAdapter.RecyclerItemType.TYPE_TAGS);
+                        baseItem.setData(date);
+                        baseItems.add(0, baseItem);
+                        return baseItems;
+                    }
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<BaseItem>>() {
@@ -134,6 +146,7 @@ public class ZhiHuPresenter extends BasePresenter {
             @Override
             public void call(ZhiHuDaily zhiHuDaily) {
                 if (zhiHuDaily != null) {
+                    date = zhiHuDaily.getDate();
                     mZhiHuDailyFrag.refreshSuccessed(zhiHuDaily);
                 }
             }

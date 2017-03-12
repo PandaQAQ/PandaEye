@@ -6,14 +6,12 @@
 
     <color name="nav_bg_ed25c6db">#ed25c6db</color>
     <color name="white_FFFFFF">#FFFFFF</color>
-    <color name="teal_00796B">#00796B</color>
     <color name="brown_8D6E63">#8D6E63</color>
     <color name="blue_2196F3">#2196F3</color>
     <color name="grey_607D8B">#607D8B</color>
     <color name="grey_adbec0">#7d847b</color>
     <color name="grey_text_5d5c5c">#5d5c5c</color>
     <color name="orange_F57C00">#F57C00</color>
-    <color name="bottom_nav_ripple_f7065249">#f7065249</color>
     <color name="indicator_selected_607D8B">#607D8B</color>
     <color name="indicator_unselected_607D8B">#607D8B</color>
     <color name="transparent_00ffffff">#00ffffff</color>

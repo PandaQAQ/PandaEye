@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.ZhihuDailyAdapter;
@@ -37,18 +38,21 @@ import butterknife.ButterKnife;
  * email : 767807368@qq.com
  * 知乎日报列表Fragment
  */
-public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag, SwipeRefreshLayout.OnRefreshListener {
+public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag, SwipeRefreshLayout.OnRefreshListener, MagicRecyclerView.OnTagChangeListener {
 
     @BindView(R.id.zhihudaily_list)
     MagicRecyclerView mZhihudailyList;
     @BindView(R.id.refresh)
     SwipeRefreshLayout mRefresh;
+    @BindView(R.id.tv_tag)
+    TextView mTvTag;
     private ZhiHuPresenter mPresenter = new ZhiHuPresenter(this);
     private ZhihuDailyAdapter mZhihuDailyAdapter;
     private ArrayList<BaseItem> mBaseItems;
     private AutoScrollViewPager scrollViewPager;
     private ViewGroupIndicator viewGroupIndicator;
     private ZhihuTopPagerAdapter mTopPagerAdapter;
+    private boolean initTag;
 
     @Nullable
     @Override
@@ -92,8 +96,8 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
         FrameLayout headerView = (FrameLayout) mZhihudailyList.getHeaderView();
         scrollViewPager = (AutoScrollViewPager) headerView.findViewById(R.id.scroll_pager);
         viewGroupIndicator = (ViewGroupIndicator) headerView.findViewById(R.id.scroll_pager_indicator);
-        refreshData();
         mPresenter.loadCache();
+        refreshData();
         mZhihudailyList.addOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(final int position, BaseItem baseItem, View view) {
@@ -107,6 +111,7 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
                 startActivity(intent);
             }
         });
+        mZhihudailyList.addOnTagChangeListener(this);
     }
 
     @Override
@@ -123,6 +128,7 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
 
     @Override
     public void refreshData() {
+        initTag = false;
         mPresenter.refreshZhihuDaily();
     }
 
@@ -140,6 +146,13 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
         viewGroupIndicator.setParent(scrollViewPager);
         //配置底部列表故事
         for (ZhiHuStory story : stories.getStories()) {
+            if (!initTag) {
+                initTag = true;
+                BaseItem<String> baseItem = new BaseItem<>();
+                baseItem.setData(stories.getDate());
+                baseItem.setItemType(BaseRecyclerAdapter.RecyclerItemType.TYPE_TAGS);
+                mBaseItems.add(baseItem);
+            }
             BaseItem<ZhiHuStory> baseItem = new BaseItem<>();
             baseItem.setData(story);
             mBaseItems.add(baseItem);
@@ -185,5 +198,13 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
         if (hidden && mRefresh.isRefreshing()) { // 隐藏的时候停止 SwipeRefreshLayout 转动
             mRefresh.setRefreshing(false);
         }
+    }
+
+    @Override
+    public void onChange(String newTag) {
+        if (mTvTag.getVisibility()==View.GONE){
+            mTvTag.setVisibility(View.VISIBLE);
+        }
+        mTvTag.setText(newTag);
     }
 }

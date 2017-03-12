@@ -37,24 +37,24 @@ public class VideoCommentFrag extends BaseFragment {
         return view;
     }
 
-    private void initRxbus() {
-        subscription = RxBus
-                .getDefault()
-                .toObservable(Action.class)
-                .subscribe(new Action1<Action<ArrayList<CommentBean.ListBean>>>() {
-                    @Override
-                    public void call(Action<ArrayList<CommentBean.ListBean>> action) {
-                        ArrayList<CommentBean.ListBean> movieInfo = action.getActionData();
-                        showInfo(movieInfo);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        // 获取信息失败
-                        mTvEmptyMsg.setVisibility(View.VISIBLE);
-                    }
-                });
-    }
+//    private void initRxbus() {
+//        subscription = RxBus
+//                .getDefault()
+//                .toObservable(Action.class)
+//                .subscribe(new Action1<Action<ArrayList<CommentBean.ListBean>>>() {
+//                    @Override
+//                    public void call(Action<ArrayList<CommentBean.ListBean>> action) {
+//                        ArrayList<CommentBean.ListBean> movieInfo = action.getActionData();
+//                        showInfo(movieInfo);
+//                    }
+//                }, new Action1<Throwable>() {
+//                    @Override
+//                    public void call(Throwable throwable) {
+//                        // 获取信息失败
+//                        mTvEmptyMsg.setVisibility(View.VISIBLE);
+//                    }
+//                });
+//    }
 
     @Override
     public void onPause() {

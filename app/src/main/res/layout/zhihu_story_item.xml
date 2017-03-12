@@ -2,20 +2,20 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/white_FFFFFF">
 
     <android.support.v7.widget.CardView
         android:id="@+id/item_cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:transitionName="@string/zhihu_story_parent"
-        android:foreground="@drawable/ripple_item">
+        android:foreground="@drawable/ripple_item"
+        android:transitionName="@string/zhihu_story_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/transparent_00ffffff">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/news_image"

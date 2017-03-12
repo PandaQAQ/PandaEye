@@ -8,13 +8,29 @@
     android:fitsSystemWindows="true"
     app:slopValue="50">
 
-    <com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView
-        android:id="@+id/zhihudaily_list"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:footer_layout="@layout/recycler_footer_layout"
-        app:header_layout="@layout/recycler_header_layout"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:parallaxMultiplier="0.8"/>
+        android:layout_height="match_parent">
+
+        <com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView
+            android:id="@+id/zhihudaily_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:footer_layout="@layout/recycler_footer_layout"
+            app:header_layout="@layout/recycler_header_layout"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:parallaxMultiplier="0.8"/>
+
+        <TextView
+            android:id="@+id/tv_tag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:padding="@dimen/base_margin"
+            android:text="2017年3月12日"
+            android:textColor="@color/blue_2196F3"
+            android:textSize="@dimen/text_size_mid"
+            android:visibility="gone"/>
+    </FrameLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>

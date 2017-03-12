@@ -65,7 +65,7 @@ public class ZhihuDailyAdapter extends BaseRecyclerAdapter {
         }
     }
 
-     class TitleHolder extends Holder {
+    class TitleHolder extends Holder {
         @BindView(R.id.item_title)
         TextView mItemTitle;
 
