@@ -53,6 +53,7 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
     private ViewGroupIndicator viewGroupIndicator;
     private ZhihuTopPagerAdapter mTopPagerAdapter;
     private boolean initTag;
+    private boolean loading = false;
 
     @Nullable
     @Override
@@ -174,17 +175,22 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
 
     @Override
     public void loadMoreData() {
-        mPresenter.loadMoreData();
+        if (!loading) {
+            loading = true;
+            mPresenter.loadMoreData();
+        }
     }
 
     @Override
     public void loadSuccessed(ArrayList<BaseItem> stories) {
         mBaseItems.addAll(stories);
         mZhihuDailyAdapter.addBaseDatas(stories);
+        loading = false;
     }
 
     @Override
     public void loadFail(String errMsg) {
+        loading = false;
     }
 
     @Override
@@ -202,7 +208,7 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
 
     @Override
     public void onChange(String newTag) {
-        if (mTvTag.getVisibility()==View.GONE){
+        if (mTvTag.getVisibility() == View.GONE) {
             mTvTag.setVisibility(View.VISIBLE);
         }
         mTvTag.setText(newTag);

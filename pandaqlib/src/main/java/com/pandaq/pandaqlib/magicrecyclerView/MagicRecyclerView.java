@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 
 import com.pandaq.pandaqlib.R;
 
+import java.util.ArrayList;
+
 import static com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter.RecyclerItemType.TYPE_TAGS;
 
 /**
@@ -44,7 +46,9 @@ public class MagicRecyclerView extends RecyclerView {
     private float multiplier = 1;//视差因子，默认值为1
     private BaseRecyclerAdapter mRecyclerAdapter;
     private OnTagChangeListener mOnTagChangeListener;
-    private boolean postChange = true; //避免标签滑动期间多次触发接口回调
+    private ArrayList<String> tags; //用于存放显示过的 tag
+    private String currentTag;//当前正在显示的 tag
+    private boolean tagChanged;
 
     public MagicRecyclerView(Context context) {
         super(context);
@@ -79,6 +83,7 @@ public class MagicRecyclerView extends RecyclerView {
             footerView.setLayoutParams(lp);
         }
         ta.recycle();
+        tags = new ArrayList<>();
     }
 
     @Override
@@ -137,13 +142,40 @@ public class MagicRecyclerView extends RecyclerView {
             headerView.setLayoutParams(layoutParams);
         }
         int firstItemType = getAdapter().getItemViewType(firstVisibleItemPosition);
-        if (firstItemType == TYPE_TAGS.getiNum()) { //当第一个可见 Item 是 Tag 时触发接口
-            if (mOnTagChangeListener != null && postChange) {
-                mOnTagChangeListener.onChange(mRecyclerAdapter.getTag(firstVisibleItemPosition));
-                postChange = false;
+        // 如果是未添加过的 Tag 则加入到 ArrayList 中
+        if (firstItemType == TYPE_TAGS.getiNum() && !tags.contains(mRecyclerAdapter.getTag(firstVisibleItemPosition))) {
+            tags.add(mRecyclerAdapter.getTag(firstVisibleItemPosition));
+        }
+        if (mOnTagChangeListener != null) {
+            if (dy > 0) { //向上滑动，滑到Tag时触发
+                if (firstItemType == TYPE_TAGS.getiNum()) { //上滑到 Item 变 Tag 时触发
+                    currentTag = mRecyclerAdapter.getTag(firstVisibleItemPosition);
+                    mOnTagChangeListener.onChange(currentTag);
+                }
+            } else {
+                if (firstItemType != TYPE_TAGS.getiNum()) { //向下滑动，滑出 Tag 时触发
+                    if (tags.size() == 0) {
+                        return;
+                    }
+                    if (firstVisibleItemPosition >= 1) {
+                        int lastItemType = getAdapter().getItemViewType(firstVisibleItemPosition - 1);
+                        if (lastItemType != TYPE_TAGS.getiNum()) { //如果不是从 Tag 滑出则不作处理
+                            return;
+                        }
+                    } else {
+                        return;
+                    }
+                    if (!tagChanged) {
+                        int lastTagPosition = tags.indexOf(currentTag) >= 1 ? tags.indexOf(currentTag) - 1 : 0;
+                        String tag = tags.get(lastTagPosition);
+                        mOnTagChangeListener.onChange(tag);
+                        currentTag = tag;
+                        tagChanged = true;
+                    }
+                } else {
+                    tagChanged = false;
+                }
             }
-        } else {
-            postChange = true;
         }
     }
 

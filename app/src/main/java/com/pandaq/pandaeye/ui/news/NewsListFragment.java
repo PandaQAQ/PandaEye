@@ -41,6 +41,7 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
     SwipeRefreshLayout mRefresh;
     private NewsPresenter mPresenter = new NewsPresenter(this);
     private TopNewsListAdapter mAdapter;
+    private boolean loading = false;
 
     @Nullable
     @Override
@@ -137,16 +138,20 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
 
     @Override
     public void loadMoreNews() {
-        mPresenter.loadMore();
+        if (!loading) {
+            mPresenter.loadMore();
+            loading = true;
+        }
     }
 
     @Override
     public void loadMoreFail(String errorMsg) {
-
+        loading = false;
     }
 
     @Override
     public void loadMoreSuccessed(ArrayList<BaseItem> topNewses) {
+        loading = false;
         mAdapter.addBaseDatas(topNewses);
     }
 

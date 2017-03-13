@@ -36,6 +36,7 @@ public class MovieListFragment extends BaseFragment implements IDoubanFrag, Swip
     SwipeRefreshLayout mSrlRefresh;
     private MovieListAdapter mMovieListAdapter;
     private DouBanMoviePresenter mPresenter = new DouBanMoviePresenter(this);
+    private boolean loading = false;
 
     @Nullable
     @Override
@@ -106,8 +107,11 @@ public class MovieListFragment extends BaseFragment implements IDoubanFrag, Swip
 
     @Override
     public void loadMoreData() {
-        //加载要显示的数据
-        mPresenter.loadMoreData();
+        if (!loading) {
+            //加载要显示的数据
+            mPresenter.loadMoreData();
+            loading = true;
+        }
     }
 
     @Override
@@ -118,12 +122,14 @@ public class MovieListFragment extends BaseFragment implements IDoubanFrag, Swip
 
     @Override
     public void loadSuccessed(ArrayList<BaseItem> movieSubjects) {
+        loading = false;
         mMovieListAdapter.addBaseDatas(movieSubjects);
     }
 
     @Override
     public void loadFail(String errMsg) {
         //SnackBar提示错误信息
+        loading = false;
     }
 
     @Override
