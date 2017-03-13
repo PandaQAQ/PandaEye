@@ -26,8 +26,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:padding="@dimen/base_margin"
-            android:text="2017年3月12日"
+            android:elevation="@dimen/elevation_height"
+            android:paddingBottom="@dimen/margin_8dp"
+            android:paddingEnd="@dimen/base_margin"
+            android:paddingStart="@dimen/base_margin"
+            android:paddingTop="@dimen/margin_8dp"
             android:textColor="@color/blue_2196F3"
             android:textSize="@dimen/text_size_mid"
             android:visibility="gone"/>

@@ -10,10 +10,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
+import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.model.zhihu.ZhiHuStory;
+import com.pandaq.pandaeye.utils.DateUtils;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.squareup.picasso.Picasso;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,8 +66,13 @@ public class ZhihuDailyAdapter extends BaseRecyclerAdapter {
                     .into(holder.mNewsImage);
         } else if (data.getItemType() == RecyclerItemType.TYPE_TAGS) { //日期标签
             String title = (String) data.getData();
+            int year = Integer.parseInt(title.substring(0, 4));
+            int mon = Integer.parseInt(title.substring(4, 6));
+            int day = Integer.parseInt(title.substring(6, 8));
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(year, mon-1, day);
             TitleHolder holder = (TitleHolder) viewHolder;
-            holder.mItemTitle.setText(title);
+            holder.mItemTitle.setText(DateUtils.formatDate(calendar) + " | " + DateUtils.getWeek(calendar));
         }
     }
 

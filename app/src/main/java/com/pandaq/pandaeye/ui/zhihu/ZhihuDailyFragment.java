@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ import com.pandaq.pandaeye.model.zhihu.ZhiHuStory;
 import com.pandaq.pandaeye.presenter.zhihu.ZhiHuPresenter;
 import com.pandaq.pandaeye.ui.ImplView.IZhiHuDailyFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
+import com.pandaq.pandaeye.utils.DateUtils;
 import com.pandaq.pandaqlib.loopbander.AutoScrollViewPager;
 import com.pandaq.pandaqlib.loopbander.ViewGroupIndicator;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
@@ -29,6 +31,7 @@ import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -85,6 +88,9 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
                 }
                 if (mZhihudailyList.loadAble()) {
                     loadMoreData();
+                }
+                if (mZhihudailyList.tagGone()) {
+                    mTvTag.setVisibility(View.GONE);
                 }
             }
         });
@@ -211,6 +217,19 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
         if (mTvTag.getVisibility() == View.GONE) {
             mTvTag.setVisibility(View.VISIBLE);
         }
-        mTvTag.setText(newTag);
+        int year = Integer.parseInt(newTag.substring(0, 4));
+        int mon = Integer.parseInt(newTag.substring(4, 6));
+        int day = Integer.parseInt(newTag.substring(6, 8));
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, mon - 1, day);
+        mTvTag.setText(DateUtils.formatDate(calendar));
+    }
+    
+    private void hideTagAnim() {
+
+    }
+
+    private void showTagAnim() {
+
     }
 }

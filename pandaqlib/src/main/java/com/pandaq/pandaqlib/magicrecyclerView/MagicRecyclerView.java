@@ -153,16 +153,9 @@ public class MagicRecyclerView extends RecyclerView {
                     mOnTagChangeListener.onChange(currentTag);
                 }
             } else {
-                if (firstItemType != TYPE_TAGS.getiNum()) { //向下滑动，滑出 Tag 时触发
+                int lastItemType = getAdapter().getItemViewType(firstVisibleItemPosition + 1);
+                if (firstItemType != TYPE_TAGS.getiNum() && lastItemType == TYPE_TAGS.getiNum()) { //下滑到 Tag 上边沿时触发
                     if (tags.size() == 0) {
-                        return;
-                    }
-                    if (firstVisibleItemPosition >= 1) {
-                        int lastItemType = getAdapter().getItemViewType(firstVisibleItemPosition - 1);
-                        if (lastItemType != TYPE_TAGS.getiNum()) { //如果不是从 Tag 滑出则不作处理
-                            return;
-                        }
-                    } else {
                         return;
                     }
                     if (!tagChanged) {
@@ -220,6 +213,10 @@ public class MagicRecyclerView extends RecyclerView {
 
     public boolean loadAble() {
         return mRecyclerAdapter != null && firstVisibleItemPosition + childCount >= mRecyclerAdapter.getItemCount();
+    }
+
+    public boolean tagGone() {
+        return firstVisibleItemPosition == 0;
     }
 
     public View getHeaderView() {

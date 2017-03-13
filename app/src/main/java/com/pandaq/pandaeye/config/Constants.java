@@ -6,6 +6,14 @@ package com.pandaq.pandaeye.config;
  */
 
 public class Constants {
+
+    public static String MONDAY = "星期一";
+    public static String TUESDAY = "星期二";
+    public static String WEDNESDAY = "星期三";
+    public static String THURSDAY = "星期四";
+    public static String FRIDAY = "星期五";
+    public static String SATURDAY = "星期六";
+    public static String SUNDAY = "星期天";
     //NetWork Erro
     public static String ERRO = "错误信息:";
     //SecretUtil

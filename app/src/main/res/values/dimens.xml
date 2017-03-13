@@ -31,5 +31,6 @@
     <dimen name="base_margin">16dp</dimen>
     <dimen name="jc_video_player_height">200dp</dimen>
     <dimen name="test_image_width">80dp</dimen>
+    <dimen name="elevation_height">4dp</dimen>
 </resources>
 
