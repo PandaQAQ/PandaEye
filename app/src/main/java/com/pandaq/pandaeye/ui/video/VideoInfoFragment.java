@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.VideoInfoAdapter;
 import com.pandaq.pandaeye.model.video.MovieInfo;
-import com.pandaq.pandaeye.rxbus.Action;
 import com.pandaq.pandaeye.rxbus.RxBus;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
 import com.pandaq.pandaeye.utils.DensityUtil;
@@ -50,7 +49,6 @@ public class VideoInfoFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.video_description_fragment, container, false);
         ButterKnife.bind(this, view);
         initView();
-        initRxbus();
         return view;
     }
 
@@ -70,11 +68,10 @@ public class VideoInfoFragment extends BaseFragment {
     private void initRxbus() {
         subscription = RxBus
                 .getDefault()
-                .toObservable(Action.class)
-                .subscribe(new Action1<Action>() {
+                .toObservable(MovieInfo.class)
+                .subscribe(new Action1<MovieInfo>() {
                     @Override
-                    public void call(Action action) {
-                        MovieInfo movieInfo = (MovieInfo) action.getActionData();
+                    public void call(MovieInfo movieInfo) {
                         showInfo(movieInfo);
                     }
                 }, new Action1<Throwable>() {
@@ -106,8 +103,12 @@ public class VideoInfoFragment extends BaseFragment {
     }
 
     @Override
-    public void onPause() { //界面不可见时就取消绑定
-        subscription.unsubscribe();
-        super.onPause();
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (isVisibleToUser) { //可见时才去加载数据
+            initRxbus();
+        } else {
+            if (subscription != null && !subscription.isUnsubscribed())
+                subscription.unsubscribe();
+        }
     }
 }

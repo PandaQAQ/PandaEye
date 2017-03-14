@@ -11,12 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.model.video.RetDataBean;
-import com.pandaq.pandaeye.ui.video.VedioInfoActivity;
+import com.pandaq.pandaeye.ui.video.VideoInfoActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -50,7 +49,7 @@ public class VideoTopPagerAdapter extends PagerAdapter {
             public void onClick(View view) {
                 //跳转到其他界面
                 Bundle bundle = new Bundle();
-                Intent intent = new Intent(mContext, VedioInfoActivity.class);
+                Intent intent = new Intent(mContext, VideoInfoActivity.class);
                 bundle.putString(Constants.BUNDLE_KEY_ID, mBanders.get(position).getDataId());
                 bundle.putString(Constants.BUNDLE_KEY_TITLE, mBanders.get(position).getTitle());
                 bundle.putString(Constants.BUNDLE_KEY_IMG_URL, mBanders.get(position).getPic());

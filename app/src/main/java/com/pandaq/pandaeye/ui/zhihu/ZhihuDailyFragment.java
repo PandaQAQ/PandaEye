@@ -224,7 +224,7 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
         calendar.set(year, mon - 1, day);
         mTvTag.setText(DateUtils.formatDate(calendar));
     }
-    
+
     private void hideTagAnim() {
 
     }

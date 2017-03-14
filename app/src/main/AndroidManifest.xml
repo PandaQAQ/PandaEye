@@ -39,7 +39,7 @@
             android:name=".ui.news.TopNewsInfoActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.video.VedioInfoActivity"/>
+            android:name=".ui.video.VideoInfoActivity"/>
 
         <meta-data
             android:name="com.pandaq.pandaqlib.glide.CustomGlideMoudle"

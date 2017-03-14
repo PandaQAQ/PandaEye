@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white_FFFFFF"
+    android:layout_margin="@dimen/margin_8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white_FFFFFF"
+        android:padding="@dimen/margin_8dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_user"
+            android:layout_width="@dimen/comment_userimag_size"
+            android:layout_height="@dimen/comment_userimag_size"
+            android:src="@drawable/userimage"/>
+
+        <TextView
+            android:id="@+id/tv_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="@dimen/base_margin"
+            android:drawableStart="@drawable/ic_action_like"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_mid"/>
+
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/comment_userimag_size"
+            android:layout_marginStart="@dimen/base_margin"
+            android:layout_toEndOf="@id/civ_user"
+            android:layout_toStartOf="@id/tv_like"
+            android:gravity="center_vertical|start"
+            android:textSize="@dimen/text_size_mid"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_comment_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/civ_user"
+            android:layout_marginStart="@dimen/base_margin"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:layout_toEndOf="@id/civ_user"
+            android:textSize="@dimen/text_size_mid"/>
+
+        <TextView
+            android:id="@+id/tv_time_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_comment_text"
+            android:layout_marginStart="@dimen/base_margin"
+            android:layout_toEndOf="@id/civ_user"
+            android:textColor="@color/grey_text_d1d1d1"
+            android:textSize="@dimen/text_size_small"/>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
+<android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rv_comment"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/srl_refresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_empty_msg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent_00ffffff"
+            android:gravity="center"
+            android:scrollbars="none"
+            android:text="@string/empty_msg"
+            android:visibility="gone"/>
+
+        <com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView
+            android:id="@+id/mrv_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:footer_layout="@layout/recycler_footer_layout"
+            app:parallaxMultiplier="0"/>
+    </FrameLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

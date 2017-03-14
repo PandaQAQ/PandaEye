@@ -145,4 +145,11 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
     public void onRefresh() {
         refreshData();
     }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (hidden && mSrlRefresh.isRefreshing()) { // 隐藏的时候停止 SwipeRefreshLayout 转动
+            mSrlRefresh.setRefreshing(false);
+        }
+    }
 }
