@@ -18,4 +18,8 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+    <style name="RatingBar" parent="AppTheme">
+        <item name="android:selectableItemBackground">@color/base_back_FFFAFAFA</item>
+        <item name="colorControlActivated">@color/green_4ad3a7</item>
+    </style>
 </resources>

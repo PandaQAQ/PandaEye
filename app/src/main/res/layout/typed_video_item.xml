@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/typed_video_item_height"
+    android:layout_margin="@dimen/margin_8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/margin_8dp">
+
+        <ImageView
+            android:id="@+id/iv_video"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/base_margin"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:id="@+id/tv_video_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/iv_video"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_size_mid"
+            android:textStyle="bold"/>
+
+        <RatingBar
+            android:id="@+id/rb_video_starts"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_airTime"
+            android:layout_marginEnd="2dp"
+            android:layout_toEndOf="@+id/iv_video"
+            android:numStars="5"
+            android:padding="2dp"
+            android:rating="3.5"
+            android:stepSize="0.5"
+            android:theme="@style/RatingBar"/>
+
+        <TextView
+            android:id="@+id/tv_video_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/rb_video_starts"
+            android:gravity="center_vertical"
+            android:padding="1dp"
+            android:textColor="@color/green_4ad3a7"
+            android:textSize="@dimen/text_size_min"/>
+
+        <TextView
+            android:id="@+id/tv_airTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/tv_video_rate"
+            android:layout_toEndOf="@id/iv_video"
+            android:maxLines="1"
+            android:padding="2dp"
+            android:textSize="@dimen/text_size_min"/>
+
+        <TextView
+            android:id="@+id/tv_duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/tv_airTime"
+            android:layout_toEndOf="@id/iv_video"
+            android:maxLines="1"
+            android:padding="2dp"
+            android:textSize="@dimen/text_size_min"/>
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

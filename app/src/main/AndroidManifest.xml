@@ -41,7 +41,9 @@
         <activity
             android:name=".ui.video.VideoInfoActivity"
             android:launchMode="singleTop"/>
-
+        <activity
+            android:name=".ui.video.TypedVideosActivity"
+            android:screenOrientation="portrait"/>
         <meta-data
             android:name="com.pandaq.pandaqlib.glide.CustomGlideMoudle"
             android:value="GlideModule"/>

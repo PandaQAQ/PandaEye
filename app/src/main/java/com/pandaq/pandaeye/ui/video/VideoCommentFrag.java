@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
@@ -43,7 +44,6 @@ public class VideoCommentFrag extends BaseFragment implements SwipeRefreshLayout
     MagicRecyclerView mMrvComment;
     @BindView(R.id.srl_refresh)
     SwipeRefreshLayout mSrlRefresh;
-    private boolean loaded = false;
     private VideoCommentAdapter mAdapter;
     //本次加载数据是否是刷新
     private boolean refresh = true;
@@ -51,6 +51,8 @@ public class VideoCommentFrag extends BaseFragment implements SwipeRefreshLayout
     private boolean loading = false;
     //是否正在刷新
     private boolean refresing = false;
+    //是否还有评论需要加载
+    private boolean loadAble = true;
     private Subscription subscription;
     private Subscription innerSubscription;
     private Subscription msgSubscription;
@@ -78,7 +80,7 @@ public class VideoCommentFrag extends BaseFragment implements SwipeRefreshLayout
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (mMrvComment.loadAble()) {
+                if (mMrvComment.loadAble() && !loading && loadAble) {
                     loadMore();
                 }
             }
@@ -89,10 +91,7 @@ public class VideoCommentFrag extends BaseFragment implements SwipeRefreshLayout
     public void setUserVisibleHint(boolean isVisibleToUser) {
         if (isVisibleToUser) { //可见时才去加载数据
             initRxbus();
-            if (!loaded) {
-                onRefresh();
-                loaded = true;
-            }
+            onRefresh();
         } else {
             if (subscription != null && !subscription.isUnsubscribed()) {
                 subscription.unsubscribe();
@@ -120,15 +119,17 @@ public class VideoCommentFrag extends BaseFragment implements SwipeRefreshLayout
     }
 
     public void noMore() {
+        loadAble = false;
         mMrvComment.getFooterView().setVisibility(View.GONE);
     }
 
     public void showInfo(ArrayList<BaseItem> items) {
+        refresing = false;
+        loading = false;
         mTvEmptyMsg.setVisibility(View.GONE);
         mSrlRefresh.setRefreshing(false);
         if (mAdapter != null) {
             if (refresh) {
-                mAdapter = new VideoCommentAdapter(this);
                 mAdapter.setBaseDatas(items);
             } else {
                 mAdapter.addBaseDatas(items);
@@ -185,6 +186,7 @@ public class VideoCommentFrag extends BaseFragment implements SwipeRefreshLayout
                                     public BaseItem call(CommentBean.ListBean listBean) {
                                         BaseItem<CommentBean.ListBean> base = new BaseItem<>();
                                         base.setData(listBean);
+                                        System.out.println(base);
                                         return base;
                                     }
                                 })
@@ -210,6 +212,7 @@ public class VideoCommentFrag extends BaseFragment implements SwipeRefreshLayout
         msgSubscription = RxBus
                 .getDefault()
                 .toObservableWithCode(RxConstants.LOADED_ALL_COMMENT_CODE, String.class)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String msg) {

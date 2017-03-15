@@ -25,7 +25,7 @@ import rx.schedulers.Schedulers;
 
 public class VideoInfoPresenter extends BasePresenter {
     private IVedioInfoActivity mInfoActivity;
-    private int currentPage = 1;
+    private int currentPage = 0;
 
     public VideoInfoPresenter(IVedioInfoActivity infoActivity) {
         mInfoActivity = infoActivity;
@@ -66,7 +66,7 @@ public class VideoInfoPresenter extends BasePresenter {
     private void loadVideoComment() {
         Subscription subscription = ApiManager.getInstence()
                 .getMovieService()
-                .getCommentList(mInfoActivity.getDataId(), String.valueOf(currentPage))
+                .getCommentList(mInfoActivity.getDataId(), String.valueOf(currentPage + 1))
                 .map(new Func1<MovieResponse<CommentBean>, CommentBean>() {
                     @Override
                     public CommentBean call(MovieResponse<CommentBean> response) {
@@ -93,6 +93,7 @@ public class VideoInfoPresenter extends BasePresenter {
 
                     @Override
                     public void onNext(CommentBean commentBean) {
+                        System.out.println("我不管我已经发送了");
                         RxBus.getDefault().post(commentBean);
                     }
                 });
@@ -104,7 +105,7 @@ public class VideoInfoPresenter extends BasePresenter {
      * 刷新评论
      */
     public void refreshComment() {
-        currentPage = 1;
+        currentPage = 0;
         loadVideoComment();
     }
 

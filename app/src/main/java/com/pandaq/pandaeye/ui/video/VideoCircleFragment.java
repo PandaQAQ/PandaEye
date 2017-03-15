@@ -1,10 +1,12 @@
 package com.pandaq.pandaeye.ui.video;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,9 +108,11 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
         //配置底部列表故事
         mBaseItems.clear();
         for (RetDataBean.ListBean listBean : listBeen) {
-            BaseItem<RetDataBean.ListBean> baseItem = new BaseItem<>();
-            baseItem.setData(listBean);
-            mBaseItems.add(baseItem);
+            if (!TextUtils.isEmpty(listBean.getMoreURL())) {
+                BaseItem<RetDataBean.ListBean> baseItem = new BaseItem<>();
+                baseItem.setData(listBean);
+                mBaseItems.add(baseItem);
+            }
         }
         if (mAdapter == null) {
             mAdapter = new VideoListAdapter(this);
@@ -157,6 +161,9 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
 
     @Override
     public void onItemClick(int position, BaseItem data, View view) {
-        System.out.println(position);
+        RetDataBean.ListBean dataBean = (RetDataBean.ListBean) data.getData();
+        Intent intent = new Intent(this.getActivity(), TypedVideosActivity.class);
+        intent.putExtra(Constants.TYPED_MORE_TITLE, dataBean.getTitle());
+        startActivity(intent);
     }
 }

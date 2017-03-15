@@ -5,6 +5,7 @@ import com.pandaq.pandaeye.model.video.MovieInfo;
 import com.pandaq.pandaeye.model.video.MovieResponse;
 import com.pandaq.pandaeye.model.video.RetDataBean;
 import com.pandaq.pandaeye.model.video.SearchData;
+import com.pandaq.pandaeye.model.video.TypedVideos;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -54,4 +55,21 @@ public interface MovieApi {
      */
     @GET("Commentary/getCommentList.do")
     Observable<MovieResponse<CommentBean>> getCommentList(@Query("mediaId") String mediaId, @Query("pnum") String pnum);
+
+    /**
+     * 获取分类视频列表
+     */
+    @GET("columns/getVideoList.do")
+    Observable<MovieResponse<TypedVideos>> getTypedVideos(@Query("catalogId") String catalogId, @Query("pnum") String pnum);
+
+    /**
+     * 获取直播列表
+     */
+    @GET("liveData/getLiveDataByTVcatalogId.do")
+    Observable<MovieResponse<TypedVideos>> getLiveVideo(@Query("catalogId") String catalogId, @Query("pnum") String pnum);
+//    /**
+//     * 获取专题列表
+//     */
+//    @GET("columns/getVideoList.do")
+//    Observable<MovieResponse<TypedVideos>> getTypedVideos(@Query("catalogId") String catalogId);
 }
