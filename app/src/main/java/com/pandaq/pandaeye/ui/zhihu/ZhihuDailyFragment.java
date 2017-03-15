@@ -41,7 +41,7 @@ import butterknife.ButterKnife;
  * email : 767807368@qq.com
  * 知乎日报列表Fragment
  */
-public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag, SwipeRefreshLayout.OnRefreshListener, MagicRecyclerView.OnTagChangeListener {
+public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag, SwipeRefreshLayout.OnRefreshListener, MagicRecyclerView.OnTagChangeListener, BaseRecyclerAdapter.OnItemClickListener {
 
     @BindView(R.id.zhihudaily_list)
     MagicRecyclerView mZhihudailyList;
@@ -105,19 +105,6 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
         viewGroupIndicator = (ViewGroupIndicator) headerView.findViewById(R.id.scroll_pager_indicator);
         mPresenter.loadCache();
         refreshData();
-        mZhihudailyList.addOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(final int position, BaseItem baseItem, View view) {
-                //跳转到其他界面
-                ZhiHuStory story = (ZhiHuStory) baseItem.getData();
-                Bundle bundle = new Bundle();
-                Intent intent = new Intent(ZhihuDailyFragment.this.getActivity(), ZhihuStoryInfoActivity.class);
-                bundle.putString(Constants.BUNDLE_KEY_TITLE, story.getTitle());
-                bundle.putInt(Constants.BUNDLE_KEY_ID, story.getId());
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
         mZhihudailyList.addOnTagChangeListener(this);
     }
 
@@ -168,6 +155,8 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
             mZhihuDailyAdapter = new ZhihuDailyAdapter(this);
             mZhihuDailyAdapter.setBaseDatas(mBaseItems);
             mZhihudailyList.setAdapter(mZhihuDailyAdapter);
+            //实质是是对 adapter 设置点击事件所以需要在设置 adapter 之后调用
+            mZhihudailyList.addOnItemClickListener(this);
         } else {
             if (mBaseItems.size() != 0) {
                 mZhihuDailyAdapter.setBaseDatas(mBaseItems);
@@ -231,5 +220,17 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
 
     private void showTagAnim() {
 
+    }
+
+    @Override
+    public void onItemClick(int position, BaseItem data, View view) {
+        //跳转到其他界面
+        ZhiHuStory story = (ZhiHuStory) data.getData();
+        Bundle bundle = new Bundle();
+        Intent intent = new Intent(ZhihuDailyFragment.this.getActivity(), ZhihuStoryInfoActivity.class);
+        bundle.putString(Constants.BUNDLE_KEY_TITLE, story.getTitle());
+        bundle.putInt(Constants.BUNDLE_KEY_ID, story.getId());
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

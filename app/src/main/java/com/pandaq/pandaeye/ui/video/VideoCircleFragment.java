@@ -22,6 +22,7 @@ import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaqlib.loopbander.AutoScrollViewPager;
 import com.pandaq.pandaqlib.loopbander.ViewGroupIndicator;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
+import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView;
 import com.pandaq.pandaqlib.magicrecyclerView.SpaceDecoration;
 
@@ -35,7 +36,7 @@ import butterknife.ButterKnife;
  * email : 767807368@qq.com
  * 冒泡圈Fragment
  */
-public class VideoCircleFragment extends BaseFragment implements IVideoListFrag, SwipeRefreshLayout.OnRefreshListener {
+public class VideoCircleFragment extends BaseFragment implements IVideoListFrag, SwipeRefreshLayout.OnRefreshListener, BaseRecyclerAdapter.OnItemClickListener {
 
     @BindView(R.id.mrv_video)
     MagicRecyclerView mMrvVideo;
@@ -77,6 +78,7 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
                 android.R.color.holo_red_light);
         refreshData();
         mPresenter.loadCache();
+        mMrvVideo.addOnItemClickListener(this);
     }
 
     @Override
@@ -151,5 +153,10 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
         if (hidden && mSrlRefresh.isRefreshing()) { // 隐藏的时候停止 SwipeRefreshLayout 转动
             mSrlRefresh.setRefreshing(false);
         }
+    }
+
+    @Override
+    public void onItemClick(int position, BaseItem data, View view) {
+        System.out.println(position);
     }
 }

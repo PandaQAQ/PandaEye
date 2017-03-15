@@ -2,6 +2,7 @@ package com.pandaq.pandaeye.ui.video;
 
 import android.animation.ArgbEvaluator;
 import android.animation.FloatEvaluator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -42,6 +43,7 @@ import rx.functions.Action1;
 public class VideoInfoActivity extends BaseActivity implements IVedioInfoActivity, ViewPager.OnPageChangeListener {
 
     private Subscription subscription;
+    private Subscription intentSubscription;
     @BindView(R.id.jc_video_player)
     JCVideoPlayerStandard mJcVideoPlayer;
     @BindView(R.id.toolbar_title)
@@ -115,9 +117,10 @@ public class VideoInfoActivity extends BaseActivity implements IVedioInfoActivit
     }
 
     private void initRxBus() {
+        // 接收刷新加载评论
         subscription = RxBus
                 .getDefault()
-                .toObservableWithCode(RxConstants.APPLY_DATA_CODE,Integer.class)
+                .toObservableWithCode(RxConstants.APPLY_DATA_CODE, Integer.class)
                 .subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer msgCode) {
@@ -134,6 +137,24 @@ public class VideoInfoActivity extends BaseActivity implements IVedioInfoActivit
                         }
                     }
                 });
+        // 点击推荐视频跳转观察者
+        intentSubscription = RxBus
+                .getDefault()
+                .toObservableWithCode(RxConstants.RELOAD_DATA_CODE, MovieInfo.ListBean.ChildListBean.class)
+                .subscribe(new Action1<MovieInfo.ListBean.ChildListBean>() {
+                    @Override
+                    public void call(MovieInfo.ListBean.ChildListBean data) {
+                        String title = data.getTitle();
+                        dataId = data.getDataId();
+                        String pic = data.getPic();
+                        mToolbarTitle.setText(title);
+                        Picasso.with(VideoInfoActivity.this)
+                                .load(pic)
+                                .into(new PicassoTarget(VideoInfoActivity.this, mJcVideoPlayer.thumbImageView, mToolbar));
+                        mPresenter.loadVideoInfo();
+                    }
+                });
+
     }
 
     @Override
@@ -147,6 +168,7 @@ public class VideoInfoActivity extends BaseActivity implements IVedioInfoActivit
     @Override
     protected void onPause() {
         subscription.unsubscribe();
+        intentSubscription.unsubscribe();
         super.onPause();
         JCVideoPlayer.releaseAllVideos();
     }

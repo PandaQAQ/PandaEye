@@ -78,10 +78,12 @@ public class VideoTopPagerAdapter extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
+        notifyDataSetChanged();
     }
 
     public void resetData(List<RetDataBean.ListBean.ChildListBean> banders) {
         mBanders.clear();
         mBanders.addAll(banders);
+        notifyDataSetChanged();
     }
 }

@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
  * email : 767807368@qq.com
  * 新闻列表界面
  */
-public class NewsListFragment extends BaseFragment implements INewsListFrag, SwipeRefreshLayout.OnRefreshListener {
+public class NewsListFragment extends BaseFragment implements INewsListFrag, SwipeRefreshLayout.OnRefreshListener, BaseRecyclerAdapter.OnItemClickListener {
 
     @BindView(R.id.testRecycler)
     MagicRecyclerView mNewsRecycler;
@@ -77,23 +77,6 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
         mRefresh.setRefreshing(true);
         refreshNews();
         mPresenter.loadCache();
-        mNewsRecycler.addOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, BaseItem baseItem, View view) {
-                //跳转到其他界面
-                TopNews topNews = (TopNews) baseItem.getData();
-                Bundle bundle = new Bundle();
-                Intent intent = new Intent(NewsListFragment.this.getActivity(), TopNewsInfoActivity.class);
-                bundle.putString(Constants.BUNDLE_KEY_TITLE, topNews.getTitle());
-                bundle.putString(Constants.BUNDLE_KEY_ID, topNews.getDocid());
-                bundle.putString(Constants.BUNDLE_KEY_IMG_URL, topNews.getImgsrc());
-                intent.putExtras(bundle);
-                String transitionName = getString(R.string.top_news_img);
-                Pair pairImg = new Pair<>(view.findViewById(R.id.news_image), transitionName);
-                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairImg);
-                startActivity(intent, transitionActivityOptions.toBundle());
-            }
-        });
         View footer = mNewsRecycler.getFooterView();
         if (footer != null) {
             footer.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +114,8 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
             mAdapter = new TopNewsListAdapter(this);
             mAdapter.setBaseDatas(topNews);
             mNewsRecycler.setAdapter(mAdapter);
+            //实质是是对 adapter 设置点击事件所以需要在设置 adapter 之后调用
+            mNewsRecycler.addOnItemClickListener(this);
         } else {
             mAdapter.setBaseDatas(topNews);
         }
@@ -172,5 +157,21 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
         if (hidden && mRefresh.isRefreshing()) { // 隐藏的时候停止 SwipeRefreshLayout 转动
             mRefresh.setRefreshing(false);
         }
+    }
+
+    @Override
+    public void onItemClick(int position, BaseItem data, View view) {
+        //跳转到其他界面
+        TopNews topNews = (TopNews) data.getData();
+        Bundle bundle = new Bundle();
+        Intent intent = new Intent(NewsListFragment.this.getActivity(), TopNewsInfoActivity.class);
+        bundle.putString(Constants.BUNDLE_KEY_TITLE, topNews.getTitle());
+        bundle.putString(Constants.BUNDLE_KEY_ID, topNews.getDocid());
+        bundle.putString(Constants.BUNDLE_KEY_IMG_URL, topNews.getImgsrc());
+        intent.putExtras(bundle);
+        String transitionName = getString(R.string.top_news_img);
+        Pair pairImg = new Pair<>(view.findViewById(R.id.news_image), transitionName);
+        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairImg);
+        startActivity(intent, transitionActivityOptions.toBundle());
     }
 }

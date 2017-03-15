@@ -150,11 +150,13 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         final int pos = getRealPosition(viewHolder);
         final BaseItem data = mDatas.get(pos);
         onBind(viewHolder, pos, data);
-        if (mListener != null && data.getItemType() == TYPE_NORMAL) { //普通的item才可以点击
+        if (data.getItemType() == TYPE_NORMAL) { //普通的item才可以点击
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onItemClick(pos, data, v);
+                    if (mListener != null) {
+                        mListener.onItemClick(pos, data, v);
+                    }
                 }
             });
         }

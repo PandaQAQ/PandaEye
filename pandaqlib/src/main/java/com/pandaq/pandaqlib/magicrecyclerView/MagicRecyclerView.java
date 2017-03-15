@@ -24,6 +24,7 @@ import static com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter.Recycle
  */
 public class MagicRecyclerView extends RecyclerView {
     private static final int NULL_VALUE = 0;
+    private BaseRecyclerAdapter.OnItemClickListener mItemClickListener;
 
     private enum LAYOUT_MANAGER_TYPE {
         LINEAR,
@@ -198,6 +199,9 @@ public class MagicRecyclerView extends RecyclerView {
             mRecyclerAdapter = adapter;
         }
         super.setAdapter(mRecyclerAdapter);
+        if (mItemClickListener != null) {
+            mRecyclerAdapter.setOnItemClickListener(mItemClickListener);
+        }
         if (headerView != null) {
             mRecyclerAdapter.setHeaderView(headerView);
         }
@@ -228,7 +232,9 @@ public class MagicRecyclerView extends RecyclerView {
     }
 
     public void addOnItemClickListener(BaseRecyclerAdapter.OnItemClickListener mItemClickListener) {
+        this.mItemClickListener = mItemClickListener;
         if (mRecyclerAdapter != null) {
+            this.mItemClickListener = null;
             mRecyclerAdapter.setOnItemClickListener(mItemClickListener);
         }
     }

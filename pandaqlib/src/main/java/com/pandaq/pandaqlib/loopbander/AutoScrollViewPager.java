@@ -80,7 +80,7 @@ public class AutoScrollViewPager extends ViewPager implements IndicatorParentImb
 
     private void init() {
         listener = new InnerOnPageChangeListener();
-        super.setOnPageChangeListener(listener);
+        super.addOnPageChangeListener(listener);
         // startAutoScroll();
     }
 
@@ -103,7 +103,6 @@ public class AutoScrollViewPager extends ViewPager implements IndicatorParentImb
         wrapperPagerAdapter = (wrappedPagerAdapter == null) ? null : new AutoScrollPagerAdapter(adapter);
         super.setAdapter(wrapperPagerAdapter);  //为viewPager设置的是包装的adapter
         if (adapter != null && adapter.getCount() != 0) {
-            adapter.notifyDataSetChanged();
             post(new Runnable() {
                 @Override
                 public void run() {

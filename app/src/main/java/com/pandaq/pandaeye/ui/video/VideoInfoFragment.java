@@ -13,14 +13,17 @@ import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.VideoInfoAdapter;
 import com.pandaq.pandaeye.model.video.MovieInfo;
 import com.pandaq.pandaeye.rxbus.RxBus;
+import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
 import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaqlib.FoldableTextView;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
+import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView;
 import com.pandaq.pandaqlib.magicrecyclerView.SpaceDecoration;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +35,7 @@ import rx.functions.Action1;
  * 视频简介 fragment
  */
 
-public class VideoInfoFragment extends BaseFragment {
+public class VideoInfoFragment extends BaseFragment implements BaseRecyclerAdapter.OnItemClickListener {
 
     @BindView(R.id.tv_empty_msg)
     TextView mTvEmptyMsg;
@@ -84,13 +87,15 @@ public class VideoInfoFragment extends BaseFragment {
     }
 
     private void showInfo(MovieInfo movieInfo) {
+        mTvEmptyMsg.setVisibility(View.GONE);
         String sb = "上映时间：" + movieInfo.getAirTime() + "\n" +
                 "导演：" + movieInfo.getDirector() + "\n" +
                 "主演：" + movieInfo.getActors() + "\n" +
                 "剧情简介：" + movieInfo.getDescription();
         mFoldableTextView.setText(sb);
         mBaseItems.clear();
-        for (MovieInfo.ListBean.ChildListBean listBean : movieInfo.getList().get(1).getChildList()) {
+        List<MovieInfo.ListBean> listBeen = movieInfo.getList();
+        for (MovieInfo.ListBean.ChildListBean listBean : listBeen.get(listBeen.size() - 1).getChildList()) {
             BaseItem<MovieInfo.ListBean.ChildListBean> baseItem = new BaseItem<>();
             baseItem.setData(listBean);
             mBaseItems.add(baseItem);
@@ -99,6 +104,9 @@ public class VideoInfoFragment extends BaseFragment {
             mAdapter = new VideoInfoAdapter(this);
             mAdapter.setBaseDatas(mBaseItems);
             mMrvRecommend.setAdapter(mAdapter);
+            mMrvRecommend.addOnItemClickListener(this);
+        } else {
+            mAdapter.setBaseDatas(mBaseItems);
         }
     }
 
@@ -110,5 +118,12 @@ public class VideoInfoFragment extends BaseFragment {
             if (subscription != null && !subscription.isUnsubscribed())
                 subscription.unsubscribe();
         }
+    }
+
+    @Override
+    public void onItemClick(int position, BaseItem data, View view) {
+
+        MovieInfo.ListBean.ChildListBean childListBean = (MovieInfo.ListBean.ChildListBean) data.getData();
+        RxBus.getDefault().postWithCode(RxConstants.RELOAD_DATA_CODE, childListBean);
     }
 }

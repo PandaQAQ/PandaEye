@@ -43,7 +43,6 @@ public class VideoInfoPresenter extends BasePresenter {
                 .subscribe(new Subscriber<MovieResponse<MovieInfo>>() {
                     @Override
                     public void onCompleted() {
-
                     }
 
                     @Override

@@ -231,7 +231,7 @@ public class MovieInfo implements Serializable {
             private int airTime;
             private String duration;
             private String loadtype;
-            private int score;
+            private float score;
             private String angleIcon;
             private String dataId;
             private String description;
@@ -264,7 +264,7 @@ public class MovieInfo implements Serializable {
                 this.loadtype = loadtype;
             }
 
-            public int getScore() {
+            public float getScore() {
                 return score;
             }
 

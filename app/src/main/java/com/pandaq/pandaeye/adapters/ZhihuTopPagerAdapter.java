@@ -85,5 +85,6 @@ public class ZhihuTopPagerAdapter extends PagerAdapter {
     public void resetData(ArrayList<ZhiHuTopStory> topStories) {
         mTopStories.clear();
         mTopStories.addAll(topStories);
+        notifyDataSetChanged();
     }
 }

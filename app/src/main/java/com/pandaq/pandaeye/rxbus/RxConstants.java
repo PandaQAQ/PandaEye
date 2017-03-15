@@ -15,6 +15,8 @@ public class RxConstants {
     public final static String LOADED_ALL_COMMENT_MSG = "我是有底线的QAQ";
     // Video 子fragment向videoInfoActivity 发送操作事件的 Code
     public final static int APPLY_DATA_CODE = 1001;
+    // 点击推荐视频重载界面的 code
+    public final static int RELOAD_DATA_CODE = 1002;
     //重新加载电影信息
     public final static int APPLY_DATA_MSG_RELOADINFO = 0;
     //刷新评论
