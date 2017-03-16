@@ -21,6 +21,8 @@ import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.model.zhihu.ZhiHuDaily;
 import com.pandaq.pandaeye.model.zhihu.ZhiHuStory;
 import com.pandaq.pandaeye.presenter.zhihu.ZhiHuPresenter;
+import com.pandaq.pandaeye.rxbus.RxBus;
+import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.ImplView.IZhiHuDailyFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
 import com.pandaq.pandaeye.utils.DateUtils;
@@ -35,6 +37,8 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * Created by PandaQ on 2016/9/9.
@@ -57,6 +61,8 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
     private ZhihuTopPagerAdapter mTopPagerAdapter;
     private boolean initTag;
     private boolean loading = false;
+    private Subscription mSubscription;
+    private LinearLayoutManager mLinearLayoutManager;
 
     @Nullable
     @Override
@@ -68,17 +74,25 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        onHiddenChanged(false);
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         mRefresh.setRefreshing(false);
         mPresenter.unSubscribe();
+        onHiddenChanged(true);
     }
 
     private void initView() {
         mBaseItems = new ArrayList<>();
         mZhihudailyList.setItemAnimator(new DefaultItemAnimator());
         mZhihudailyList.getItemAnimator().setChangeDuration(0);
-        mZhihudailyList.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        mLinearLayoutManager = new LinearLayoutManager(this.getContext());
+        mZhihudailyList.setLayoutManager(mLinearLayoutManager);
         mZhihudailyList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -199,6 +213,25 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
         if (hidden && mRefresh.isRefreshing()) { // 隐藏的时候停止 SwipeRefreshLayout 转动
             mRefresh.setRefreshing(false);
         }
+        if (!hidden) {
+            mSubscription = RxBus
+                    .getDefault()
+                    .toObservableWithCode(RxConstants.BACK_PRESSED_CODE, String.class)
+                    .subscribe(new Action1<String>() {
+                        @Override
+                        public void call(String s) {
+                            if (s.endsWith(RxConstants.BACK_PRESSED_DATA) && mZhihudailyList != null) {
+                                //滚动到顶部
+                                mLinearLayoutManager.smoothScrollToPosition(mZhihudailyList, null, 0);
+                            }
+                        }
+                    });
+        } else {
+            System.out.println("sssssssssss");
+            if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+                mSubscription.unsubscribe();
+            }
+        }
     }
 
     @Override
@@ -233,4 +266,5 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
         intent.putExtras(bundle);
         startActivity(intent);
     }
+
 }

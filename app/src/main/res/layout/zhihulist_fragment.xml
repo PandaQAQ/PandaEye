@@ -18,19 +18,17 @@
             android:layout_height="match_parent"
             app:footer_layout="@layout/recycler_footer_layout"
             app:header_layout="@layout/recycler_header_layout"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:parallaxMultiplier="0.8"/>
 
         <TextView
             android:id="@+id/tv_tag"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
             android:elevation="@dimen/elevation_height"
-            android:paddingBottom="@dimen/margin_8dp"
+            android:gravity="center_vertical"
             android:paddingEnd="@dimen/base_margin"
             android:paddingStart="@dimen/base_margin"
-            android:paddingTop="@dimen/margin_8dp"
             android:textColor="@color/blue_2196F3"
             android:textSize="@dimen/text_size_mid"
             android:visibility="gone"/>

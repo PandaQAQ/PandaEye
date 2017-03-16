@@ -23,4 +23,10 @@ public class RxConstants {
     public final static int APPLY_DATA_MSG_REFRESHCOMMENT = 1;
     //加载更多评论
     public final static int APPLY_DATA_MSG_LOADMORECOMMENT = 2;
+
+    /**
+     * 退出应用前先滚动到顶部
+     */
+    public final static int BACK_PRESSED_CODE = 1003;
+    public final static String BACK_PRESSED_DATA = "backPressed";
 }

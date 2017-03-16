@@ -17,6 +17,8 @@ import com.pandaq.pandaeye.adapters.TopNewsListAdapter;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.model.neteasynews.TopNews;
 import com.pandaq.pandaeye.presenter.news.NewsPresenter;
+import com.pandaq.pandaeye.rxbus.RxBus;
+import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.ImplView.INewsListFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
@@ -27,6 +29,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * Created by PandaQ on 2016/9/9.
@@ -42,17 +46,34 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
     private NewsPresenter mPresenter = new NewsPresenter(this);
     private TopNewsListAdapter mAdapter;
     private boolean loading = false;
+    private Subscription mSubscription;
+    private LinearLayoutManager mLinearLayoutManager;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.newslist_fragment, container, false);
         ButterKnife.bind(this, view);
-        mNewsRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        mLinearLayoutManager = new LinearLayoutManager(this.getContext());
+        mNewsRecycler.setLayoutManager(mLinearLayoutManager);
         //屏蔽掉默认的动画，房子刷新时图片闪烁
         mNewsRecycler.getItemAnimator().setChangeDuration(0);
         initView();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        onHiddenChanged(false);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mRefresh.setRefreshing(false);
+        mPresenter.unSubscribe();
+        onHiddenChanged(true);
     }
 
     private void initView() {
@@ -141,21 +162,33 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mRefresh.setRefreshing(false);
-        mPresenter.unSubscribe();
-    }
-
-    @Override
     public void onRefresh() {
         refreshNews();
     }
+
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         if (hidden && mRefresh.isRefreshing()) { // 隐藏的时候停止 SwipeRefreshLayout 转动
             mRefresh.setRefreshing(false);
+        }
+        if (!hidden) {
+            mSubscription = RxBus
+                    .getDefault()
+                    .toObservableWithCode(RxConstants.BACK_PRESSED_CODE, String.class)
+                    .subscribe(new Action1<String>() {
+                        @Override
+                        public void call(String s) {
+                            if (s.endsWith(RxConstants.BACK_PRESSED_DATA) && mNewsRecycler != null) {
+                                //滚动到顶部
+                                mLinearLayoutManager.smoothScrollToPosition(mNewsRecycler, null, 0);
+                            }
+                        }
+                    });
+        } else {
+            if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+                mSubscription.unsubscribe();
+            }
         }
     }
 

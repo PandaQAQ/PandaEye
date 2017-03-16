@@ -4,33 +4,32 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.view.MotionEvent;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.pandaq.pandaeye.CustomApplication;
+import com.ashokvarma.bottomnavigation.BottomNavigationBar;
+import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.pandaq.pandaeye.R;
-import com.pandaq.pandaeye.ui.video.VideoCircleFragment;
-import com.pandaq.pandaeye.utils.BlurImageUtils;
-import com.pandaq.pandaeye.utils.LogWritter;
+import com.pandaq.pandaeye.rxbus.RxBus;
+import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.douban.MovieListFragment;
 import com.pandaq.pandaeye.ui.news.NewsListFragment;
+import com.pandaq.pandaeye.ui.video.VideoCircleFragment;
 import com.pandaq.pandaeye.ui.zhihu.ZhihuDailyFragment;
-import com.pandaq.pandaqlib.bottomnavigation.BottomNavigationBar;
-import com.pandaq.pandaqlib.bottomnavigation.BottomNavigationItem;
+import com.pandaq.pandaeye.utils.BlurImageUtils;
+import com.pandaq.pandaeye.utils.LogWritter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -46,12 +45,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     DrawerLayout mDrawerLayout;
     @BindView(R.id.bottom_navgation)
     BottomNavigationBar mBottomNavgation;
+    @BindView(R.id.fl_bottom_navgation)
+    FrameLayout mFlBottomNavgation;
     private Fragment mCurrentFrag;
     private FragmentManager fm;
     private Fragment mMovieFragment;
     private Fragment mZhihuFragment;
     private Fragment mNewsFragment;
     private Fragment mBubbleFragment;
+    private BottomSheetBehavior mBottomSheetBehavior;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +62,40 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         ButterKnife.bind(this);
         fm = getSupportFragmentManager();
         //用于显示toolbar上的侧滑开关动画的
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
-//                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        mDrawerLayout.addDrawerListener(toggle);
-//        toggle.syncState();
         mNavigation.setNavigationItemSelectedListener(this);
+        mBottomSheetBehavior = BottomSheetBehavior.from(mFlBottomNavgation);
+        mBottomSheetBehavior.setPeekHeight(0);
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         initView();
+    }
+
+    float down_y;
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                down_y = event.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                System.out.println(event.getY() - down_y);
+                if (event.getY() - down_y < 0) {
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+                if (event.getY() - down_y > 0) {
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                if (event.getY() - down_y < 0) {
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+                if (event.getY() - down_y > 0) {
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+                break;
+        }
+        return super.dispatchTouchEvent(event);
     }
 
     private void initView() {
@@ -86,13 +116,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void initNavigation() {
         mBottomNavgation
-                .setKeepRipple(false, getResources().getColor(R.color.colorPrimaryDark))
                 .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_RIPPLE)
                 .setMode(BottomNavigationBar.MODE_SHIFTING)
                 .addItem(new BottomNavigationItem(R.drawable.ic_home, getString(R.string.nav_00_title)).setActiveColorResource(R.color.colorPrimary))
-                .addItem(new BottomNavigationItem(R.drawable.ic_book, getString(R.string.nav_01_title)).setActiveColorResource(R.color.colorPrimary))
-                .addItem(new BottomNavigationItem(R.drawable.ic_music_note, getString(R.string.nav_02_title)).setActiveColorResource(R.color.colorPrimary))
-                .addItem(new BottomNavigationItem(R.drawable.ic_live_tv, getString(R.string.nav_03_title)).setActiveColorResource(R.color.colorPrimary))
+                .addItem(new BottomNavigationItem(R.drawable.ic_view_headline, getString(R.string.nav_01_title)).setActiveColorResource(R.color.colorPrimary))
+                .addItem(new BottomNavigationItem(R.drawable.ic_live_tv, getString(R.string.nav_02_title)).setActiveColorResource(R.color.colorPrimary))
+                .addItem(new BottomNavigationItem(R.drawable.ic_explore, getString(R.string.nav_03_title)).setActiveColorResource(R.color.colorPrimary))
                 .setFirstSelectedPosition(0)
                 .setTabSelectedListener(this)
                 .initialise();
@@ -188,6 +217,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void onBackPressed() {
+        if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
+        RxBus.getDefault().postWithCode(RxConstants.BACK_PRESSED_CODE, RxConstants.BACK_PRESSED_DATA);
         long secondTime = System.currentTimeMillis();
         if (secondTime - firstTime > 1500) {
             showLongToast(this, getString(R.string.back_again_exit));

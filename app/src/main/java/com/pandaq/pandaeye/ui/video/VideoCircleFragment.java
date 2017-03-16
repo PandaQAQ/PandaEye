@@ -18,6 +18,8 @@ import com.pandaq.pandaeye.adapters.VideoTopPagerAdapter;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.model.video.RetDataBean;
 import com.pandaq.pandaeye.presenter.video.VideoFragPresenter;
+import com.pandaq.pandaeye.rxbus.RxBus;
+import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.ImplView.IVideoListFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
 import com.pandaq.pandaeye.utils.DensityUtil;
@@ -32,6 +34,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * Created by PandaQ on 2016/9/9.
@@ -50,6 +54,8 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
     private VideoListAdapter mAdapter;
     private VideoFragPresenter mPresenter = new VideoFragPresenter(this);
     private ArrayList<BaseItem> mBaseItems;
+    private Subscription mSubscription;
+    private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,9 +65,24 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        onHiddenChanged(false);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mSrlRefresh.setRefreshing(false);
+        mPresenter.unSubscribe();
+        onHiddenChanged(true);
+    }
+
     private void initView() {
         mBaseItems = new ArrayList<>();
-        mMrvVideo.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        mMrvVideo.setLayoutManager(mStaggeredGridLayoutManager);
         mMrvVideo.setItemAnimator(new DefaultItemAnimator());
         mMrvVideo.getItemAnimator().setChangeDuration(0);
         SpaceDecoration itemDecoration = new SpaceDecoration(DensityUtil.dip2px(getContext(), 8));
@@ -142,12 +163,6 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mPresenter.unSubscribe();
-    }
-
-    @Override
     public void onRefresh() {
         refreshData();
     }
@@ -156,6 +171,24 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
     public void onHiddenChanged(boolean hidden) {
         if (hidden && mSrlRefresh.isRefreshing()) { // 隐藏的时候停止 SwipeRefreshLayout 转动
             mSrlRefresh.setRefreshing(false);
+        }
+        if (!hidden) {
+            mSubscription = RxBus
+                    .getDefault()
+                    .toObservableWithCode(RxConstants.BACK_PRESSED_CODE, String.class)
+                    .subscribe(new Action1<String>() {
+                        @Override
+                        public void call(String s) {
+                            if (s.endsWith(RxConstants.BACK_PRESSED_DATA) && mMrvVideo != null) {
+                                //滚动到顶部
+                                mStaggeredGridLayoutManager.smoothScrollToPosition(mMrvVideo, null, 0);
+                            }
+                        }
+                    });
+        } else {
+            if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+                mSubscription.unsubscribe();
+            }
         }
     }
 
@@ -166,4 +199,5 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
         intent.putExtra(Constants.TYPED_MORE_TITLE, dataBean.getTitle());
         startActivity(intent);
     }
+
 }

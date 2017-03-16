@@ -1,12 +1,9 @@
 package com.pandaq.pandaeye.behavior;
 
-import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListener;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.pandaq.pandaeye.utils.AnimUtils;
@@ -18,10 +15,6 @@ import com.pandaq.pandaeye.utils.AnimUtils;
 public class FABScrollBehavior extends FloatingActionButton.Behavior {
 
     public FABScrollBehavior() {
-    }
-
-    public FABScrollBehavior(Context context, AttributeSet attrs) {
-        super(context, attrs);
     }
 
     // 隐藏动画是否正在执行

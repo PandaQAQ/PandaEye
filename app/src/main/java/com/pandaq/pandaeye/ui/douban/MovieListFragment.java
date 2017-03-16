@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.MovieListAdapter;
 import com.pandaq.pandaeye.presenter.douban.DouBanMoviePresenter;
+import com.pandaq.pandaeye.rxbus.RxBus;
+import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.ImplView.IDoubanFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
@@ -23,6 +25,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * Created by PandaQ on 2016/9/8.
@@ -37,6 +41,8 @@ public class MovieListFragment extends BaseFragment implements IDoubanFrag, Swip
     private MovieListAdapter mMovieListAdapter;
     private DouBanMoviePresenter mPresenter = new DouBanMoviePresenter(this);
     private boolean loading = false;
+    private Subscription mSubscription;
+    private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
 
     @Nullable
     @Override
@@ -47,8 +53,22 @@ public class MovieListFragment extends BaseFragment implements IDoubanFrag, Swip
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        onHiddenChanged(false);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mSrlRefresh.setRefreshing(false);
+        mPresenter.unSubscribe();
+        onHiddenChanged(true);
+    }
+
     private void initView() {
-        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mMovieList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -61,7 +81,7 @@ public class MovieListFragment extends BaseFragment implements IDoubanFrag, Swip
         mMovieList.setItemAnimator(new DefaultItemAnimator());
         //屏蔽掉默认的动画，房子刷新时图片闪烁
         mMovieList.getItemAnimator().setChangeDuration(0);
-        mMovieList.setLayoutManager(layoutManager);
+        mMovieList.setLayoutManager(mStaggeredGridLayoutManager);
         mSrlRefresh.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.white_FFFFFF));
         mSrlRefresh.setOnRefreshListener(this);
         mSrlRefresh.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -151,13 +171,6 @@ public class MovieListFragment extends BaseFragment implements IDoubanFrag, Swip
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mSrlRefresh.setRefreshing(false);
-        mPresenter.unSubscribe();
-    }
-
-    @Override
     public void onRefresh() {
         refreshData();
     }
@@ -166,6 +179,24 @@ public class MovieListFragment extends BaseFragment implements IDoubanFrag, Swip
     public void onHiddenChanged(boolean hidden) {
         if (hidden && mSrlRefresh.isRefreshing()) { // 隐藏的时候停止 SwipeRefreshLayout 转动
             mSrlRefresh.setRefreshing(false);
+        }
+        if (!hidden) {
+            mSubscription = RxBus
+                    .getDefault()
+                    .toObservableWithCode(RxConstants.BACK_PRESSED_CODE, String.class)
+                    .subscribe(new Action1<String>() {
+                        @Override
+                        public void call(String s) {
+                            if (s.endsWith(RxConstants.BACK_PRESSED_DATA) && mMovieList != null) {
+                                //滚动到顶部
+                                mStaggeredGridLayoutManager.smoothScrollToPosition(mMovieList, null, 0);
+                            }
+                        }
+                    });
+        } else {
+            if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+                mSubscription.unsubscribe();
+            }
         }
     }
 }
