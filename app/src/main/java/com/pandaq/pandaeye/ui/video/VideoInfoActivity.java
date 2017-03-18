@@ -18,8 +18,6 @@ import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.model.video.MovieInfo;
 import com.pandaq.pandaeye.presenter.video.VideoInfoPresenter;
-import com.pandaq.pandaeye.rxbus.RxBus;
-import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.ImplView.IVedioInfoActivity;
 import com.pandaq.pandaeye.ui.base.BaseActivity;
 import com.pandaq.pandaeye.utils.PicassoTarget;
@@ -31,8 +29,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
-import rx.Subscription;
-import rx.functions.Action1;
 
 /**
  * Created by PandaQ on 2017/2/28.
@@ -41,8 +37,6 @@ import rx.functions.Action1;
 
 public class VideoInfoActivity extends BaseActivity implements IVedioInfoActivity, ViewPager.OnPageChangeListener {
 
-    private Subscription subscription;
-    private Subscription intentSubscription;
     @BindView(R.id.jc_video_player)
     JCVideoPlayerStandard mJcVideoPlayer;
     @BindView(R.id.toolbar_title)
@@ -56,6 +50,7 @@ public class VideoInfoActivity extends BaseActivity implements IVedioInfoActivit
     @BindView(R.id.tv_tab_comment)
     TextView mTvTabComment;
     private String dataId = "";
+    private String currentDataId = "";
     private ArgbEvaluator argbEvaluator;
     private FloatEvaluator floatEvaluator;
     private VideoInfoPresenter mPresenter = new VideoInfoPresenter(this);
@@ -79,7 +74,7 @@ public class VideoInfoActivity extends BaseActivity implements IVedioInfoActivit
     private void initView() {
         Bundle bundle = getIntent().getExtras();
         String title = bundle.getString(Constants.BUNDLE_KEY_TITLE);
-        dataId = bundle.getString(Constants.BUNDLE_KEY_ID);
+        currentDataId = bundle.getString(Constants.BUNDLE_KEY_ID);
         String pic = bundle.getString(Constants.BUNDLE_KEY_IMG_URL);
         mToolbarTitle.setText(title);
         mJcVideoPlayer.backButton.setVisibility(View.GONE);
@@ -116,43 +111,43 @@ public class VideoInfoActivity extends BaseActivity implements IVedioInfoActivit
     }
 
     private void initRxBus() {
-        // 接收刷新加载评论
-        subscription = RxBus
-                .getDefault()
-                .toObservableWithCode(RxConstants.APPLY_DATA_CODE, Integer.class)
-                .subscribe(new Action1<Integer>() {
-                    @Override
-                    public void call(Integer msgCode) {
-                        switch (msgCode) {
-                            case RxConstants.APPLY_DATA_MSG_RELOADINFO:
-                                mPresenter.loadVideoInfo();
-                                break;
-                            case RxConstants.APPLY_DATA_MSG_REFRESHCOMMENT:
-                                refreshComment();
-                                break;
-                            case RxConstants.APPLY_DATA_MSG_LOADMORECOMMENT:
-                                loadCommentMore();
-                                break;
-                        }
-                    }
-                });
-        // 点击推荐视频跳转观察者
-        intentSubscription = RxBus
-                .getDefault()
-                .toObservableWithCode(RxConstants.RELOAD_DATA_CODE, MovieInfo.ListBean.ChildListBean.class)
-                .subscribe(new Action1<MovieInfo.ListBean.ChildListBean>() {
-                    @Override
-                    public void call(MovieInfo.ListBean.ChildListBean data) {
-                        String title = data.getTitle();
-                        dataId = data.getDataId();
-                        String pic = data.getPic();
-                        mToolbarTitle.setText(title);
-                        Picasso.with(VideoInfoActivity.this)
-                                .load(pic)
-                                .into(new PicassoTarget(VideoInfoActivity.this, mJcVideoPlayer.thumbImageView, mToolbar));
-                        mPresenter.loadVideoInfo();
-                    }
-                });
+//        // 接收刷新加载评论
+//        subscription = RxBus
+//                .getDefault()
+//                .toObservableWithCode(RxConstants.APPLY_DATA_CODE, Integer.class)
+//                .subscribe(new Action1<Integer>() {
+//                    @Override
+//                    public void call(Integer msgCode) {
+//                        switch (msgCode) {
+//                            case RxConstants.APPLY_DATA_MSG_RELOADINFO:
+//                                mPresenter.loadVideoInfo();
+//                                break;
+//                            case RxConstants.APPLY_DATA_MSG_REFRESHCOMMENT:
+//                                refreshComment();
+//                                break;
+//                            case RxConstants.APPLY_DATA_MSG_LOADMORECOMMENT:
+//                                loadCommentMore();
+//                                break;
+//                        }
+//                    }
+//                });
+//        // 点击推荐视频跳转观察者
+//        intentSubscription = RxBus
+//                .getDefault()
+//                .toObservableWithCode(RxConstants.RELOAD_DATA_CODE, MovieInfo.ListBean.ChildListBean.class)
+//                .subscribe(new Action1<MovieInfo.ListBean.ChildListBean>() {
+//                    @Override
+//                    public void call(MovieInfo.ListBean.ChildListBean data) {
+//                        String title = data.getTitle();
+//                        currentDataId = data.getDataId();
+//                        String pic = data.getPic();
+//                        mToolbarTitle.setText(title);
+//                        Picasso.with(VideoInfoActivity.this)
+//                                .load(pic)
+//                                .into(new PicassoTarget(VideoInfoActivity.this, mJcVideoPlayer.thumbImageView, mToolbar));
+//                        mPresenter.loadVideoInfo();
+//                    }
+//                });
 
     }
 
@@ -166,15 +161,15 @@ public class VideoInfoActivity extends BaseActivity implements IVedioInfoActivit
 
     @Override
     protected void onPause() {
-        subscription.unsubscribe();
-        intentSubscription.unsubscribe();
+//        subscription.unsubscribe();
+//        intentSubscription.unsubscribe();
         super.onPause();
         JCVideoPlayer.releaseAllVideos();
     }
 
     @Override
     public String getDataId() {
-        return dataId;
+        return currentDataId;
     }
 
     @Override

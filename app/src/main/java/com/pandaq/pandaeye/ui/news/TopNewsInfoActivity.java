@@ -129,7 +129,7 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
     @Override
     protected void onPause() {
         super.onPause();
-        mPresenter.unSubscribe();
+        mPresenter.dispose();
     }
 
 }

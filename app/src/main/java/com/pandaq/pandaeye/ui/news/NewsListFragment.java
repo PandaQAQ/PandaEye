@@ -29,8 +29,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscription;
-import rx.functions.Action1;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by PandaQ on 2016/9/9.
@@ -46,7 +46,7 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
     private NewsPresenter mPresenter = new NewsPresenter(this);
     private TopNewsListAdapter mAdapter;
     private boolean loading = false;
-    private Subscription mSubscription;
+    private Disposable mDisposable;
     private LinearLayoutManager mLinearLayoutManager;
 
     @Nullable
@@ -72,7 +72,7 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
     public void onPause() {
         super.onPause();
         mRefresh.setRefreshing(false);
-        mPresenter.unSubscribe();
+        mPresenter.dispose();
         onHiddenChanged(true);
     }
 
@@ -173,21 +173,35 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
             mRefresh.setRefreshing(false);
         }
         if (!hidden) {
-            mSubscription = RxBus
-                    .getDefault()
+            RxBus.getDefault()
                     .toObservableWithCode(RxConstants.BACK_PRESSED_CODE, String.class)
-                    .subscribe(new Action1<String>() {
+                    .subscribeWith(new Observer<String>() {
                         @Override
-                        public void call(String s) {
-                            if (s.endsWith(RxConstants.BACK_PRESSED_DATA) && mNewsRecycler != null) {
+                        public void onSubscribe(Disposable d) {
+                            mDisposable = d;
+                        }
+
+                        @Override
+                        public void onNext(String value) {
+                            if (value.equals(RxConstants.BACK_PRESSED_DATA) && mNewsRecycler != null) {
                                 //滚动到顶部
                                 mLinearLayoutManager.smoothScrollToPosition(mNewsRecycler, null, 0);
                             }
                         }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
                     });
         } else {
-            if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-                mSubscription.unsubscribe();
+            if (mDisposable != null && !mDisposable.isDisposed()) {
+                mDisposable.dispose();
             }
         }
     }

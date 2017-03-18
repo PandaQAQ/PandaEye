@@ -2,10 +2,10 @@ package com.pandaq.pandaeye.model.api;
 
 import com.pandaq.pandaeye.model.neteasynews.TopNewsList;
 
+import io.reactivex.Observable;
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
-import rx.Observable;
 
 /**
  * Created by PandaQ on 2016/9/20.

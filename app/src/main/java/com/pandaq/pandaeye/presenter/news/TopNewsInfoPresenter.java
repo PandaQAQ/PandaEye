@@ -8,12 +8,12 @@ import com.pandaq.pandaeye.utils.JsonUtils;
 
 import java.io.IOException;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by PandaQ on 2016/10/10.
@@ -34,12 +34,12 @@ public class TopNewsInfoPresenter extends BasePresenter {
      */
     public void loadNewsContent(final String id) {
         mActivity.showProgressBar();
-        Subscription subscription = ApiManager.getInstence()
+        ApiManager.getInstence()
                 .getTopNewsServie()
                 .getNewsContent(id)
-                .map(new Func1<ResponseBody, TopNewsContent>() {
+                .map(new Function<ResponseBody, TopNewsContent>() {
                     @Override
-                    public TopNewsContent call(ResponseBody responseBody) {
+                    public TopNewsContent apply(ResponseBody responseBody) {
                         TopNewsContent topNews = null;
                         try {
                             topNews = JsonUtils.readJsonNewsContent(responseBody.string(), id);
@@ -51,9 +51,9 @@ public class TopNewsInfoPresenter extends BasePresenter {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<TopNewsContent>() {
+                .subscribe(new Observer<TopNewsContent>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                         mActivity.hideProgressBar();
                     }
 
@@ -63,13 +63,19 @@ public class TopNewsInfoPresenter extends BasePresenter {
                         mActivity.loadFail(e.getMessage());
                     }
 
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
                     @Override
                     public void onNext(TopNewsContent response) {
                         mActivity.hideProgressBar();
                         mActivity.loadSuccess(response);
                     }
                 });
-        addSubscription(subscription);
+
     }
 
 }

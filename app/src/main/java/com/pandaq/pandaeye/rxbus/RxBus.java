@@ -1,10 +1,11 @@
 package com.pandaq.pandaeye.rxbus;
 
-import rx.Observable;
-import rx.functions.Func1;
-import rx.subjects.PublishSubject;
-import rx.subjects.SerializedSubject;
-import rx.subjects.Subject;
+
+import io.reactivex.Observable;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
 
 /**
  * Created by PandaQ on 2016/12/9.
@@ -15,11 +16,11 @@ public class RxBus {
 
     private static volatile RxBus defaultInstance;
 
-    private final Subject<Object, Object> bus;
+    private final Subject<Object> bus;
 
     // PublishSubject只会把在订阅发生的时间点之后来自原始Observable的数据发射给观察者
     private RxBus() {
-        bus = new SerializedSubject<>(PublishSubject.create());
+        bus = PublishSubject.create().toSerialized();
     }
 
     // 单例RxBus
@@ -53,15 +54,15 @@ public class RxBus {
     // 根据传递的 eventType 类型返回特定类型(eventType)的 被观察者,
     public <T> Observable<T> toObservableWithCode(final int code, Class<T> eventType) {
         return bus.ofType(Action.class)
-                .filter(new Func1<Action, Boolean>() {
+                .filter(new Predicate<Action>() {
                     @Override
-                    public Boolean call(Action action) {
+                    public boolean test(Action action) throws Exception {
                         return action.code == code;
                     }
                 })
-                .map(new Func1<Action, Object>() {
+                .map(new Function<Action, Object>() {
                     @Override
-                    public Object call(Action action) {
+                    public Object apply(Action action) throws Exception {
                         return action.data;
                     }
                 })

@@ -1,9 +1,9 @@
 package com.pandaq.pandaeye.presenter.douban;
 
 import com.pandaq.pandaeye.CustomApplication;
-import com.pandaq.pandaeye.model.api.ApiManager;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
+import com.pandaq.pandaeye.model.api.ApiManager;
 import com.pandaq.pandaeye.model.douban.MovieSubject;
 import com.pandaq.pandaeye.model.douban.MovieTop250;
 import com.pandaq.pandaeye.presenter.BasePresenter;
@@ -13,12 +13,13 @@ import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by PandaQ on 2016/9/8.
@@ -40,21 +41,19 @@ public class DouBanMoviePresenter extends BasePresenter {
      */
     public void refreshData() {
         mMovieListFrag.showProgressBar();
-        Subscription subscription = ApiManager.getInstence().getDoubanService()
+        ApiManager.getInstence().getDoubanService()
                 .getTop250(0, 20)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Func1<MovieTop250, Observable<MovieSubject>>() {
+                .flatMap(new Function<MovieTop250, ObservableSource<MovieSubject>>() {
                     @Override
-                    public Observable<MovieSubject> call(MovieTop250 movieTop250) {
+                    public Observable<MovieSubject> apply(MovieTop250 movieTop250) throws Exception {
                         //刷新后下一次加载的起点为
                         start = movieTop250.getCount();
-                        return Observable.from(movieTop250.getMovieSubjects());
+                        return Observable.fromIterable(movieTop250.getMovieSubjects());
                     }
                 })
-                .map(new Func1<MovieSubject, BaseItem>() {
+                .map(new Function<MovieSubject, BaseItem>() {
                     @Override
-                    public BaseItem call(MovieSubject movieSubject) {
+                    public BaseItem apply(MovieSubject movieSubject) {
                         BaseItem<MovieSubject> baseItem = new BaseItem<>();
                         baseItem.setData(movieSubject);
                         return baseItem;
@@ -62,20 +61,19 @@ public class DouBanMoviePresenter extends BasePresenter {
                 })
                 .toList()
                 //将 List 转为ArrayList 缓存存储 ArrayList Serializable对象
-                .map(new Func1<List<BaseItem>, ArrayList<BaseItem>>() {
+                .map(new Function<List<BaseItem>, ArrayList<BaseItem>>() {
                     @Override
-                    public ArrayList<BaseItem> call(List<BaseItem> baseItems) {
+                    public ArrayList<BaseItem> apply(List<BaseItem> baseItems) {
                         ArrayList<BaseItem> items = new ArrayList<>();
                         items.addAll(baseItems);
+                        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_DOUBAN_FILE);
+                        manager.put(Constants.CACHE_DOUBAN_MOVIE, items);
                         return items;
                     }
                 })
-                .subscribe(new Subscriber<ArrayList<BaseItem>>() {
-                    @Override
-                    public void onCompleted() {
-                        mMovieListFrag.hideProgressBar();
-                    }
-
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<ArrayList<BaseItem>>() {
                     @Override
                     public void onError(Throwable e) {
                         mMovieListFrag.hideProgressBar();
@@ -83,14 +81,17 @@ public class DouBanMoviePresenter extends BasePresenter {
                     }
 
                     @Override
-                    public void onNext(ArrayList<BaseItem> baseItems) {
-                        mMovieListFrag.hideProgressBar();
-                        mMovieListFrag.refreshSucceed(baseItems);
-                        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_DOUBAN_FILE);
-                        manager.put(Constants.CACHE_DOUBAN_MOVIE, baseItems);
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
                     }
+
+                    @Override
+                    public void onSuccess(ArrayList<BaseItem> value) {
+                        mMovieListFrag.hideProgressBar();
+                        mMovieListFrag.refreshSucceed(value);
+                    }
+
                 });
-        addSubscription(subscription);
     }
 
     /**
@@ -106,44 +107,39 @@ public class DouBanMoviePresenter extends BasePresenter {
      * 加载更多
      */
     private void loadMore() {
-        Subscription subscription = ApiManager.getInstence().getDoubanService()
+        ApiManager.getInstence().getDoubanService()
                 .getTop250(start, 20)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Func1<MovieTop250, Observable<MovieSubject>>() {
+                .flatMap(new Function<MovieTop250, ObservableSource<MovieSubject>>() {
                     @Override
-                    public Observable<MovieSubject> call(MovieTop250 movieTop250) {
+                    public ObservableSource<MovieSubject> apply(MovieTop250 movieTop250) {
                         //刷新后下一次加载的起点为
                         start += movieTop250.getCount();
                         if (start == movieTop250.getTotal()) {
                             loadAllCompleted = true;
                         }
-                        return Observable.from(movieTop250.getMovieSubjects());
+                        return Observable.fromIterable(movieTop250.getMovieSubjects());
                     }
                 })
-                .map(new Func1<MovieSubject, BaseItem>() {
+                .map(new Function<MovieSubject, BaseItem>() {
                     @Override
-                    public BaseItem call(MovieSubject movieSubject) {
+                    public BaseItem apply(MovieSubject movieSubject) {
                         BaseItem<MovieSubject> baseItem = new BaseItem<>();
                         baseItem.setData(movieSubject);
                         return baseItem;
                     }
                 })
                 .toList()
-                .map(new Func1<List<BaseItem>, ArrayList<BaseItem>>() {
+                .map(new Function<List<BaseItem>, ArrayList<BaseItem>>() {
                     @Override
-                    public ArrayList<BaseItem> call(List<BaseItem> baseItems) {
+                    public ArrayList<BaseItem> apply(List<BaseItem> baseItems) {
                         ArrayList<BaseItem> items = new ArrayList<>();
                         items.addAll(baseItems);
                         return items;
                     }
                 })
-                .subscribe(new Subscriber<ArrayList<BaseItem>>() {
-                    @Override
-                    public void onCompleted() {
-                        mMovieListFrag.hideProgressBar();
-                    }
-
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<ArrayList<BaseItem>>() {
                     @Override
                     public void onError(Throwable e) {
                         mMovieListFrag.hideProgressBar();
@@ -151,12 +147,17 @@ public class DouBanMoviePresenter extends BasePresenter {
                     }
 
                     @Override
-                    public void onNext(ArrayList<BaseItem> movieSubjects) {
-                        mMovieListFrag.hideProgressBar();
-                        mMovieListFrag.loadSuccessed(movieSubjects);
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
                     }
+
+                    @Override
+                    public void onSuccess(ArrayList<BaseItem> value) {
+                        mMovieListFrag.hideProgressBar();
+                        mMovieListFrag.loadSuccessed(value);
+                    }
+
                 });
-        addSubscription(subscription);
     }
 
     /**

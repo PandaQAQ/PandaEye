@@ -11,12 +11,14 @@ import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+
 
 /**
  * Created by PandaQ on 2017/3/15.
@@ -32,13 +34,13 @@ public class TypedVideosPresenter extends BasePresenter {
     }
 
     private void loadVideos(String catalogId) {
-        Subscription subscription = ApiManager
+        ApiManager
                 .getInstence()
                 .getMovieService()
                 .getTypedVideos(catalogId, String.valueOf(currentPage + 1))
-                .map(new Func1<MovieResponse<TypedVideos>, List<TypedVideos.ListBean>>() {
+                .map(new Function<MovieResponse<TypedVideos>, List<TypedVideos.ListBean>>() {
                     @Override
-                    public List<TypedVideos.ListBean> call(MovieResponse<TypedVideos> response) {
+                    public List<TypedVideos.ListBean> apply(MovieResponse<TypedVideos> response) {
                         currentPage = response.getData().getPnum();
                         int totalPum = response.getData().getTotalPnum();
                         if (currentPage == totalPum) { //加载完所有的视频后
@@ -47,15 +49,15 @@ public class TypedVideosPresenter extends BasePresenter {
                         return response.getData().getList();
                     }
                 })
-                .flatMap(new Func1<List<TypedVideos.ListBean>, Observable<TypedVideos.ListBean>>() {
+                .flatMap(new Function<List<TypedVideos.ListBean>, Observable<TypedVideos.ListBean>>() {
                     @Override
-                    public Observable<TypedVideos.ListBean> call(List<TypedVideos.ListBean> listBeen) {
-                        return Observable.from(listBeen);
+                    public Observable<TypedVideos.ListBean> apply(List<TypedVideos.ListBean> listBeen) {
+                        return Observable.fromIterable(listBeen);
                     }
                 })
-                .map(new Func1<TypedVideos.ListBean, BaseItem>() {
+                .map(new Function<TypedVideos.ListBean, BaseItem>() {
                     @Override
-                    public BaseItem call(TypedVideos.ListBean listBean) {
+                    public BaseItem apply(TypedVideos.ListBean listBean) {
                         BaseItem<TypedVideos.ListBean> base = new BaseItem<>();
                         base.setData(listBean);
                         return base;
@@ -64,10 +66,16 @@ public class TypedVideosPresenter extends BasePresenter {
                 .toList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<BaseItem>>() {
-                    @Override
-                    public void onCompleted() {
+                .subscribe(new SingleObserver<List<BaseItem>>() {
 
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onSuccess(List<BaseItem> value) {
+                        mActivity.loadMoreSuccess(value);
                     }
 
                     @Override
@@ -75,22 +83,17 @@ public class TypedVideosPresenter extends BasePresenter {
                         mActivity.loadFail(Constants.ERRO, e.getMessage());
                     }
 
-                    @Override
-                    public void onNext(List<BaseItem> baseItems) {
-                        mActivity.loadMoreSuccess(baseItems);
-                    }
                 });
-        addSubscription(subscription);
     }
 
     private void loadLives(String catalogId) {
-        Subscription subscription = ApiManager
+        ApiManager
                 .getInstence()
                 .getMovieService()
                 .getLiveVideo(catalogId, String.valueOf(currentPage + 1))
-                .map(new Func1<MovieResponse<TypedVideos>, List<TypedVideos.ListBean>>() {
+                .map(new Function<MovieResponse<TypedVideos>, List<TypedVideos.ListBean>>() {
                     @Override
-                    public List<TypedVideos.ListBean> call(MovieResponse<TypedVideos> response) {
+                    public List<TypedVideos.ListBean> apply(MovieResponse<TypedVideos> response) {
                         currentPage = response.getData().getPnum();
                         int totalPum = response.getData().getTotalPnum();
                         if (currentPage == totalPum) { //加载完所有的视频后
@@ -99,15 +102,15 @@ public class TypedVideosPresenter extends BasePresenter {
                         return response.getData().getList();
                     }
                 })
-                .flatMap(new Func1<List<TypedVideos.ListBean>, Observable<TypedVideos.ListBean>>() {
+                .flatMap(new Function<List<TypedVideos.ListBean>, Observable<TypedVideos.ListBean>>() {
                     @Override
-                    public Observable<TypedVideos.ListBean> call(List<TypedVideos.ListBean> listBeen) {
-                        return Observable.from(listBeen);
+                    public Observable<TypedVideos.ListBean> apply(List<TypedVideos.ListBean> listBeen) {
+                        return Observable.fromIterable(listBeen);
                     }
                 })
-                .map(new Func1<TypedVideos.ListBean, BaseItem>() {
+                .map(new Function<TypedVideos.ListBean, BaseItem>() {
                     @Override
-                    public BaseItem call(TypedVideos.ListBean listBean) {
+                    public BaseItem apply(TypedVideos.ListBean listBean) {
                         BaseItem<TypedVideos.ListBean> base = new BaseItem<>();
                         base.setData(listBean);
                         return base;
@@ -116,10 +119,16 @@ public class TypedVideosPresenter extends BasePresenter {
                 .toList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<BaseItem>>() {
-                    @Override
-                    public void onCompleted() {
+                .subscribe(new SingleObserver<List<BaseItem>>() {
 
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onSuccess(List<BaseItem> value) {
+                        mActivity.loadMoreSuccess(value);
                     }
 
                     @Override
@@ -127,12 +136,8 @@ public class TypedVideosPresenter extends BasePresenter {
                         mActivity.loadFail(Constants.ERRO, e.getMessage());
                     }
 
-                    @Override
-                    public void onNext(List<BaseItem> baseItems) {
-                        mActivity.loadMoreSuccess(baseItems);
-                    }
                 });
-        addSubscription(subscription);
+
     }
 
     public void loadData(String title) {

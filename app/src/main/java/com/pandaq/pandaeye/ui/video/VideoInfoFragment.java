@@ -27,8 +27,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscription;
-import rx.functions.Action1;
 
 /**
  * Created by PandaQ on 2017/3/2.
@@ -42,7 +40,6 @@ public class VideoInfoFragment extends BaseFragment implements BaseRecyclerAdapt
     @BindView(R.id.mrv_recommend)
     MagicRecyclerView mMrvRecommend;
     private FoldableTextView mFoldableTextView;
-    private Subscription subscription;
     private ArrayList<BaseItem> mBaseItems;
     private VideoInfoAdapter mAdapter;
 
@@ -69,21 +66,33 @@ public class VideoInfoFragment extends BaseFragment implements BaseRecyclerAdapt
     }
 
     private void initRxbus() {
-        subscription = RxBus
-                .getDefault()
-                .toObservable(MovieInfo.class)
-                .subscribe(new Action1<MovieInfo>() {
-                    @Override
-                    public void call(MovieInfo movieInfo) {
-                        showInfo(movieInfo);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        // 获取信息失败
-                        mTvEmptyMsg.setVisibility(View.VISIBLE);
-                    }
-                });
+//        subscription = RxBus
+//                .getDefault()
+//                .toObservableWithCode(RxConstants.LOAD_DATA_INFO_RESULT_OK, MovieInfo.class)
+//                .subscribe(new Subscriber<MovieInfo>() {
+//                    @Override
+//                    public void onCompleted() {
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                    }
+//
+//                    @Override
+//                    public void onNext(MovieInfo movieInfo) {
+//                        showInfo(movieInfo);
+//                    }
+//                });
+//        errSubscription = RxBus
+//                .getDefault()
+//                .toObservableWithCode(RxConstants.LOAD_DATA_INFO_RESULT_THROWABLE, Throwable.class)
+//                .subscribe(new Action1<Throwable>() {
+//                    @Override
+//                    public void call(Throwable throwable) {
+//                        // 获取信息失败
+//                        mTvEmptyMsg.setVisibility(View.VISIBLE);
+//                    }
+//                });
     }
 
     private void showInfo(MovieInfo movieInfo) {
@@ -115,15 +124,18 @@ public class VideoInfoFragment extends BaseFragment implements BaseRecyclerAdapt
         if (isVisibleToUser) { //可见时才去加载数据
             initRxbus();
         } else {
-            if (subscription != null && !subscription.isUnsubscribed())
-                subscription.unsubscribe();
+//            if (subscription != null && !subscription.isUnsubscribed()) {
+//                subscription.unsubscribe();
+//                errSubscription.unsubscribe();
+//            }
         }
     }
 
     @Override
     public void onItemClick(int position, BaseItem data, View view) {
-
         MovieInfo.ListBean.ChildListBean childListBean = (MovieInfo.ListBean.ChildListBean) data.getData();
         RxBus.getDefault().postWithCode(RxConstants.RELOAD_DATA_CODE, childListBean);
+        //通知评论Fragment Id已变更
+        RxBus.getDefault().postWithCode(RxConstants.LOADED_ALL_COMMENT_CODE, childListBean.getDataId());
     }
 }

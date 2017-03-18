@@ -2,9 +2,9 @@ package com.pandaq.pandaeye.model.api;
 
 import com.pandaq.pandaeye.model.douban.MovieTop250;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * Created by PandaQ on 2016/9/8.

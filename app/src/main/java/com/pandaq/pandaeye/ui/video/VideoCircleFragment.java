@@ -34,8 +34,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscription;
-import rx.functions.Action1;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by PandaQ on 2016/9/9.
@@ -54,7 +54,7 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
     private VideoListAdapter mAdapter;
     private VideoFragPresenter mPresenter = new VideoFragPresenter(this);
     private ArrayList<BaseItem> mBaseItems;
-    private Subscription mSubscription;
+    private Disposable mDisposable;
     private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
 
     @Override
@@ -75,7 +75,7 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
     public void onPause() {
         super.onPause();
         mSrlRefresh.setRefreshing(false);
-        mPresenter.unSubscribe();
+        mPresenter.dispose();
         onHiddenChanged(true);
     }
 
@@ -173,21 +173,35 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
             mSrlRefresh.setRefreshing(false);
         }
         if (!hidden) {
-            mSubscription = RxBus
-                    .getDefault()
+            RxBus.getDefault()
                     .toObservableWithCode(RxConstants.BACK_PRESSED_CODE, String.class)
-                    .subscribe(new Action1<String>() {
+                    .subscribeWith(new Observer<String>() {
                         @Override
-                        public void call(String s) {
-                            if (s.endsWith(RxConstants.BACK_PRESSED_DATA) && mMrvVideo != null) {
+                        public void onSubscribe(Disposable d) {
+                            mDisposable = d;
+                        }
+
+                        @Override
+                        public void onNext(String value) {
+                            if (value.equals(RxConstants.BACK_PRESSED_DATA) && mMrvVideo != null) {
                                 //滚动到顶部
                                 mStaggeredGridLayoutManager.smoothScrollToPosition(mMrvVideo, null, 0);
                             }
                         }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
                     });
         } else {
-            if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-                mSubscription.unsubscribe();
+            if (mDisposable != null && !mDisposable.isDisposed()) {
+                mDisposable.dispose();
             }
         }
     }

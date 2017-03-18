@@ -78,20 +78,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 down_y = event.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
-                System.out.println(event.getY() - down_y);
-                if (event.getY() - down_y < 0) {
-                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
-                if (event.getY() - down_y > 0) {
+                if (event.getY() - down_y > 20) {
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+                if (event.getY() - down_y < -150) {
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                if (event.getY() - down_y < 0) {
-                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                if (event.getY() - down_y > 20) {
+                    if (mBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+                        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    }
                 }
-                if (event.getY() - down_y > 0) {
-                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                if (event.getY() - down_y < -150) {
+                    if (mBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED) {
+                        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    }
                 }
                 break;
         }

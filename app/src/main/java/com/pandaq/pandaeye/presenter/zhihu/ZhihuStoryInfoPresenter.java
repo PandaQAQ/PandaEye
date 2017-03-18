@@ -5,10 +5,11 @@ import com.pandaq.pandaeye.model.zhihu.ZhihuStoryContent;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.IZhihuStoryInfoActivity;
 
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 
 /**
  * Created by PandaQ on 2016/10/10.
@@ -25,20 +26,26 @@ public class ZhihuStoryInfoPresenter extends BasePresenter {
 
     public void loadStory(String id) {
         mActivity.showProgressBar();
-        Subscription subscription = ApiManager.getInstence().getZhihuService()
+        ApiManager.getInstence().getZhihuService()
                 .getStoryContent(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ZhihuStoryContent>() {
-                    @Override
-                    public void onCompleted() {
-                        mActivity.hideProgressBar();
-                    }
+                .subscribe(new Observer<ZhihuStoryContent>() {
 
                     @Override
                     public void onError(Throwable e) {
                         mActivity.loadFail(e.getMessage());
                         mActivity.hideProgressBar();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mActivity.hideProgressBar();
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
                     }
 
                     @Override
@@ -48,6 +55,5 @@ public class ZhihuStoryInfoPresenter extends BasePresenter {
                     }
                 });
 
-        addSubscription(subscription);
     }
 }

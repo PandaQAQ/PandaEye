@@ -7,9 +7,9 @@ import com.pandaq.pandaeye.model.video.RetDataBean;
 import com.pandaq.pandaeye.model.video.SearchData;
 import com.pandaq.pandaeye.model.video.TypedVideos;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * Created by PandaQ on 2017/2/28.

@@ -1,11 +1,11 @@
 package com.pandaq.pandaeye.ui.zhihu;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -79,6 +79,10 @@ public class ZhihuStoryInfoActivity extends BaseActivity implements IZhihuStoryI
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT, "我发现了一个好应用");
+                intent.setType("text/plain");
+                startActivity(Intent.createChooser(intent,"分享到"));
             }
         });
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -120,7 +124,7 @@ public class ZhihuStoryInfoActivity extends BaseActivity implements IZhihuStoryI
 
     @Override
     public void loadSuccess(ZhihuStoryContent zhihuStory) {
-        Target target = new PicassoTarget(this, mStoryImg, mToolbarLayout, mToolbar,mFab);
+        Target target = new PicassoTarget(this, mStoryImg, mToolbarLayout, mToolbar, mFab);
         //不设置的话会有时候不加载图片
         mStoryImg.setTag(target);
         Picasso.with(this)
@@ -145,6 +149,6 @@ public class ZhihuStoryInfoActivity extends BaseActivity implements IZhihuStoryI
     @Override
     protected void onPause() {
         super.onPause();
-        mPresenter.unSubscribe();
+        mPresenter.dispose();
     }
 }

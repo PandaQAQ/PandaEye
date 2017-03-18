@@ -14,13 +14,19 @@ import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.internal.operators.observable.ObservableObserveOn;
+import io.reactivex.schedulers.Schedulers;
+
 
 /**
  * Created by PandaQ on 2016/9/13.
@@ -37,12 +43,12 @@ public class ZhiHuPresenter extends BasePresenter {
 
     public void refreshZhihuDaily() {
         mZhiHuDailyFrag.showRefreshBar();
-        Subscription subscription = ApiManager.getInstence()
+        ApiManager.getInstence()
                 .getZhihuService()
                 .getLatestZhihuDaily()
-                .map(new Func1<ZhiHuDaily, ZhiHuDaily>() { //io 线程存储缓存
+                .map(new Function<ZhiHuDaily, ZhiHuDaily>() { //io 线程存储缓存
                     @Override
-                    public ZhiHuDaily call(ZhiHuDaily zhiHuDaily) {
+                    public ZhiHuDaily apply(ZhiHuDaily zhiHuDaily) {
                         DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_ZHIHU_FILE);
                         manager.put(Constants.CACHE_ZHIHU_DAILY, zhiHuDaily);
                         return zhiHuDaily;
@@ -50,9 +56,9 @@ public class ZhiHuPresenter extends BasePresenter {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ZhiHuDaily>() {
+                .subscribe(new Observer<ZhiHuDaily>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                         mZhiHuDailyFrag.hideRefreshBar();
                     }
 
@@ -63,35 +69,39 @@ public class ZhiHuPresenter extends BasePresenter {
                     }
 
                     @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
                     public void onNext(ZhiHuDaily zhiHuDaily) {
                         date = zhiHuDaily.getDate();
                         mZhiHuDailyFrag.hideRefreshBar();
                         mZhiHuDailyFrag.refreshSuccessed(zhiHuDaily);
                     }
                 });
-        addSubscription(subscription);
     }
 
     public void loadMoreData() {
-        Subscription subscription = ApiManager.getInstence()
+        ApiManager.getInstence()
                 .getZhihuService()
                 .getZhihuDaily(date)
-                .map(new Func1<ZhiHuDaily, ArrayList<ZhiHuStory>>() {
+                .map(new Function<ZhiHuDaily, ArrayList<ZhiHuStory>>() {
                     @Override
-                    public ArrayList<ZhiHuStory> call(ZhiHuDaily zhiHuDaily) {
+                    public ArrayList<ZhiHuStory> apply(ZhiHuDaily zhiHuDaily) {
                         date = zhiHuDaily.getDate();
                         return zhiHuDaily.getStories();
                     }
                 })
-                .flatMap(new Func1<ArrayList<ZhiHuStory>, Observable<ZhiHuStory>>() {
+                .flatMap(new Function<ArrayList<ZhiHuStory>, Observable<ZhiHuStory>>() {
                     @Override
-                    public Observable<ZhiHuStory> call(ArrayList<ZhiHuStory> zhiHuStories) {
-                        return Observable.from(zhiHuStories);
+                    public Observable<ZhiHuStory> apply(ArrayList<ZhiHuStory> zhiHuStories) {
+                        return Observable.fromIterable(zhiHuStories);
                     }
                 })
-                .map(new Func1<ZhiHuStory, BaseItem>() {
+                .map(new Function<ZhiHuStory, BaseItem>() {
                     @Override
-                    public BaseItem call(ZhiHuStory zhiHuStory) {
+                    public BaseItem apply(ZhiHuStory zhiHuStory) {
                         //将日期值设置到 story 中
                         zhiHuStory.setDate(date);
                         BaseItem<ZhiHuStory> baseItem = new BaseItem<>();
@@ -101,9 +111,9 @@ public class ZhiHuPresenter extends BasePresenter {
                 })
                 .toList()
                 // 在所有的数据 list 前面加上当天的 tag
-                .map(new Func1<List<BaseItem>, List<BaseItem>>() {
+                .map(new Function<List<BaseItem>, List<BaseItem>>() {
                     @Override
-                    public List<BaseItem> call(List<BaseItem> baseItems) {
+                    public List<BaseItem> apply(List<BaseItem> baseItems) {
                         BaseItem<String> baseItem = new BaseItem<>();
                         baseItem.setItemType(BaseRecyclerAdapter.RecyclerItemType.TYPE_TAGS);
                         baseItem.setData(date);
@@ -113,9 +123,15 @@ public class ZhiHuPresenter extends BasePresenter {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<BaseItem>>() {
+                .subscribe(new SingleObserver<List<BaseItem>>() {
                     @Override
-                    public void onCompleted() {
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onSuccess(List<BaseItem> value) {
+                        mZhiHuDailyFrag.loadSuccessed((ArrayList<BaseItem>) value);
                     }
 
                     @Override
@@ -123,12 +139,7 @@ public class ZhiHuPresenter extends BasePresenter {
                         mZhiHuDailyFrag.loadFail(e.getMessage());
                     }
 
-                    @Override
-                    public void onNext(List<BaseItem> baseitems) {
-                        mZhiHuDailyFrag.loadSuccessed((ArrayList<BaseItem>) baseitems);
-                    }
                 });
-        addSubscription(subscription);
     }
 
     /**
@@ -136,21 +147,36 @@ public class ZhiHuPresenter extends BasePresenter {
      */
     public void loadCache() {
         final DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_ZHIHU_FILE);
-        Subscription subscription = Observable.create(new Observable.OnSubscribe<ZhiHuDaily>() {
+        Observable.create(new ObservableOnSubscribe<ZhiHuDaily>() {
             @Override
-            public void call(Subscriber<? super ZhiHuDaily> subscriber) {
+            public void subscribe(ObservableEmitter<ZhiHuDaily> e) throws Exception {
                 ZhiHuDaily zhiHuDaily = manager.getSerializable(Constants.CACHE_ZHIHU_DAILY);
-                subscriber.onNext(zhiHuDaily);
+                e.onNext(zhiHuDaily);
             }
-        }).subscribe(new Action1<ZhiHuDaily>() {
+        }).subscribe(new Observer<ZhiHuDaily>() {
             @Override
-            public void call(ZhiHuDaily zhiHuDaily) {
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
+
+            @Override
+            public void onNext(ZhiHuDaily zhiHuDaily) {
                 if (zhiHuDaily != null) {
                     date = zhiHuDaily.getDate();
                     mZhiHuDailyFrag.refreshSuccessed(zhiHuDaily);
                 }
             }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
         });
-        addSubscription(subscription);
+
     }
 }

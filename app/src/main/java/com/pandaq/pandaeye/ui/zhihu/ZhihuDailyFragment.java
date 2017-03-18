@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -37,8 +36,8 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscription;
-import rx.functions.Action1;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by PandaQ on 2016/9/9.
@@ -61,7 +60,7 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
     private ZhihuTopPagerAdapter mTopPagerAdapter;
     private boolean initTag;
     private boolean loading = false;
-    private Subscription mSubscription;
+    private Disposable mDisposable;
     private LinearLayoutManager mLinearLayoutManager;
 
     @Nullable
@@ -83,7 +82,7 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
     public void onPause() {
         super.onPause();
         mRefresh.setRefreshing(false);
-        mPresenter.unSubscribe();
+        mPresenter.dispose();
         onHiddenChanged(true);
     }
 
@@ -214,22 +213,35 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
             mRefresh.setRefreshing(false);
         }
         if (!hidden) {
-            mSubscription = RxBus
-                    .getDefault()
+            RxBus.getDefault()
                     .toObservableWithCode(RxConstants.BACK_PRESSED_CODE, String.class)
-                    .subscribe(new Action1<String>() {
+                    .subscribeWith(new Observer<String>() {
                         @Override
-                        public void call(String s) {
-                            if (s.endsWith(RxConstants.BACK_PRESSED_DATA) && mZhihudailyList != null) {
+                        public void onSubscribe(Disposable d) {
+                            mDisposable = d;
+                        }
+
+                        @Override
+                        public void onNext(String value) {
+                            if (value.equals(RxConstants.BACK_PRESSED_DATA) && mZhihudailyList != null) {
                                 //滚动到顶部
                                 mLinearLayoutManager.smoothScrollToPosition(mZhihudailyList, null, 0);
                             }
                         }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
                     });
         } else {
-            System.out.println("sssssssssss");
-            if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-                mSubscription.unsubscribe();
+            if (mDisposable != null && !mDisposable.isDisposed()) {
+                mDisposable.dispose();
             }
         }
     }

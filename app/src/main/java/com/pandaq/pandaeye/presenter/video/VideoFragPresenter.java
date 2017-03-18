@@ -1,9 +1,9 @@
 package com.pandaq.pandaeye.presenter.video;
 
 import com.pandaq.pandaeye.CustomApplication;
-import com.pandaq.pandaeye.model.api.ApiManager;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
+import com.pandaq.pandaeye.model.api.ApiManager;
 import com.pandaq.pandaeye.model.video.MovieResponse;
 import com.pandaq.pandaeye.model.video.RetDataBean;
 import com.pandaq.pandaeye.presenter.BasePresenter;
@@ -12,13 +12,17 @@ import com.pandaq.pandaeye.ui.ImplView.IVideoListFrag;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
+
 
 /**
  * Created by PandaQ on 2017/3/1.
@@ -38,28 +42,28 @@ public class VideoFragPresenter extends BasePresenter {
      */
     public void loadData() {
         mFrag.showProgressBar();
-        Subscription subscription = ApiManager.getInstence()
+        ApiManager.getInstence()
                 .getMovieService()
                 .getHomePage()
-                .flatMap(new Func1<MovieResponse<RetDataBean>, Observable<RetDataBean.ListBean>>() {
+                .flatMap(new Function<MovieResponse<RetDataBean>, Observable<RetDataBean.ListBean>>() {
                     @Override
-                    public Observable<RetDataBean.ListBean> call(MovieResponse<RetDataBean> response) {
-                        return Observable.from(response.getData().getList());
+                    public Observable<RetDataBean.ListBean> apply(MovieResponse<RetDataBean> response) {
+                        return Observable.fromIterable(response.getData().getList());
                     }
                 })
                 //去广告
-                .filter(new Func1<RetDataBean.ListBean, Boolean>() {
+                .filter(new Predicate<RetDataBean.ListBean>() {
                     @Override
-                    public Boolean call(RetDataBean.ListBean listBean) {
+                    public boolean test(RetDataBean.ListBean listBean) throws Exception {
                         String showType = listBean.getShowType();
                         return Constants.SHOW_TYPE_IN.equals(showType) || Constants.SHOW_TYPE_BANNER.equals(showType);
                     }
                 })
                 .toList()
                 //将 List 转为ArrayList 缓存存储 ArrayList Serializable对象
-                .map(new Func1<List<RetDataBean.ListBean>, ArrayList<RetDataBean.ListBean>>() {
+                .map(new Function<List<RetDataBean.ListBean>, ArrayList<RetDataBean.ListBean>>() {
                     @Override
-                    public ArrayList<RetDataBean.ListBean> call(List<RetDataBean.ListBean> listBeen) {
+                    public ArrayList<RetDataBean.ListBean> apply(List<RetDataBean.ListBean> listBeen) {
                         ArrayList<RetDataBean.ListBean> arr = new ArrayList<RetDataBean.ListBean>();
                         arr.addAll(listBeen);
                         DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_VIDEO_FILE);
@@ -69,9 +73,17 @@ public class VideoFragPresenter extends BasePresenter {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ArrayList<RetDataBean.ListBean>>() {
+                .subscribe(new SingleObserver<ArrayList<RetDataBean.ListBean>>() {
+
+
                     @Override
-                    public void onCompleted() {
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onSuccess(ArrayList<RetDataBean.ListBean> value) {
+                        mFrag.refreshSuccess(value);
                         mFrag.hideProgressBar();
                     }
 
@@ -81,34 +93,44 @@ public class VideoFragPresenter extends BasePresenter {
                         mFrag.refreshFail(Constants.ERRO, e.getMessage());
                     }
 
-                    @Override
-                    public void onNext(ArrayList<RetDataBean.ListBean> listBeen) {
-                        mFrag.refreshSuccess(listBeen);
-                        mFrag.hideProgressBar();
-                    }
                 });
-        addSubscription(subscription);
+
     }
 
     /**
-     * 读取缓存
+     * 加载缓存
      */
     public void loadCache() {
         final DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_VIDEO_FILE);
-        Subscription subscription = Observable.create(new Observable.OnSubscribe<ArrayList<RetDataBean.ListBean>>() {
+        Observable.create(new ObservableOnSubscribe<ArrayList<RetDataBean.ListBean>>() {
             @Override
-            public void call(Subscriber<? super ArrayList<RetDataBean.ListBean>> subscriber) {
+            public void subscribe(ObservableEmitter<ArrayList<RetDataBean.ListBean>> e) throws Exception {
                 ArrayList<RetDataBean.ListBean> arrbean = manager.getSerializable(Constants.CACHE_VIDEO);
-                subscriber.onNext(arrbean);
+                e.onNext(arrbean);
             }
-        }).subscribe(new Action1<ArrayList<RetDataBean.ListBean>>() {
+        }).subscribe(new Observer<ArrayList<RetDataBean.ListBean>>() {
             @Override
-            public void call(ArrayList<RetDataBean.ListBean> listBeen) {
-                if (listBeen != null) {
-                    mFrag.refreshSuccess(listBeen);
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
+
+            @Override
+            public void onNext(ArrayList<RetDataBean.ListBean> value) {
+                if (value != null) {
+                    mFrag.refreshSuccess(value);
                 }
             }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
         });
-        addSubscription(subscription);
+
     }
 }

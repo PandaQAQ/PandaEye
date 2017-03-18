@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.TypedVideosAdapter;
 import com.pandaq.pandaeye.config.Constants;
-import com.pandaq.pandaeye.model.video.MovieInfo;
 import com.pandaq.pandaeye.model.video.TypedVideos;
 import com.pandaq.pandaeye.presenter.video.TypedVideosPresenter;
 import com.pandaq.pandaeye.ui.ImplView.ITypedVideosActivity;
@@ -119,7 +118,7 @@ public class TypedVideosActivity extends BaseActivity implements ITypedVideosAct
 
     @Override
     protected void onPause() {
-        mPresenter.unSubscribe();
+        mPresenter.dispose();
         super.onPause();
     }
 
