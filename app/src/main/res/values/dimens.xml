@@ -27,7 +27,7 @@
     <dimen name="splash_image_top_margin">160dp</dimen>
     <dimen name="video_type_text_height">32dp</dimen>
     <dimen name="video_type_card_height">96dp</dimen>
-    <dimen name="typed_video_item_height">136dp</dimen>
+    <dimen name="typed_video_item_height">116dp</dimen>
     <dimen name="video_info_tab_height">40dp</dimen>
     <dimen name="base_margin">16dp</dimen>
     <dimen name="jc_video_player_height">200dp</dimen>

@@ -8,12 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.VideoInfoAdapter;
+import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.model.video.MovieInfo;
+import com.pandaq.pandaeye.presenter.video.VideoInfoFragPresenter;
 import com.pandaq.pandaeye.rxbus.RxBus;
 import com.pandaq.pandaeye.rxbus.RxConstants;
+import com.pandaq.pandaeye.ui.ImplView.IVideoInfoFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
 import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaqlib.FoldableTextView;
@@ -33,7 +37,7 @@ import butterknife.ButterKnife;
  * 视频简介 fragment
  */
 
-public class VideoInfoFragment extends BaseFragment implements BaseRecyclerAdapter.OnItemClickListener {
+public class VideoInfoFragment extends BaseFragment implements IVideoInfoFrag, BaseRecyclerAdapter.OnItemClickListener {
 
     @BindView(R.id.tv_empty_msg)
     TextView mTvEmptyMsg;
@@ -42,6 +46,8 @@ public class VideoInfoFragment extends BaseFragment implements BaseRecyclerAdapt
     private FoldableTextView mFoldableTextView;
     private ArrayList<BaseItem> mBaseItems;
     private VideoInfoAdapter mAdapter;
+    private String currentId = "";
+    private VideoInfoFragPresenter mPresenter = new VideoInfoFragPresenter(this);
 
     @Nullable
     @Override
@@ -63,39 +69,39 @@ public class VideoInfoFragment extends BaseFragment implements BaseRecyclerAdapt
         itemDecoration.setPaddingStart(true);
         itemDecoration.setPaddingHeaderFooter(false);
         mMrvRecommend.addItemDecoration(itemDecoration);
+        currentId = getArguments().getString(Constants.BUNDLE_KEY_DATAID);
+        loadInfo();
     }
 
-    private void initRxbus() {
-//        subscription = RxBus
-//                .getDefault()
-//                .toObservableWithCode(RxConstants.LOAD_DATA_INFO_RESULT_OK, MovieInfo.class)
-//                .subscribe(new Subscriber<MovieInfo>() {
-//                    @Override
-//                    public void onCompleted() {
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                    }
-//
-//                    @Override
-//                    public void onNext(MovieInfo movieInfo) {
-//                        showInfo(movieInfo);
-//                    }
-//                });
-//        errSubscription = RxBus
-//                .getDefault()
-//                .toObservableWithCode(RxConstants.LOAD_DATA_INFO_RESULT_THROWABLE, Throwable.class)
-//                .subscribe(new Action1<Throwable>() {
-//                    @Override
-//                    public void call(Throwable throwable) {
-//                        // 获取信息失败
-//                        mTvEmptyMsg.setVisibility(View.VISIBLE);
-//                    }
-//                });
+    @Override
+    public void onItemClick(int position, BaseItem data, View view) {
+        MovieInfo.ListBean.ChildListBean childListBean = (MovieInfo.ListBean.ChildListBean) data.getData();
+        currentId = childListBean.getDataId();
+        loadInfo();
+        // 通知Activity 修改播放器图片
+        RxBus.getDefault().postWithCode(RxConstants.LOADED_VIDEO_PIC_CODE, childListBean.getPic());
+        //通知评论Fragment Id已变更
+        RxBus.getDefault().postWithCode(RxConstants.ACCEPT_VIDEO_DATAID, childListBean.getDataId());
     }
 
-    private void showInfo(MovieInfo movieInfo) {
+    @Override
+    public void loadInfo() {
+        mPresenter.loadVideoInfo();
+    }
+
+    @Override
+    public String getDataId() {
+        return currentId;
+    }
+
+    @Override
+    public void loadInfoFail(String errCode, String errMsg) {
+        mTvEmptyMsg.setVisibility(View.VISIBLE);
+        mTvEmptyMsg.setText(errMsg);
+    }
+
+    @Override
+    public void loadInfoSuccess(MovieInfo movieInfo) {
         mTvEmptyMsg.setVisibility(View.GONE);
         String sb = "上映时间：" + movieInfo.getAirTime() + "\n" +
                 "导演：" + movieInfo.getDirector() + "\n" +
@@ -120,22 +126,8 @@ public class VideoInfoFragment extends BaseFragment implements BaseRecyclerAdapt
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        if (isVisibleToUser) { //可见时才去加载数据
-            initRxbus();
-        } else {
-//            if (subscription != null && !subscription.isUnsubscribed()) {
-//                subscription.unsubscribe();
-//                errSubscription.unsubscribe();
-//            }
-        }
-    }
-
-    @Override
-    public void onItemClick(int position, BaseItem data, View view) {
-        MovieInfo.ListBean.ChildListBean childListBean = (MovieInfo.ListBean.ChildListBean) data.getData();
-        RxBus.getDefault().postWithCode(RxConstants.RELOAD_DATA_CODE, childListBean);
-        //通知评论Fragment Id已变更
-        RxBus.getDefault().postWithCode(RxConstants.LOADED_ALL_COMMENT_CODE, childListBean.getDataId());
+    public void onPause() {
+        super.onPause();
+        mPresenter.dispose();
     }
 }

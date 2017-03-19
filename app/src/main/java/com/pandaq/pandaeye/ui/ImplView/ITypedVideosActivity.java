@@ -2,6 +2,7 @@ package com.pandaq.pandaeye.ui.ImplView;
 
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ public interface ITypedVideosActivity {
 
     void noMoreVideo();
 
-    void loadMoreSuccess(List<BaseItem> list);
+    void loadMoreSuccess(ArrayList<BaseItem> list);
 
     void loadFail(String errCode, String errMsg);
 }

@@ -18,14 +18,11 @@ import com.pandaq.pandaeye.model.video.TypedVideos;
 import com.pandaq.pandaeye.presenter.video.TypedVideosPresenter;
 import com.pandaq.pandaeye.ui.ImplView.ITypedVideosActivity;
 import com.pandaq.pandaeye.ui.base.BaseActivity;
-import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView;
-import com.pandaq.pandaqlib.magicrecyclerView.SpaceDecoration;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,11 +60,6 @@ public class TypedVideosActivity extends BaseActivity implements ITypedVideosAct
         mMrvVideoList.setLayoutManager(new LinearLayoutManager(this));
         mMrvVideoList.setItemAnimator(new DefaultItemAnimator());
         mMrvVideoList.getItemAnimator().setChangeDuration(0);
-        SpaceDecoration itemDecoration = new SpaceDecoration(DensityUtil.dip2px(this, 8));
-        itemDecoration.setPaddingEdgeSide(true);
-        itemDecoration.setPaddingStart(true);
-        itemDecoration.setPaddingHeaderFooter(false);
-        mMrvVideoList.addItemDecoration(itemDecoration);
         mMrvVideoList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -97,16 +89,16 @@ public class TypedVideosActivity extends BaseActivity implements ITypedVideosAct
     }
 
     @Override
-    public void loadMoreSuccess(List<BaseItem> list) {
+    public void loadMoreSuccess(ArrayList<BaseItem> list) {
         loading = false;
         mTvEmptyMsg.setVisibility(View.GONE);
         if (mAdapter == null) {
             mAdapter = new TypedVideosAdapter(this);
-            mAdapter.setBaseDatas((ArrayList<BaseItem>) list);
+            mAdapter.setBaseDatas(list);
             mMrvVideoList.setAdapter(mAdapter);
             mMrvVideoList.addOnItemClickListener(this);
         } else {
-            mAdapter.addBaseDatas((ArrayList<BaseItem>) list);
+            mAdapter.addBaseDatas(list);
         }
     }
 

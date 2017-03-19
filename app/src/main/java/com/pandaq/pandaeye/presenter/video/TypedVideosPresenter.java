@@ -9,6 +9,7 @@ import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.ITypedVideosActivity;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -75,7 +76,7 @@ public class TypedVideosPresenter extends BasePresenter {
 
                     @Override
                     public void onSuccess(List<BaseItem> value) {
-                        mActivity.loadMoreSuccess(value);
+                        mActivity.loadMoreSuccess((ArrayList<BaseItem>) value);
                     }
 
                     @Override
@@ -128,7 +129,7 @@ public class TypedVideosPresenter extends BasePresenter {
 
                     @Override
                     public void onSuccess(List<BaseItem> value) {
-                        mActivity.loadMoreSuccess(value);
+                        mActivity.loadMoreSuccess((ArrayList<BaseItem>) value);
                     }
 
                     @Override

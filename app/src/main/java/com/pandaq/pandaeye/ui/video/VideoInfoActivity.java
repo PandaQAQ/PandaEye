@@ -17,8 +17,8 @@ import android.widget.TextView;
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.model.video.MovieInfo;
-import com.pandaq.pandaeye.presenter.video.VideoInfoPresenter;
-import com.pandaq.pandaeye.ui.ImplView.IVedioInfoActivity;
+import com.pandaq.pandaeye.rxbus.RxBus;
+import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.base.BaseActivity;
 import com.pandaq.pandaeye.utils.PicassoTarget;
 import com.squareup.picasso.Picasso;
@@ -29,13 +29,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by PandaQ on 2017/2/28.
  * 视频详情界面
  */
 
-public class VideoInfoActivity extends BaseActivity implements IVedioInfoActivity, ViewPager.OnPageChangeListener {
+public class VideoInfoActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 
     @BindView(R.id.jc_video_player)
     JCVideoPlayerStandard mJcVideoPlayer;
@@ -49,11 +51,10 @@ public class VideoInfoActivity extends BaseActivity implements IVedioInfoActivit
     TextView mTvTabDescription;
     @BindView(R.id.tv_tab_comment)
     TextView mTvTabComment;
-    private String dataId = "";
-    private String currentDataId = "";
+    private Disposable mDisposable;
+    private Disposable mPicDisposable;
     private ArgbEvaluator argbEvaluator;
     private FloatEvaluator floatEvaluator;
-    private VideoInfoPresenter mPresenter = new VideoInfoPresenter(this);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,19 +63,15 @@ public class VideoInfoActivity extends BaseActivity implements IVedioInfoActivit
         ButterKnife.bind(this);
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
-        initView();
-        initData();
         initRxBus();
+        initView();
     }
 
-    private void initData() {
-        mPresenter.loadVideoInfo();
-    }
 
     private void initView() {
         Bundle bundle = getIntent().getExtras();
         String title = bundle.getString(Constants.BUNDLE_KEY_TITLE);
-        currentDataId = bundle.getString(Constants.BUNDLE_KEY_ID);
+        String currentDataId = bundle.getString(Constants.BUNDLE_KEY_ID);
         String pic = bundle.getString(Constants.BUNDLE_KEY_IMG_URL);
         mToolbarTitle.setText(title);
         mJcVideoPlayer.backButton.setVisibility(View.GONE);
@@ -85,8 +82,15 @@ public class VideoInfoActivity extends BaseActivity implements IVedioInfoActivit
                 .load(pic)
                 .into(new PicassoTarget(this, mJcVideoPlayer.thumbImageView, mToolbar));
         final ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(new VideoInfoFragment());
-        fragments.add(new VideoCommentFrag());
+        //将首次需要加载的电影Id传递过去
+        VideoInfoFragment videoInfoFragment = new VideoInfoFragment();
+        Bundle arg = new Bundle();
+        arg.putString(Constants.BUNDLE_KEY_DATAID, currentDataId);
+        videoInfoFragment.setArguments(arg);
+        VideoCommentFrag videoCommentFrag = new VideoCommentFrag();
+        videoCommentFrag.setArguments(arg);
+        fragments.add(videoInfoFragment);
+        fragments.add(videoCommentFrag);
         mVpVideoInfo.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -111,44 +115,58 @@ public class VideoInfoActivity extends BaseActivity implements IVedioInfoActivit
     }
 
     private void initRxBus() {
-//        // 接收刷新加载评论
-//        subscription = RxBus
-//                .getDefault()
-//                .toObservableWithCode(RxConstants.APPLY_DATA_CODE, Integer.class)
-//                .subscribe(new Action1<Integer>() {
-//                    @Override
-//                    public void call(Integer msgCode) {
-//                        switch (msgCode) {
-//                            case RxConstants.APPLY_DATA_MSG_RELOADINFO:
-//                                mPresenter.loadVideoInfo();
-//                                break;
-//                            case RxConstants.APPLY_DATA_MSG_REFRESHCOMMENT:
-//                                refreshComment();
-//                                break;
-//                            case RxConstants.APPLY_DATA_MSG_LOADMORECOMMENT:
-//                                loadCommentMore();
-//                                break;
-//                        }
-//                    }
-//                });
-//        // 点击推荐视频跳转观察者
-//        intentSubscription = RxBus
-//                .getDefault()
-//                .toObservableWithCode(RxConstants.RELOAD_DATA_CODE, MovieInfo.ListBean.ChildListBean.class)
-//                .subscribe(new Action1<MovieInfo.ListBean.ChildListBean>() {
-//                    @Override
-//                    public void call(MovieInfo.ListBean.ChildListBean data) {
-//                        String title = data.getTitle();
-//                        currentDataId = data.getDataId();
-//                        String pic = data.getPic();
-//                        mToolbarTitle.setText(title);
-//                        Picasso.with(VideoInfoActivity.this)
-//                                .load(pic)
-//                                .into(new PicassoTarget(VideoInfoActivity.this, mJcVideoPlayer.thumbImageView, mToolbar));
-//                        mPresenter.loadVideoInfo();
-//                    }
-//                });
+        // 点击推荐视频跳转观察者
+        RxBus
+                .getDefault()
+                .toObservableWithCode(RxConstants.LOADED_DATA_CODE, MovieInfo.class)
+                .subscribe(new Observer<MovieInfo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        mDisposable = d;
+                    }
 
+                    @Override
+                    public void onNext(MovieInfo value) {
+                        mToolbarTitle.setText(value.getTitle());
+                        mJcVideoPlayer.setUp(value.getVideoUrl(), JCVideoPlayerStandard.SCREEN_LAYOUT_LIST, value.getTitle());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+        RxBus
+                .getDefault()
+                .toObservableWithCode(RxConstants.LOADED_VIDEO_PIC_CODE, String.class)
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        mPicDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(String value) {
+                        Picasso.with(VideoInfoActivity.this)
+                                .load(value)
+                                .into(new PicassoTarget(VideoInfoActivity.this, mJcVideoPlayer.thumbImageView, mToolbar));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @Override
@@ -161,30 +179,12 @@ public class VideoInfoActivity extends BaseActivity implements IVedioInfoActivit
 
     @Override
     protected void onPause() {
-//        subscription.unsubscribe();
-//        intentSubscription.unsubscribe();
+        if (mDisposable != null && !mDisposable.isDisposed()) {
+            mDisposable.dispose();
+            mPicDisposable.dispose();
+        }
         super.onPause();
         JCVideoPlayer.releaseAllVideos();
-    }
-
-    @Override
-    public String getDataId() {
-        return currentDataId;
-    }
-
-    @Override
-    public void loadVideoInfoSuccess(MovieInfo info) {
-        mJcVideoPlayer.setUp(info.getVideoUrl(), JCVideoPlayerStandard.SCREEN_LAYOUT_LIST, info.getTitle());
-    }
-
-    @Override
-    public void refreshComment() {
-        mPresenter.refreshComment();
-    }
-
-    @Override
-    public void loadCommentMore() {
-        mPresenter.loadMoreComment();
     }
 
     @Override

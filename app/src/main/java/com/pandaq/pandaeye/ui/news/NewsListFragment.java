@@ -39,7 +39,7 @@ import io.reactivex.disposables.Disposable;
  */
 public class NewsListFragment extends BaseFragment implements INewsListFrag, SwipeRefreshLayout.OnRefreshListener, BaseRecyclerAdapter.OnItemClickListener {
 
-    @BindView(R.id.testRecycler)
+    @BindView(R.id.newsRecycler)
     MagicRecyclerView mNewsRecycler;
     @BindView(R.id.refresh)
     SwipeRefreshLayout mRefresh;

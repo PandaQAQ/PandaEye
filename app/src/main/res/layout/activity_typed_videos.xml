@@ -22,6 +22,7 @@
         app:layout_collapseMode="pin"
         app:navigationIcon="@drawable/ic_arrow_back"
         app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:titleTextColor="@color/white_FFFFFF"
         />
 
     <com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView
