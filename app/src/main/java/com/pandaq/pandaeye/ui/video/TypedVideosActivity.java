@@ -18,6 +18,7 @@ import com.pandaq.pandaeye.model.video.TypedVideos;
 import com.pandaq.pandaeye.presenter.video.TypedVideosPresenter;
 import com.pandaq.pandaeye.ui.ImplView.ITypedVideosActivity;
 import com.pandaq.pandaeye.ui.base.BaseActivity;
+import com.pandaq.pandaeye.ui.base.SwipeBackActivity;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView;
@@ -32,7 +33,7 @@ import butterknife.ButterKnife;
  * 分类视频列表界面
  */
 
-public class TypedVideosActivity extends BaseActivity implements ITypedVideosActivity, BaseRecyclerAdapter.OnItemClickListener {
+public class TypedVideosActivity extends SwipeBackActivity implements ITypedVideosActivity, BaseRecyclerAdapter.OnItemClickListener {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.mrv_video_list)

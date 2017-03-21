@@ -65,7 +65,7 @@ public class MovieListAdapter extends BaseRecyclerAdapter {
         }
     }
 
-    protected String toString(Object string) {
+    private String toString(Object string) {
         return string + "";
     }
 

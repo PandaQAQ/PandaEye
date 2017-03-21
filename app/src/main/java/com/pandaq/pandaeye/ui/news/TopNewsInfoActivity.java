@@ -17,6 +17,7 @@ import com.pandaq.pandaeye.model.neteasynews.TopNewsContent;
 import com.pandaq.pandaeye.presenter.news.TopNewsInfoPresenter;
 import com.pandaq.pandaeye.ui.ImplView.ITopNewsInfoActivity;
 import com.pandaq.pandaeye.ui.base.BaseActivity;
+import com.pandaq.pandaeye.ui.base.SwipeBackActivity;
 import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaeye.utils.PicassoTarget;
 import com.pandaq.pandaeye.utils.WebUtils;
@@ -28,7 +29,7 @@ import com.tencent.smtt.sdk.WebView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoActivity {
+public class TopNewsInfoActivity extends SwipeBackActivity implements ITopNewsInfoActivity {
 
     @BindView(R.id.news_img)
     FiveThreeImageView mNewsImg;
@@ -57,6 +58,7 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_news_info);
         ButterKnife.bind(this);
+        setViewActivity(this);
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         initView();

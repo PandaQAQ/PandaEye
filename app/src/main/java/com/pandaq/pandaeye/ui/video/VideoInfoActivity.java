@@ -2,6 +2,7 @@ package com.pandaq.pandaeye.ui.video;
 
 import android.animation.ArgbEvaluator;
 import android.animation.FloatEvaluator;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,7 +20,7 @@ import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.model.video.MovieInfo;
 import com.pandaq.pandaeye.rxbus.RxBus;
 import com.pandaq.pandaeye.rxbus.RxConstants;
-import com.pandaq.pandaeye.ui.base.BaseActivity;
+import com.pandaq.pandaeye.ui.base.SwipeBackActivity;
 import com.pandaq.pandaeye.utils.PicassoTarget;
 import com.squareup.picasso.Picasso;
 
@@ -37,7 +38,7 @@ import io.reactivex.disposables.Disposable;
  * 视频详情界面
  */
 
-public class VideoInfoActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.OnPageChangeListener {
 
     @BindView(R.id.jc_video_player)
     JCVideoPlayerStandard mJcVideoPlayer;
@@ -61,12 +62,12 @@ public class VideoInfoActivity extends BaseActivity implements ViewPager.OnPageC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vedioinfo);
         ButterKnife.bind(this);
+        setViewActivity(this);
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         initRxBus();
         initView();
     }
-
 
     private void initView() {
         Bundle bundle = getIntent().getExtras();

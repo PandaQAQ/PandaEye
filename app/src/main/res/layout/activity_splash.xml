@@ -12,6 +12,7 @@
         android:layout_height="@dimen/splash_image_width"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/splash_image_top_margin"
+        android:background="@color/transparent_00ffffff"
         android:elevation="4dp"
         android:scaleType="centerCrop"
         android:src="@drawable/userimage"

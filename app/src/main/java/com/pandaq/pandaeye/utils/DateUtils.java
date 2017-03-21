@@ -1,5 +1,7 @@
 package com.pandaq.pandaeye.utils;
 
+import com.pandaq.pandaeye.CustomApplication;
+import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
 
 import java.text.DateFormat;
@@ -12,24 +14,24 @@ import java.util.Calendar;
  */
 
 public class DateUtils {
-
     public static String getWeek(Calendar calendar) {
+        String[] week = CustomApplication.getContext().getResources().getStringArray(R.array.week_array);
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         switch (day) {
             case Calendar.MONDAY:
-                return Constants.MONDAY;
+                return week[0];
             case Calendar.TUESDAY:
-                return Constants.TUESDAY;
+                return week[1];
             case Calendar.WEDNESDAY:
-                return Constants.WEDNESDAY;
+                return week[2];
             case Calendar.THURSDAY:
-                return Constants.THURSDAY;
+                return week[3];
             case Calendar.FRIDAY:
-                return Constants.FRIDAY;
+                return week[4];
             case Calendar.SATURDAY:
-                return Constants.SATURDAY;
+                return week[5];
             case Calendar.SUNDAY:
-                return Constants.SUNDAY;
+                return week[6];
             default:
                 return null;
         }
