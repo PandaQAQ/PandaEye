@@ -23,7 +23,7 @@
             android:background="@color/transparent_00ffffff"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
             <com.pandaq.pandaeye.widget.FiveThreeImageView
                 android:id="@+id/news_img"

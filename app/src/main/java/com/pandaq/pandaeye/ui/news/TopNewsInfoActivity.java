@@ -1,5 +1,6 @@
 package com.pandaq.pandaeye.ui.news;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -7,7 +8,9 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -17,10 +20,10 @@ import com.pandaq.pandaeye.model.neteasynews.TopNewsContent;
 import com.pandaq.pandaeye.presenter.news.TopNewsInfoPresenter;
 import com.pandaq.pandaeye.ui.ImplView.ITopNewsInfoActivity;
 import com.pandaq.pandaeye.ui.base.BaseActivity;
-import com.pandaq.pandaeye.ui.base.SwipeBackActivity;
 import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaeye.utils.PicassoTarget;
-import com.pandaq.pandaeye.utils.WebUtils;
+import com.pandaq.pandaeye.utils.x5webview.JavaSciptFunction;
+import com.pandaq.pandaeye.utils.x5webview.WebUtils;
 import com.pandaq.pandaeye.widget.FiveThreeImageView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -29,7 +32,7 @@ import com.tencent.smtt.sdk.WebView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TopNewsInfoActivity extends SwipeBackActivity implements ITopNewsInfoActivity {
+public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoActivity {
 
     @BindView(R.id.news_img)
     FiveThreeImageView mNewsImg;
@@ -58,7 +61,6 @@ public class TopNewsInfoActivity extends SwipeBackActivity implements ITopNewsIn
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_news_info);
         ButterKnife.bind(this);
-        setViewActivity(this);
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         initView();
@@ -89,7 +91,7 @@ public class TopNewsInfoActivity extends SwipeBackActivity implements ITopNewsIn
         String newsImg = bundle.getString(Constants.BUNDLE_KEY_IMG_URL);
         String title = bundle.getString(Constants.BUNDLE_KEY_TITLE);
         loadTopNewsInfo(news_id);
-        Target target = new PicassoTarget(this,mNewsImg,mToolbarLayout,mToolbar,mFab);
+        Target target = new PicassoTarget(this, mNewsImg, mToolbarLayout, mToolbar, mFab);
         //不设置的话会有时候不加载图片
         mNewsImg.setTag(target);
         Picasso.with(this)
@@ -121,10 +123,37 @@ public class TopNewsInfoActivity extends SwipeBackActivity implements ITopNewsIn
 
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void loadSuccess(TopNewsContent topNewsContent) {
-        String htmlBody = topNewsContent.getBody();
+        mWvTopnewsContent.getSettings().setJavaScriptEnabled(true);
+        mWvTopnewsContent.getSettings().setUseWideViewPort(true);
+        mWvTopnewsContent.getSettings().setLoadWithOverviewMode(true);
+        mWvTopnewsContent.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        mWvTopnewsContent.getSettings().setAllowFileAccess(true);
+        mWvTopnewsContent.getSettings().setSupportZoom(true);
+        mWvTopnewsContent.getSettings().setBuiltInZoomControls(true);
+        mWvTopnewsContent.getSettings().setSupportMultipleWindows(true);
+        mWvTopnewsContent.getSettings().setAppCacheEnabled(true);
+        mWvTopnewsContent.getSettings().setDomStorageEnabled(true);
+        mWvTopnewsContent.getSettings().setGeolocationEnabled(true);
+        mWvTopnewsContent.getSettings().setAppCacheMaxSize(Long.MAX_VALUE);
+        mWvTopnewsContent.addJavascriptInterface(new JavaSciptFunction() {
+            @Override
+            public void onJsFunctionCalled(String action) {
+
+            }
+
+            @JavascriptInterface
+            public void clickedPicUrl(String url) {
+                Log.i("jsToAndroid", "pic = " + url);
+            }
+
+        }, "Android");
+        // 加载新闻数据
+        String htmlBody = WebUtils.newsInsertPic(topNewsContent);
         String url = WebUtils.buildHtmlForIt(htmlBody, false);
+        System.out.println(url);
         mWvTopnewsContent.loadDataWithBaseURL(WebUtils.BASE_URL, url, WebUtils.MIME_TYPE, WebUtils.ENCODING, WebUtils.FAIL_URL);
     }
 
@@ -133,5 +162,4 @@ public class TopNewsInfoActivity extends SwipeBackActivity implements ITopNewsIn
         super.onPause();
         mPresenter.dispose();
     }
-
 }

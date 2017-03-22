@@ -48,6 +48,9 @@
         <meta-data
             android:name="com.pandaq.pandaqlib.glide.CustomGlideMoudle"
             android:value="GlideModule"/>
+        <meta-data
+            android:name="QBSDKAppKey"
+            android:value="iahkz0B5LQ171VoCrdaflZl2" />
     </application>
 
 </manifest>

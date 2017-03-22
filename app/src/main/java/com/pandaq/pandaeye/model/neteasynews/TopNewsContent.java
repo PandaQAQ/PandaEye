@@ -42,8 +42,8 @@ public class TopNewsContent implements Serializable {
     /**
      * 图片列表
      */
-    @SerializedName("imgList")
-    private List<String> imgList;
+    @SerializedName("img")
+    private List<ImgBean> img;
 
 
     public String getDocid() {
@@ -94,11 +94,57 @@ public class TopNewsContent implements Serializable {
         this.cover = cover;
     }
 
-    public List<String> getImgList() {
-        return imgList;
+    public List<ImgBean> getImg() {
+        return img;
     }
 
-    public void setImgList(List<String> imgList) {
-        this.imgList = imgList;
+    public void setImg(List<ImgBean> img) {
+        this.img = img;
+    }
+
+    public static class ImgBean {
+        /**
+         * ref : <!--IMG#0-->
+         * pixel : 584*421
+         * alt :
+         * src : http://dingyue.nosdn.127.net/CLeKeFBgqYWFGrj1rVqXmfCZHYydZMvsGKP7jVmGAdQZ61490139332009transferflag.png
+         */
+
+        private String ref;
+        private String pixel;
+        private String alt;
+        private String src;
+
+        public String getRef() {
+            return ref;
+        }
+
+        public void setRef(String ref) {
+            this.ref = ref;
+        }
+
+        public String getPixel() {
+            return pixel;
+        }
+
+        public void setPixel(String pixel) {
+            this.pixel = pixel;
+        }
+
+        public String getAlt() {
+            return alt;
+        }
+
+        public void setAlt(String alt) {
+            this.alt = alt;
+        }
+
+        public String getSrc() {
+            return src;
+        }
+
+        public void setSrc(String src) {
+            this.src = src;
+        }
     }
 }

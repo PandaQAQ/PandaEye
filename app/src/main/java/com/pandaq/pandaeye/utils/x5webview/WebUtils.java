@@ -1,4 +1,8 @@
-package com.pandaq.pandaeye.utils;
+package com.pandaq.pandaeye.utils.x5webview;
+
+import com.pandaq.pandaeye.model.neteasynews.TopNewsContent;
+
+import java.util.List;
 
 /**
  * Created by PandaQ on 2016/9/13.
@@ -44,7 +48,7 @@ public class WebUtils {
                 + "<html xmlns=\"http://www.w3.org/1999/xhtml\">" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"application/xhtml+xml; charset=utf-8\"/>"
                 + "<meta http-equiv=\"Cache-control\" content=\"public\" />" + "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0\" />"
                 + "<link rel=\"stylesheet\" href=\"file:///android_asset/news.css\" type=\"text/css\">"
-                + "<script src=\"file:///android_asset/jquery.min.js\"></script>" + "<script src=\"file:///android_asset/info.js\"></script>");
+                + "<script type = \"text/javascript\" src=\"file:///android_asset/info.js\"></script>");
         modifiedHtml.append("<body ");
         if (isNightMode) {
             modifiedHtml.append("class=\'night\'");
@@ -53,5 +57,30 @@ public class WebUtils {
         modifiedHtml.append(content);
         modifiedHtml.append("</body></html>");
         return modifiedHtml.toString();
+    }
+
+    public static String newsInsertPic(TopNewsContent newsContent) {
+        String str = newsContent.getBody();
+        String result = str;
+        if (str != null) {
+            List<TopNewsContent.ImgBean> imgBeen = newsContent.getImg();
+            for (TopNewsContent.ImgBean imgBean : imgBeen) {
+                String url = imgBean.getSrc();
+                String ref = imgBean.getRef();
+                result = result.replaceAll(ref, getImageBody(url));
+            }
+        }
+        return result;
+    }
+
+    private static String getImageBody(String url) {
+        return "<img src = " +
+                url +
+                " width = 100%" +
+//                sizes[0] +
+                " height = 100%" +
+//                sizes[1]
+                "onclick = \"alert(2333)\"" +
+                "/>" + "\n";
     }
 }

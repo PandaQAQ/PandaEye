@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+
 import com.tencent.smtt.sdk.QbSdk;
 
 /**
@@ -12,7 +13,6 @@ import com.tencent.smtt.sdk.QbSdk;
  */
 
 public class CustomApplication extends Application {
-
     public static CustomApplication sApplication;
 
     @Override

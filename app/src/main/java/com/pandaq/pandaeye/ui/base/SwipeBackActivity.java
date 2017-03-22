@@ -1,57 +1,51 @@
 package com.pandaq.pandaeye.ui.base;
 
+import android.animation.ArgbEvaluator;
+import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.MotionEvent;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 
-import com.pandaq.pandaeye.utils.SwipeBackController;
+import com.pandaq.pandaeye.R;
+import com.pandaq.pandaqlib.SwipeBackLayout;
 
 /**
  * Created by PandaQ on 2017/3/20.
  * 所有侧滑返回的activity的父类
  */
 
-public abstract class SwipeBackActivity extends BaseActivity {
-    private SwipeBackController swipeBackController;
-    private boolean swipeBack = true;
-    private float down_x;
-    private float down_y;
+public class SwipeBackActivity extends BaseActivity implements SwipeBackLayout.SwipeListener {
+    protected SwipeBackLayout layout;
+    private ArgbEvaluator argbEvaluator;
 
+    @SuppressLint("InflateParams")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        //横向滑动时交给 swipeBackController 处理
-        if (swipeBackController != null) {
-            switch (ev.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    down_x = ev.getX();
-                    down_y = ev.getY();
-                    swipeBack = ev.getX() < swipeBackController.getTouchWidth();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    float x = Math.abs(ev.getX() - down_x);
-                    float y = Math.abs(ev.getY() - down_y);
-                    swipeBack = y < x;
-                    break;
-                case MotionEvent.ACTION_UP:
-                    break;
-            }
-            if (swipeBack) {
-                return swipeBackController.processEvent(ev);
-            } else {
-                return super.dispatchTouchEvent(ev);
-            }
+        layout = (SwipeBackLayout) LayoutInflater.from(this).inflate(
+                R.layout.swipeback_base, null);
+        layout.attachToActivity(this);
+        argbEvaluator = new ArgbEvaluator();
+        layout.addSwipeListener(this);
+        if (Build.VERSION.SDK_INT >= 23) {
+            currentStatusColor = getResources().getColor(R.color.colorPrimaryDark, null);
         } else {
-            return super.dispatchTouchEvent(ev);
+            currentStatusColor = getResources().getColor(R.color.colorPrimaryDark);
         }
     }
 
-    protected void setViewActivity(SwipeBackActivity swipeBackActivity) {
-        swipeBackController = new SwipeBackController(swipeBackActivity);
+    public void addViewPager(ViewPager pager) {
+        layout.addViewPager(pager);
+    }
+
+    @Override
+    public void swipeValue(double value) {
+        int statusColor = (int) argbEvaluator.evaluate((float) value, currentStatusColor,
+                ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        getWindow().setStatusBarColor(statusColor);
     }
 
 }

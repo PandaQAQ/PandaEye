@@ -19,6 +19,8 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 
 import com.pandaq.pandaeye.R;
+import com.pandaq.pandaeye.ui.base.BaseActivity;
+import com.pandaq.pandaeye.ui.base.SwipeBackActivity;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -88,6 +90,7 @@ public class PicassoTarget implements Target {
                                     @Override
                                     public void onAnimationUpdate(ValueAnimator animation) {
                                         mActivity.getWindow().setStatusBarColor((int) animation.getAnimatedValue());
+                                        BaseActivity.currentStatusColor = (int) animation.getAnimatedValue();
                                     }
                                 });
                                 statusBarColorAnim.setDuration(500L);

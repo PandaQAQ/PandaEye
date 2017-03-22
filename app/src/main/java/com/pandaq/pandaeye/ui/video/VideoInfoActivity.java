@@ -2,7 +2,6 @@ package com.pandaq.pandaeye.ui.video;
 
 import android.animation.ArgbEvaluator;
 import android.animation.FloatEvaluator;
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +22,7 @@ import com.pandaq.pandaeye.rxbus.RxBus;
 import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.base.SwipeBackActivity;
 import com.pandaq.pandaeye.utils.PicassoTarget;
+import com.pandaq.pandaqlib.SwipeBackLayout;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vedioinfo);
         ButterKnife.bind(this);
-        setViewActivity(this);
+        addViewPager(mVpVideoInfo);
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         initRxBus();

@@ -17,6 +17,9 @@ import com.pandaq.pandaeye.R;
  * 所有Activity的基类
  */
 public class BaseActivity extends AppCompatActivity {
+    //静态变量，在 PicassoTarget 中修改 status 颜色时也动态修改
+    public static int currentStatusColor;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
