@@ -6,4 +6,14 @@
     <declare-styleable name="ViewPagerIndicator">
         <attr name="titleCount" format="integer"/>
     </declare-styleable>
+
+    <declare-styleable name="NavItem">
+        <attr name="startIcon" format="reference"/>
+        <attr name="action" format="string"/>
+        <attr name="textColor" format="color"/>
+        <attr name="actionState">
+            <enum name="off" value="0"/>
+            <enum name="on" value="1"/>
+        </attr>
+    </declare-styleable>
 </resources>

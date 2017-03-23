@@ -183,7 +183,6 @@ public class VideoCommentFrag extends BaseFragment implements IVideoCommentFrag,
 
                     @Override
                     public void onNext(String value) {
-                        System.out.println(value);
                         currentId = value;
                     }
 

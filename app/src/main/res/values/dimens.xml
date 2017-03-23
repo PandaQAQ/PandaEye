@@ -34,5 +34,6 @@
     <dimen name="test_image_width">80dp</dimen>
     <dimen name="elevation_height">4dp</dimen>
     <dimen name="comment_userimag_size">32dp</dimen>
+    <dimen name="nav_item_height">48dp</dimen>
 </resources>
 

@@ -60,13 +60,12 @@ public class WebUtils {
     }
 
     public static String newsInsertPic(TopNewsContent newsContent) {
-        String str = newsContent.getBody();
-        String result = str;
-        if (str != null) {
-            List<TopNewsContent.ImgBean> imgBeen = newsContent.getImg();
-            for (TopNewsContent.ImgBean imgBean : imgBeen) {
-                String url = imgBean.getSrc();
-                String ref = imgBean.getRef();
+        String result = newsContent.getBody().replaceAll("　　", "");
+        List<TopNewsContent.ImgBean> imgBeen = newsContent.getImg();
+        for (int i = 0; i < imgBeen.size(); i++) {
+            if (i != 0) {
+                String ref = imgBeen.get(i).getRef();
+                String url = imgBeen.get(i).getSrc();
                 result = result.replaceAll(ref, getImageBody(url));
             }
         }

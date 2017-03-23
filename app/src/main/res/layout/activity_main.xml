@@ -37,13 +37,11 @@
         </FrameLayout>
     </android.support.design.widget.CoordinatorLayout>
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/navigation"
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/drawer_menu"
+        layout="@layout/drawer_menu_layout"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/nav_bg_ed25c6db"
-        app:elevation="2dp"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_menu"/>
+        />
 </android.support.v4.widget.DrawerLayout>

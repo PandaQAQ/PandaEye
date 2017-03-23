@@ -24,7 +24,6 @@ public class AutoScrollViewPager extends ViewPager implements IndicatorParentImb
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             if (isRunning && msg.what == 0) {
-                Log.i("AutoScroll", "收到滚动消息");
                 //让viewPager 滑动到下一页
                 AutoScrollViewPager.this.setCurrentItem(getCurrentItem() + 1, true);
                 handler.sendEmptyMessageDelayed(0, delayTime);
@@ -45,7 +44,6 @@ public class AutoScrollViewPager extends ViewPager implements IndicatorParentImb
     @Override
     public void startAutoScroll() {
         if (!isRunning) {
-            Log.i("AutoScroll", "startAutoScroll");
             isRunning = true;
             handler.sendEmptyMessageDelayed(0, delayTime);
         }
@@ -53,7 +51,6 @@ public class AutoScrollViewPager extends ViewPager implements IndicatorParentImb
 
     @Override
     public void stopAutoScroll() {
-        Log.i("AutoScroll", "stopAutoScroll");
         isRunning = false;
         handler.removeMessages(0);
     }

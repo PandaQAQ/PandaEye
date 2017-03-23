@@ -33,4 +33,17 @@
         <item name="android:activityCloseEnterAnimation">@anim/base_slide_right_in</item>
         <item name="android:activityCloseExitAnimation">@anim/base_slide_right_out</item>
     </style>
+
+    <style name="Spliter">
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0.1dp"-->
+        <!--android:layout_marginBottom="4dp"-->
+        <!--android:layout_marginTop="4dp"-->
+        <!--android:background="@color/grey_acacac"-->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.1dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:background">@color/grey_text_d1d1d1</item>
+    </style>
 </resources>

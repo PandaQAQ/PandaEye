@@ -51,6 +51,7 @@ public class TopNewsInfoActivity extends ShareActivity implements ITopNewsInfoAc
     ProgressBar mPbTopnewsContent;
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
+    private String newsImg = "";
     private int width;
     private int heigh;
     private TopNewsInfoPresenter mPresenter = new TopNewsInfoPresenter(this);
@@ -87,7 +88,7 @@ public class TopNewsInfoActivity extends ShareActivity implements ITopNewsInfoAc
     private void initData() {
         Bundle bundle = getIntent().getExtras();
         String news_id = bundle.getString(Constants.BUNDLE_KEY_ID);
-        String newsImg = bundle.getString(Constants.BUNDLE_KEY_IMG_URL);
+        newsImg = bundle.getString(Constants.BUNDLE_KEY_IMG_URL);
         String title = bundle.getString(Constants.BUNDLE_KEY_TITLE);
         loadTopNewsInfo(news_id);
         Target target = new PicassoTarget(this, mNewsImg, mToolbarLayout, mToolbar, mFab);
@@ -149,10 +150,9 @@ public class TopNewsInfoActivity extends ShareActivity implements ITopNewsInfoAc
             }
 
         }, "Android");
-        // 加载新闻数据
+        // 加载新闻数据，如果图片跟标题图相同则不加载
         String htmlBody = WebUtils.newsInsertPic(topNewsContent);
         String url = WebUtils.buildHtmlForIt(htmlBody, false);
-        System.out.println(url);
         mWvTopnewsContent.loadDataWithBaseURL(WebUtils.BASE_URL, url, WebUtils.MIME_TYPE, WebUtils.ENCODING, WebUtils.FAIL_URL);
     }
 
