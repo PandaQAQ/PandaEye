@@ -18,6 +18,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        disable 'MissingTranslation'
+    }
 }
 
 dependencies {
@@ -56,4 +59,7 @@ dependencies {
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     //显示 html 的 textview
     compile files('libs/tbs_sdk_thirdapp_v3.1.0.1034_43100_sharewithdownload_obfs_20170301_182143.jar')
+    compile files('libs/MobCommons-2017.0216.1054.jar')
+    compile files('libs/MobTools-2017.0216.1054.jar')
+    compile files('libs/ShareSDK-QQ-2.8.1.jar')
 }

@@ -17,6 +17,7 @@ import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.model.zhihu.ZhihuStoryContent;
 import com.pandaq.pandaeye.presenter.zhihu.ZhihuStoryInfoPresenter;
 import com.pandaq.pandaeye.ui.ImplView.IZhihuStoryInfoActivity;
+import com.pandaq.pandaeye.ui.base.ShareActivity;
 import com.pandaq.pandaeye.ui.base.SwipeBackActivity;
 import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaeye.utils.PicassoTarget;
@@ -34,7 +35,7 @@ import butterknife.ButterKnife;
  * email : 767807368@qq.com
  * 知乎日报打开详情页面
  */
-public class ZhihuStoryInfoActivity extends SwipeBackActivity implements IZhihuStoryInfoActivity {
+public class ZhihuStoryInfoActivity extends ShareActivity implements IZhihuStoryInfoActivity {
 
     private static final float SCRIM_ADJUSTMENT = 0.075f;
     @BindView(R.id.toolbar)
@@ -49,8 +50,6 @@ public class ZhihuStoryInfoActivity extends SwipeBackActivity implements IZhihuS
     FiveThreeImageView mStoryImg;
     @BindView(R.id.zhihudaily_webview)
     WebView mZhihudailyWebview;
-    @BindView(R.id.parentPanel)
-    CoordinatorLayout mParentPanel;
     @BindView(R.id.pb_load_story)
     ProgressBar mPbLoadStory;
     @BindView(R.id.toolbar_title)
@@ -79,10 +78,7 @@ public class ZhihuStoryInfoActivity extends SwipeBackActivity implements IZhihuS
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_TEXT, "我发现了一个好应用");
-                intent.setType("text/plain");
-                startActivity(Intent.createChooser(intent, "分享到"));
+                ZhihuStoryInfoActivity.this.showShare();
             }
         });
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {

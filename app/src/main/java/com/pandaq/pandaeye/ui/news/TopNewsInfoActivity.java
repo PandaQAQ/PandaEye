@@ -20,6 +20,7 @@ import com.pandaq.pandaeye.model.neteasynews.TopNewsContent;
 import com.pandaq.pandaeye.presenter.news.TopNewsInfoPresenter;
 import com.pandaq.pandaeye.ui.ImplView.ITopNewsInfoActivity;
 import com.pandaq.pandaeye.ui.base.BaseActivity;
+import com.pandaq.pandaeye.ui.base.ShareActivity;
 import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaeye.utils.PicassoTarget;
 import com.pandaq.pandaeye.utils.x5webview.JavaSciptFunction;
@@ -32,7 +33,7 @@ import com.tencent.smtt.sdk.WebView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoActivity {
+public class TopNewsInfoActivity extends ShareActivity implements ITopNewsInfoActivity {
 
     @BindView(R.id.news_img)
     FiveThreeImageView mNewsImg;
@@ -40,8 +41,6 @@ public class TopNewsInfoActivity extends BaseActivity implements ITopNewsInfoAct
     Toolbar mToolbar;
     @BindView(R.id.toolbar_layout)
     CollapsingToolbarLayout mToolbarLayout;
-    @BindView(R.id.app_bar)
-    AppBarLayout mAppBar;
     @BindView(R.id.fab)
     FloatingActionButton mFab;
     @BindView(R.id.wv_topnews_content)
