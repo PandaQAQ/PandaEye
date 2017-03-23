@@ -16,6 +16,7 @@ import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.VideoListAdapter;
 import com.pandaq.pandaeye.adapters.VideoTopPagerAdapter;
 import com.pandaq.pandaeye.config.Constants;
+import com.pandaq.pandaeye.model.video.CommentBean;
 import com.pandaq.pandaeye.model.video.RetDataBean;
 import com.pandaq.pandaeye.presenter.video.VideoFragPresenter;
 import com.pandaq.pandaeye.rxbus.RxBus;
@@ -111,20 +112,17 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
 
     @Override
     public void refreshSuccess(ArrayList<RetDataBean.ListBean> listBeen) {
-        for (RetDataBean.ListBean listBean : listBeen) { //事实上只会执行一次，Banner 为第一个 item
-            if (Constants.SHOW_TYPE_BANNER.equals(listBean.getShowType())) { //判断是否为 banner
-                //配置顶部故事
-                if (mPagerAdapter == null) {
-                    mPagerAdapter = new VideoTopPagerAdapter(this, listBean.getChildList());
-                    scrollViewPager.setAdapter(mPagerAdapter);
-                } else {
-                    mPagerAdapter.resetData(listBean.getChildList());
-                    mPagerAdapter.notifyDataSetChanged();
-                }
-                viewGroupIndicator.setParent(scrollViewPager);
-                listBeen.remove(listBean);
-                break;
+        RetDataBean.ListBean banner = listBeen.get(0);
+        if (Constants.SHOW_TYPE_BANNER.equals(banner.getShowType())) { //判断是否为 banner
+            //配置顶部故事
+            if (mPagerAdapter == null) {
+                mPagerAdapter = new VideoTopPagerAdapter(this, banner.getChildList());
+                scrollViewPager.setAdapter(mPagerAdapter);
+            } else {
+                mPagerAdapter.resetData(banner.getChildList());
             }
+            viewGroupIndicator.setParent(scrollViewPager);
+            listBeen.remove(banner);
         }
         //配置底部列表故事
         mBaseItems.clear();

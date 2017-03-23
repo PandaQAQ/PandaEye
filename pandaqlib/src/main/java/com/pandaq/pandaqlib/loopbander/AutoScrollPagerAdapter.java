@@ -32,11 +32,7 @@ public class AutoScrollPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-
-      //  Log.e("AutoScrollPagerAdapter","instantiateItem position=" + position);
-
-
-        if (!isSaveed){
+        if (!isSaveed) {
             if (position == 0) {
                 return wrappedAdapter.instantiateItem(container, wrappedAdapter.getCount() - 1);
             } else if (position == wrappedAdapter.getCount() + 1) {
@@ -44,8 +40,7 @@ public class AutoScrollPagerAdapter extends PagerAdapter {
             } else {
                 return wrappedAdapter.instantiateItem(container, position - 1);
             }
-        }
-        else {
+        } else {
             isSaveed = false;
             return wrappedAdapter.instantiateItem(container, 0);
         }
@@ -53,7 +48,7 @@ public class AutoScrollPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-       // Log.e("position", "" + position);
+        // Log.e("position", "" + position);
         wrappedAdapter.destroyItem(container, position, object);
     }
 
@@ -65,36 +60,9 @@ public class AutoScrollPagerAdapter extends PagerAdapter {
 
     @Override
     public void restoreState(Parcelable state, ClassLoader loader) {
-     //   Log.e("AutoScrollPagerAdapter","restoreState");
+        //   Log.e("AutoScrollPagerAdapter","restoreState");
         isSaveed = true;
         super.restoreState(state, loader);
     }
 
-    @Override
-    public Parcelable saveState() {
-        return super.saveState();
-    }
-
-//
-//    private static final String INSTANCE_STATUS = "instance_status";
-//    private static final String STATUS_INDEX = "status_index";
-//
-//    @Override
-//    public Parcelable onSaveInstanceState() {
-//        Bundle bundle = new Bundle();
-//        bundle.putParcelable(INSTANCE_STATUS, super.onSaveInstanceState());
-//        bundle.putInt(STATUS_INDEX,getCurrentItem());
-//        return bundle;
-//    }
-//
-//    @Override
-//    public void onRestoreInstanceState(Parcelable state) {
-//        if (state instanceof Bundle) {
-//            Bundle bundle = (Bundle) state;
-//            setCurrentItem(bundle.getInt(STATUS_INDEX));
-//            super.onRestoreInstanceState(bundle.getParcelable(INSTANCE_STATUS));
-//            return;
-//        }
-//        super.onRestoreInstanceState(state);
-//    }
 }

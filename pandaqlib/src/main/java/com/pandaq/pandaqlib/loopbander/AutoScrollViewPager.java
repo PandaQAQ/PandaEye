@@ -2,10 +2,13 @@ package com.pandaq.pandaqlib.loopbander;
 
 import android.content.Context;
 import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.v4.util.TimeUtils;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
 /**
@@ -15,18 +18,18 @@ import android.view.MotionEvent;
 public class AutoScrollViewPager extends ViewPager implements IndicatorParentImbl {
 
     private IndicatorListener mIndicatorListener;
+    private long delayTime = 5000;
 
     private boolean isRunning = false;
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             if (isRunning && msg.what == 0) {
+                Log.i("AutoScroll", "收到滚动消息");
                 //让viewPager 滑动到下一页
                 AutoScrollViewPager.this.setCurrentItem(getCurrentItem() + 1, true);
-                handler.sendEmptyMessageDelayed(0, 5000);
+                handler.sendEmptyMessageDelayed(0, delayTime);
             }
         }
-
-        ;
     };
 
     @Override
@@ -41,12 +44,16 @@ public class AutoScrollViewPager extends ViewPager implements IndicatorParentImb
 
     @Override
     public void startAutoScroll() {
-        isRunning = true;
-        handler.sendEmptyMessageDelayed(0, 5000);
+        if (!isRunning) {
+            Log.i("AutoScroll", "startAutoScroll");
+            isRunning = true;
+            handler.sendEmptyMessageDelayed(0, delayTime);
+        }
     }
 
     @Override
     public void stopAutoScroll() {
+        Log.i("AutoScroll", "stopAutoScroll");
         isRunning = false;
         handler.removeMessages(0);
     }
@@ -54,7 +61,6 @@ public class AutoScrollViewPager extends ViewPager implements IndicatorParentImb
     @Override
     public void onReDraw(int index) {
         setCurrentItem(index);
-        //   mIndicatorListener.setNext(getCurrentItem());
     }
 
 
@@ -81,7 +87,6 @@ public class AutoScrollViewPager extends ViewPager implements IndicatorParentImb
     private void init() {
         listener = new InnerOnPageChangeListener();
         super.addOnPageChangeListener(listener);
-        // startAutoScroll();
     }
 
     @Override
@@ -100,6 +105,7 @@ public class AutoScrollViewPager extends ViewPager implements IndicatorParentImb
     @Override
     public void setAdapter(PagerAdapter adapter) {
         wrappedPagerAdapter = adapter;
+        //若设置的 adapter 不为空则对其进行包装
         wrapperPagerAdapter = (wrappedPagerAdapter == null) ? null : new AutoScrollPagerAdapter(adapter);
         super.setAdapter(wrapperPagerAdapter);  //为viewPager设置的是包装的adapter
         if (adapter != null && adapter.getCount() != 0) {
@@ -125,9 +131,7 @@ public class AutoScrollViewPager extends ViewPager implements IndicatorParentImb
 
     @Override
     public void setCurrentItem(int item, boolean smoothScroll) {
-
         super.setCurrentItem(item + 1, smoothScroll);
-        //   mIndicatorListener.setNext(getCurrentItem());
     }
 
     @Override
@@ -181,7 +185,6 @@ public class AutoScrollViewPager extends ViewPager implements IndicatorParentImb
             case MotionEvent.ACTION_UP:
                 getParent().requestDisallowInterceptTouchEvent(false);
                 startAutoScroll();
-
                 break;
         }
         return super.onTouchEvent(ev);
@@ -253,6 +256,15 @@ public class AutoScrollViewPager extends ViewPager implements IndicatorParentImb
                 listener.onPageScrollStateChanged(state);
             }
         }
+    }
+
+    /**
+     * 设置轮播间隔时间
+     *
+     * @param time 时长 单位毫秒
+     */
+    public void setDelayed(long time) {
+        delayTime = time;
     }
 
 }

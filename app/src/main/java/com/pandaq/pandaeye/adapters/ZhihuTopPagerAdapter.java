@@ -66,10 +66,6 @@ public class ZhihuTopPagerAdapter extends PagerAdapter {
                 bundle.putInt(Constants.BUNDLE_KEY_ID, mTopStories.get(position).getId());
                 bundle.putBoolean(Constants.BUNDLE_KEY_TRANSLATION_EXPORD, false);
                 intent.putExtras(bundle);
-//                //多个控件共享用pairs
-//                Pair[] pairs = TranslateHelper.createSafeTransitionParticipants(mFragment.getActivity(), false,
-//                        new Pair<>(mTopStoryImg, mFragment.getString(R.string.zhihu_story_img)));
-//                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(mFragment.getActivity(), pairs);
                 mContext.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(mActivity).toBundle());
             }
         });
