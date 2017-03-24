@@ -24,6 +24,8 @@ import com.pandaq.pandaeye.ui.news.NewsListFragment;
 import com.pandaq.pandaeye.ui.video.VideoCircleFragment;
 import com.pandaq.pandaeye.ui.zhihu.ZhihuDailyFragment;
 import com.pandaq.pandaeye.utils.BlurImageUtils;
+import com.pandaq.pandaeye.utils.DataCleanManager;
+import com.pandaq.pandaeye.widget.NavItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,6 +55,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     private Fragment mBubbleFragment;
     private BottomSheetBehavior mBottomSheetBehavior;
     private boolean drawerOpen = false;
+    private NavItem mCleanItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +126,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
             public void onDrawerOpened(View drawerView) {
                 drawerView.setClickable(true);
                 drawerOpen = true;
+                mCleanItem.setTvActionState(DataCleanManager.getTotalCacheSize(MainActivity.this));
             }
 
             @Override
@@ -139,6 +143,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         mDrawerLayout.findViewById(R.id.nav_download).setOnClickListener(this);
         mDrawerLayout.findViewById(R.id.nav_share).setOnClickListener(this);
         mDrawerLayout.findViewById(R.id.nav_about).setOnClickListener(this);
+        mCleanItem = (NavItem) mDrawerLayout.findViewById(R.id.nav_clean);
+        mCleanItem.setOnClickListener(this);
     }
 
     private void initNavigation() {
@@ -249,6 +255,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 break;
             case R.id.nav_about:
                 System.out.println("nav_about");
+                break;
+            case R.id.nav_clean:
+                DataCleanManager.clearAllCache(this);
+                mCleanItem.setTvActionState(DataCleanManager.getTotalCacheSize(this));
                 break;
         }
     }

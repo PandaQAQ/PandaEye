@@ -44,13 +44,9 @@ public class NavItem extends RelativeLayout {
         ButterKnife.bind(view);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.NavItem);
         String action = ta.getString(R.styleable.NavItem_action);
-        int actionState = ta.getInteger(R.styleable.NavItem_actionState, -1);
-        if (actionState == 0) {
-//            mTvActionState.setText(context.getString(R.string.off));
-            mTvActionState.setVisibility(GONE);
-        } else if (actionState == 1) {
-            mTvActionState.setVisibility(VISIBLE);
-//            mTvActionState.setText(context.getString(R.string.on));
+        String actionState = ta.getString(R.styleable.NavItem_actionState);
+        if (actionState != null) {
+            mTvActionState.setText(actionState);
         }
         mTvActionTitle.setText(action != null ? action : "");
         int startInco = ta.getResourceId(R.styleable.NavItem_startIcon, 0);
@@ -67,5 +63,9 @@ public class NavItem extends RelativeLayout {
             mTvActionState.setTextColor(color);
         }
         ta.recycle();
+    }
+
+    public void setTvActionState(String state) {
+        mTvActionState.setText(state);
     }
 }

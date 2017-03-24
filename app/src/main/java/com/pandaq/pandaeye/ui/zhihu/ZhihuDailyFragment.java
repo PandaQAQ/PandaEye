@@ -1,6 +1,7 @@
 package com.pandaq.pandaeye.ui.zhihu;
 
 import android.content.Intent;
+import android.graphics.Interpolator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,7 +11,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
+import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
@@ -25,6 +29,7 @@ import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.ImplView.IZhiHuDailyFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
 import com.pandaq.pandaeye.utils.DateUtils;
+import com.pandaq.pandaeye.utils.TagAnimationUtils;
 import com.pandaq.pandaqlib.loopbander.AutoScrollViewPager;
 import com.pandaq.pandaqlib.loopbander.ViewGroupIndicator;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
@@ -36,6 +41,7 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -52,6 +58,8 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
     SwipeRefreshLayout mRefresh;
     @BindView(R.id.tv_tag)
     TextView mTvTag;
+    @BindView(R.id.empty_msg)
+    TextView mEmptyMsg;
     private ZhiHuPresenter mPresenter = new ZhiHuPresenter(this);
     private ZhihuDailyAdapter mZhihuDailyAdapter;
     private ArrayList<BaseItem> mBaseItems;
@@ -62,12 +70,13 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
     private boolean loading = false;
     private Disposable mDisposable;
     private LinearLayoutManager mLinearLayoutManager;
+    private Unbinder mUnbinder;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.zhihulist_fragment, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         initView();
         return view;
     }
@@ -102,7 +111,8 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
                 if (mZhihudailyList.loadAble()) {
                     loadMoreData();
                 }
-                if (mZhihudailyList.tagGone()) {
+                if (mZhihudailyList.tagGone() && mTvTag.getVisibility() == View.VISIBLE) {
+                    hideTagAnim(mTvTag);
                     mTvTag.setVisibility(View.GONE);
                 }
             }
@@ -141,6 +151,15 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
 
     @Override
     public void refreshSuccessed(ZhiHuDaily stories) {
+        if (stories == null || stories.getStories().size() <= 0) {
+            mEmptyMsg.setVisibility(View.VISIBLE);
+            mZhihudailyList.setVisibility(View.INVISIBLE);
+            mRefresh.requestFocus();
+            return;
+        } else {
+            mEmptyMsg.setVisibility(View.GONE);
+            mZhihudailyList.setVisibility(View.VISIBLE);
+        }
         mBaseItems.clear();
         //配置顶部故事
         if (mTopPagerAdapter == null) {
@@ -179,6 +198,11 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
 
     @Override
     public void refreshFail(String errMsg) {
+        if (mZhihuDailyAdapter == null) {
+            mEmptyMsg.setVisibility(View.VISIBLE);
+            mZhihudailyList.setVisibility(View.INVISIBLE);
+            mRefresh.requestFocus();
+        }
     }
 
     @Override
@@ -250,6 +274,7 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
     public void onChange(String newTag) {
         if (mTvTag.getVisibility() == View.GONE) {
             mTvTag.setVisibility(View.VISIBLE);
+            showTagAnim(mTvTag);
         }
         int year = Integer.parseInt(newTag.substring(0, 4));
         int mon = Integer.parseInt(newTag.substring(4, 6));
@@ -259,12 +284,46 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
         mTvTag.setText(DateUtils.formatDate(calendar));
     }
 
-    private void hideTagAnim() {
+    private void hideTagAnim(final View view) {
+        Animation animation = TagAnimationUtils.moveToViewTop();
+        view.setAnimation(animation);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
 
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                view.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
-    private void showTagAnim() {
+    private void showTagAnim(final View view) {
+        Animation animation = TagAnimationUtils.moveToViewLocation();
+        view.setAnimation(animation);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                view.setVisibility(View.VISIBLE);
+            }
 
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     @Override
@@ -279,4 +338,9 @@ public class ZhihuDailyFragment extends BaseFragment implements IZhiHuDailyFrag,
         startActivity(intent);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
+    }
 }

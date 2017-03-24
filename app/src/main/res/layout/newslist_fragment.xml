@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/refresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:slopValue="20">
+    android:layout_height="match_parent">
 
-    <com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView
-        android:id="@+id/newsRecycler"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh"
         android:layout_width="match_parent"
-        app:footer_layout="@layout/recycler_footer_layout"
-        android:layout_height="match_parent"/>
-</android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_height="match_parent"
+        app:slopValue="20">
+
+        <com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView
+            android:id="@+id/newsRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:footer_layout="@layout/recycler_footer_layout"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:id="@+id/empty_msg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/empty_msg"
+        android:visibility="gone"/>
+</RelativeLayout>

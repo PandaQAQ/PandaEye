@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.TopNewsListAdapter;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -43,17 +45,20 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
     MagicRecyclerView mNewsRecycler;
     @BindView(R.id.refresh)
     SwipeRefreshLayout mRefresh;
+    @BindView(R.id.empty_msg)
+    TextView mEmptyMsg;
     private NewsPresenter mPresenter = new NewsPresenter(this);
     private TopNewsListAdapter mAdapter;
     private boolean loading = false;
     private Disposable mDisposable;
     private LinearLayoutManager mLinearLayoutManager;
+    private Unbinder mUnbinder;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.newslist_fragment, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mLinearLayoutManager = new LinearLayoutManager(this.getContext());
         mNewsRecycler.setLayoutManager(mLinearLayoutManager);
         //屏蔽掉默认的动画，房子刷新时图片闪烁
@@ -126,11 +131,23 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
 
     @Override
     public void refreshNewsFail(String errorMsg) {
-
+        if (mAdapter == null) {
+            mEmptyMsg.setVisibility(View.VISIBLE);
+            mNewsRecycler.setVisibility(View.INVISIBLE);
+            mRefresh.requestFocus();
+        }
     }
 
     @Override
     public void refreshNewsSuccessed(ArrayList<BaseItem> topNews) {
+        if (topNews == null || topNews.size() <= 0) {
+            mEmptyMsg.setVisibility(View.VISIBLE);
+            mNewsRecycler.setVisibility(View.INVISIBLE);
+            mRefresh.requestFocus();
+        } else {
+            mEmptyMsg.setVisibility(View.GONE);
+            mNewsRecycler.setVisibility(View.VISIBLE);
+        }
         if (mAdapter == null) {
             mAdapter = new TopNewsListAdapter(this);
             mAdapter.setBaseDatas(topNews);
@@ -220,5 +237,11 @@ public class NewsListFragment extends BaseFragment implements INewsListFrag, Swi
         Pair pairImg = new Pair<>(view.findViewById(R.id.news_image), transitionName);
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairImg);
         startActivity(intent, transitionActivityOptions.toBundle());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 }

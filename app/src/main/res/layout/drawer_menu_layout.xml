@@ -69,6 +69,17 @@
         style="@style/Spliter"/>
 
     <com.pandaq.pandaeye.widget.NavItem
+        android:id="@+id/nav_clean"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="@drawable/ripple_item"
+        app:action="@string/clean_chace"
+        app:startIcon="@drawable/ic_clear_all"/>
+
+    <View
+        style="@style/Spliter"/>
+
+    <com.pandaq.pandaeye.widget.NavItem
         android:id="@+id/nav_about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

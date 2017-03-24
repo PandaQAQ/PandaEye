@@ -12,8 +12,8 @@
     <dimen name="text_size_small">16sp</dimen>
     <dimen name="text_size_min">14sp</dimen>
     <dimen name="userimage_border_width">2dp</dimen>
-    <dimen name="recycler_header_height">220dp</dimen>
-    <dimen name="recycler_header_indi_height">32dp</dimen>
+    <dimen name="recycler_header_height">200dp</dimen>
+    <dimen name="recycler_header_indi_height">16dp</dimen>
     <dimen name="distance_from_tow_indicator">3dp</dimen>
     <dimen name="indicator_radius">2dp</dimen>
     <dimen name="news_image_width">80dp</dimen>

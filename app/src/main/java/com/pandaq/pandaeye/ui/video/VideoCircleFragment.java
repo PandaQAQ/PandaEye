@@ -11,12 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.VideoListAdapter;
 import com.pandaq.pandaeye.adapters.VideoTopPagerAdapter;
 import com.pandaq.pandaeye.config.Constants;
-import com.pandaq.pandaeye.model.video.CommentBean;
 import com.pandaq.pandaeye.model.video.RetDataBean;
 import com.pandaq.pandaeye.presenter.video.VideoFragPresenter;
 import com.pandaq.pandaeye.rxbus.RxBus;
@@ -35,6 +35,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -49,6 +50,8 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
     MagicRecyclerView mMrvVideo;
     @BindView(R.id.srl_refresh)
     SwipeRefreshLayout mSrlRefresh;
+    @BindView(R.id.empty_msg)
+    TextView mEmptyMsg;
     private AutoScrollViewPager scrollViewPager;
     private ViewGroupIndicator viewGroupIndicator;
     private VideoTopPagerAdapter mPagerAdapter;
@@ -57,11 +60,12 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
     private ArrayList<BaseItem> mBaseItems;
     private Disposable mDisposable;
     private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
+    private Unbinder unbinder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.video_fragment, container, false);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         initView();
         return view;
     }
@@ -112,6 +116,15 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
 
     @Override
     public void refreshSuccess(ArrayList<RetDataBean.ListBean> listBeen) {
+        if (listBeen == null || listBeen.size() <= 0) {
+            mEmptyMsg.setVisibility(View.VISIBLE);
+            mMrvVideo.setVisibility(View.INVISIBLE);
+            mSrlRefresh.requestFocus();
+            return;
+        } else {
+            mEmptyMsg.setVisibility(View.GONE);
+            mMrvVideo.setVisibility(View.VISIBLE);
+        }
         RetDataBean.ListBean banner = listBeen.get(0);
         if (Constants.SHOW_TYPE_BANNER.equals(banner.getShowType())) { //判断是否为 banner
             //配置顶部故事
@@ -146,7 +159,11 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
 
     @Override
     public void refreshFail(String errCode, String errMsg) {
-
+        if (mAdapter == null) {
+            mEmptyMsg.setVisibility(View.VISIBLE);
+            mMrvVideo.setVisibility(View.INVISIBLE);
+            mSrlRefresh.requestFocus();
+        }
     }
 
     @Override
@@ -212,4 +229,9 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
         startActivity(intent);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

@@ -11,9 +11,6 @@
         <attr name="startIcon" format="reference"/>
         <attr name="action" format="string"/>
         <attr name="textColor" format="color"/>
-        <attr name="actionState">
-            <enum name="off" value="0"/>
-            <enum name="on" value="1"/>
-        </attr>
+        <attr name="actionState" format="string"/>
     </declare-styleable>
 </resources>

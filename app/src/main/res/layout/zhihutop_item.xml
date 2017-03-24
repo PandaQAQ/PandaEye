@@ -6,20 +6,23 @@
     android:layout_height="wrap_content"
     android:transitionName="@string/zhihu_story_parent">
 
-    <com.pandaq.pandaeye.widget.FiveThreeImageView
+    <ImageView
         android:id="@+id/top_story_img"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/transparent_00ffffff"
-        android:scaleType="fitXY"
-        android:transitionName="@string/zhihu_story_img"/>
+        android:scaleType="fitXY"/>
 
     <TextView
         android:id="@+id/top_story_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/recycler_header_indi_height"
+        android:background="@color/trans_title_1b2a2a2f"
+        android:paddingBottom="@dimen/recycler_header_indi_height"
+        android:paddingLeft="@dimen/recycler_header_indi_height"
+        android:paddingRight="@dimen/recycler_header_indi_height"
+        android:paddingTop="@dimen/margin_8dp"
         android:textColor="@color/white_FFFFFF"
         android:textSize="@dimen/text_size_big"/>
 </RelativeLayout>
