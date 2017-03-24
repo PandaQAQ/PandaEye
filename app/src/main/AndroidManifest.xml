@@ -44,6 +44,10 @@
         <activity
             android:name=".ui.video.TypedVideosActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.setting.AboutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentFullScreenTheme"/>
 
         <!--配置 ShareSDK 分享-->
         <activity

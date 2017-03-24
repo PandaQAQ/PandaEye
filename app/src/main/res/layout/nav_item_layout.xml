@@ -20,7 +20,7 @@
         android:layout_centerVertical="true"
         android:layout_margin="@dimen/margin_8dp"
         android:layout_toEndOf="@id/iv_start_icon"
-        android:gravity="center"/>
+        android:gravity="center_vertical"/>
 
     <TextView
         android:id="@+id/tv_action_state"

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_FFFFFF">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:layout_collapseMode="pin"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:title="关于"
+        app:titleTextColor="@color/white_FFFFFF"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_centerInParent="true"
+            android:layout_margin="32dp"
+            android:padding="@dimen/margin_8dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/margin_8dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_my_avatar"
+                    android:layout_width="@dimen/user_image_size"
+                    android:layout_height="@dimen/user_image_size"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="32dp"
+                    android:src="@drawable/userimage"
+                    app:civ_border_color="@color/colorAccent"
+                    app:civ_border_width="@dimen/userimage_border_width"/>
+
+                <TextView
+                    android:id="@+id/tv_myname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/civ_my_avatar"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_8dp"
+                    android:text="@string/pandaq"/>
+
+                <com.pandaq.pandaeye.widget.NavItem
+                    android:id="@+id/nav_github"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_myname"
+                    android:layout_marginTop="32dp"
+                    android:foreground="@drawable/ripple_item"
+                    app:action="https://github.com/PandaQAQ"
+                    app:startIcon="@drawable/ic_action_github"/>
+
+                <com.pandaq.pandaeye.widget.NavItem
+                    android:id="@+id/nav_jianshu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/nav_github"
+                    android:foreground="@drawable/ripple_item"
+                    app:action="http://www.jianshu.com/u/aa53f5d59037"
+                    app:startIcon="@drawable/ic_jianshu"/>
+
+                <com.pandaq.pandaeye.widget.NavItem
+                    android:id="@+id/nav_juejin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/nav_jianshu"
+                    android:foreground="@drawable/ripple_item"
+                    app:action="https://juejin.im/user/57aaeaa3165abd0061789740"
+                    app:startIcon="@drawable/ic_juejin"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@id/nav_juejin"
+                    android:gravity="center"
+                    android:text="欢迎 Star、follow 支持！"
+                    android:textSize="@dimen/text_size_mid"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
+</RelativeLayout>

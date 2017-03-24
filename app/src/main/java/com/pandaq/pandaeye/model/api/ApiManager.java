@@ -20,6 +20,7 @@ public class ApiManager {
     private ZhihuDailyApi mDailyApi;
     private TopNewsApi mNewsApi;
     private MovieApi mMovieApi;
+    private GithubApi mGithubApi;
     private static ApiManager sApiManager;
 
     private static OkHttpClient mClient;
@@ -105,6 +106,22 @@ public class ApiManager {
             mMovieApi = retrofit.create(MovieApi.class);
         }
         return mMovieApi;
+    }
+
+    /**
+     * 封装 gayhub API
+     */
+    public GithubApi getGithubService() {
+        if (mGithubApi == null) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(Config.GITHUB_API_URL)
+                    .client(mClient)
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            mGithubApi = retrofit.create(GithubApi.class);
+        }
+        return mGithubApi;
     }
 
 }

@@ -68,4 +68,8 @@ public class NavItem extends RelativeLayout {
     public void setTvActionState(String state) {
         mTvActionState.setText(state);
     }
+
+    public void setTvActionTitle(String state) {
+        mTvActionTitle.setText(state);
+    }
 }

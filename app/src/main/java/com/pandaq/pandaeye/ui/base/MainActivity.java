@@ -1,5 +1,6 @@
 package com.pandaq.pandaeye.ui.base;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -21,11 +22,13 @@ import com.pandaq.pandaeye.rxbus.RxBus;
 import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.douban.MovieListFragment;
 import com.pandaq.pandaeye.ui.news.NewsListFragment;
+import com.pandaq.pandaeye.ui.setting.AboutActivity;
 import com.pandaq.pandaeye.ui.video.VideoCircleFragment;
 import com.pandaq.pandaeye.ui.zhihu.ZhihuDailyFragment;
 import com.pandaq.pandaeye.utils.BlurImageUtils;
 import com.pandaq.pandaeye.utils.DataCleanManager;
 import com.pandaq.pandaeye.widget.NavItem;
+import com.squareup.haha.perflib.Main;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +40,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class MainActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener, View.OnClickListener {
 
+    private final int ABOUT_ME = 10;
+    private final int FAVORITE = 11;
+    private final int VIDEO = 12;
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     @BindView(R.id.bottom_navgation)
@@ -56,6 +62,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     private BottomSheetBehavior mBottomSheetBehavior;
     private boolean drawerOpen = false;
     private NavItem mCleanItem;
+    private int drawerIntentAction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +139,16 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
             @Override
             public void onDrawerClosed(View drawerView) {
                 drawerOpen = false;
+                switch (drawerIntentAction) {
+                    case FAVORITE:
+                        break;
+                    case VIDEO:
+                        break;
+                    case ABOUT_ME:
+                        Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+                        startActivity(intent);
+                        break;
+                }
             }
 
             @Override
@@ -245,16 +262,19 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.nav_favorite:
+                drawerIntentAction = FAVORITE;
                 System.out.println("nav_favorite");
                 break;
             case R.id.nav_download:
+                drawerIntentAction = VIDEO;
                 System.out.println("nav_download");
                 break;
             case R.id.nav_share:
                 System.out.println("nav_share");
                 break;
             case R.id.nav_about:
-                System.out.println("nav_about");
+                mDrawerLayout.closeDrawers();
+                drawerIntentAction = ABOUT_ME;
                 break;
             case R.id.nav_clean:
                 DataCleanManager.clearAllCache(this);

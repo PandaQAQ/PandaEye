@@ -33,4 +33,5 @@
     <string name="air_time">上映时间</string>
     <string name="duration">时长</string>
     <string name="clean_chace">清理缓存</string>
+    <string name="pandaq">PandaQ</string>
 </resources>
