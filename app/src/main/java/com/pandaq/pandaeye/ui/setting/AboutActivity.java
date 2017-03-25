@@ -54,6 +54,7 @@ public class AboutActivity extends SwipeBackActivity implements IAboutMeActivity
                 AboutActivity.this.finish();
             }
         });
+        loadMyInfo();
     }
 
     @Override
