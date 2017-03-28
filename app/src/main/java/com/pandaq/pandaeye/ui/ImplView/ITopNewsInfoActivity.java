@@ -1,6 +1,6 @@
 package com.pandaq.pandaeye.ui.ImplView;
 
-import com.pandaq.pandaeye.model.neteasynews.TopNewsContent;
+import com.pandaq.pandaeye.model.neteasynews.NewsContent;
 
 /**
  * Created by PandaQ on 2016/10/10.
@@ -16,5 +16,5 @@ public interface ITopNewsInfoActivity {
 
     void loadFail(String errmsg);
 
-    void loadSuccess(TopNewsContent topNewsContent);
+    void loadSuccess(NewsContent topNewsContent);
 }

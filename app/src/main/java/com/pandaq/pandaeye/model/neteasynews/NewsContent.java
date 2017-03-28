@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Description : 新闻详情实体类
  */
-public class TopNewsContent implements Serializable {
+public class NewsContent implements Serializable {
     /**
      * docid
      */

@@ -10,13 +10,13 @@ import java.util.ArrayList;
  * email : 767807368@qq.com
  */
 
-public class TopNewsList {
+public class AutoNewsList {
 
-    @SerializedName(Constants.NETEASY_NEWS_HEADLINE)
+    @SerializedName(Constants.NETEASY_NEWS_AUTO)
 
-    private ArrayList<NewsBean> mTopNewsArrayList;
+    private ArrayList<NewsBean> mAutoNewsArrayList;
 
-    public ArrayList<NewsBean> getTopNewsArrayList() {
-        return mTopNewsArrayList;
+    public ArrayList<NewsBean> getAutoNewsArrayList() {
+        return mAutoNewsArrayList;
     }
 }

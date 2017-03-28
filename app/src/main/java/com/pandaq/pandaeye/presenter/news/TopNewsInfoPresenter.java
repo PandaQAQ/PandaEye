@@ -1,7 +1,7 @@
 package com.pandaq.pandaeye.presenter.news;
 
 import com.pandaq.pandaeye.model.api.ApiManager;
-import com.pandaq.pandaeye.model.neteasynews.TopNewsContent;
+import com.pandaq.pandaeye.model.neteasynews.NewsContent;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.ITopNewsInfoActivity;
 import com.pandaq.pandaeye.utils.JsonUtils;
@@ -37,10 +37,10 @@ public class TopNewsInfoPresenter extends BasePresenter {
         ApiManager.getInstence()
                 .getTopNewsServie()
                 .getNewsContent(id)
-                .map(new Function<ResponseBody, TopNewsContent>() {
+                .map(new Function<ResponseBody, NewsContent>() {
                     @Override
-                    public TopNewsContent apply(ResponseBody responseBody) {
-                        TopNewsContent topNews = null;
+                    public NewsContent apply(ResponseBody responseBody) {
+                        NewsContent topNews = null;
                         try {
                             topNews = JsonUtils.readJsonNewsContent(responseBody.string(), id);
                         } catch (IOException e) {
@@ -51,7 +51,7 @@ public class TopNewsInfoPresenter extends BasePresenter {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<TopNewsContent>() {
+                .subscribe(new Observer<NewsContent>() {
                     @Override
                     public void onComplete() {
                         mActivity.hideProgressBar();
@@ -70,7 +70,7 @@ public class TopNewsInfoPresenter extends BasePresenter {
                     }
 
                     @Override
-                    public void onNext(TopNewsContent response) {
+                    public void onNext(NewsContent response) {
                         mActivity.hideProgressBar();
                         mActivity.loadSuccess(response);
                     }

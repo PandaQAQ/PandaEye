@@ -63,9 +63,16 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
     private Unbinder unbinder;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        System.out.println("创建了");
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.video_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
+        System.out.println("创建View了");
         initView();
         return view;
     }

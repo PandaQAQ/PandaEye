@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,10 +15,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.pandaq.pandaeye.R;
+import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.rxbus.RxBus;
 import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.douban.MovieListFragment;
@@ -28,6 +31,8 @@ import com.pandaq.pandaeye.ui.zhihu.ZhihuDailyFragment;
 import com.pandaq.pandaeye.utils.BlurImageUtils;
 import com.pandaq.pandaeye.utils.DataCleanManager;
 import com.pandaq.pandaeye.widget.NavItem;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -155,6 +160,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
             }
         });
+        mUserimage.setOnClickListener(this);
         mDrawerLayout.findViewById(R.id.nav_favorite).setOnClickListener(this);
         mDrawerLayout.findViewById(R.id.nav_download).setOnClickListener(this);
         mDrawerLayout.findViewById(R.id.nav_share).setOnClickListener(this);
@@ -260,6 +266,9 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.userimage:
+                takePhoto();
+                break;
             case R.id.nav_favorite:
                 drawerIntentAction = FAVORITE;
                 System.out.println("nav_favorite");
@@ -280,5 +289,23 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 mCleanItem.setTvActionState(DataCleanManager.getTotalCacheSize(this));
                 break;
         }
+    }
+
+    private void takePhoto() {
+        String photoPath = Environment.getExternalStorageDirectory()
+                .getAbsolutePath() + Constants.USER_PIC;
+        File image = new File(photoPath + "buffer.jpg");
+        File file = new File(photoPath);
+        if (!file.exists()) {
+            try {
+                if (file.mkdirs() & !image.exists()) {
+                    image.createNewFile();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(this, R.string.make_dir_fail, Toast.LENGTH_SHORT).show();
+            }
+        }
+//        Intent intent = new Intent(Intent.IMAGE)
     }
 }

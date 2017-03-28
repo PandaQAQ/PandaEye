@@ -154,7 +154,11 @@ public class DouBanMoviePresenter extends BasePresenter {
                     @Override
                     public void onSuccess(ArrayList<BaseItem> value) {
                         mMovieListFrag.hideProgressBar();
-                        mMovieListFrag.loadSuccessed(value);
+                        if (value != null) {
+                            mMovieListFrag.loadSuccessed(value);
+                        } else {
+                            mMovieListFrag.loadFail("null value");
+                        }
                     }
 
                 });
