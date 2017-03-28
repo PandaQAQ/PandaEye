@@ -65,4 +65,20 @@ public class Constants {
     //午夜剧场
     public static final String MOVIE_TYPE_MIDNIGHT = "午夜剧场";
 
+    /**
+     * 设置
+     */
+    public static final String USER_PIC = "/pandaeye/images";
+    /**
+     * 网易新闻
+     */
+    public static final String NETEASY_NEWS_HEADLINE = "";//头条
+    public static final String NETEASY_NEWS_TEC = "";//科技
+    public static final String NETEASY_NEWS_AUTO = "";//汽车
+    public static final String NETEASY_NEWS_RECOMMEND = "";//精选
+    public static final String NETEASY_NEWS_DADA = "";//哒哒趣闻
+    public static final String NETEASY_NEWS_MILITARY = "";//军事
+    public static final String NETEASY_NEWS_TRAVEL = "";//旅游
+
+
 }

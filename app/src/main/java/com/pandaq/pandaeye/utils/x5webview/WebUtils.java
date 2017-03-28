@@ -1,6 +1,6 @@
 package com.pandaq.pandaeye.utils.x5webview;
 
-import com.pandaq.pandaeye.model.neteasynews.TopNewsContent;
+import com.pandaq.pandaeye.model.neteasynews.NewsContent;
 
 import java.util.List;
 
@@ -59,9 +59,9 @@ public class WebUtils {
         return modifiedHtml.toString();
     }
 
-    public static String newsInsertPic(TopNewsContent newsContent) {
+    public static String newsInsertPic(NewsContent newsContent) {
         String result = newsContent.getBody().replaceAll("　　", "");
-        List<TopNewsContent.ImgBean> imgBeen = newsContent.getImg();
+        List<NewsContent.ImgBean> imgBeen = newsContent.getImg();
         for (int i = 0; i < imgBeen.size(); i++) {
             if (i != 0) {
                 String ref = imgBeen.get(i).getRef();

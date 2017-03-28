@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 网易头条新闻实体类
  */
 
-public class TopNews implements Serializable{
+public class NewsBean implements Serializable{
     /**
      * docid
      */

@@ -1,40 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_cardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white_FFFFFF">
+    android:layout_margin="@dimen/activity_horizontal_margin"
+    android:foreground="@drawable/ripple_item"
+    android:transitionName="@string/zhihu_story_parent">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/item_cardview"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:foreground="@drawable/ripple_item"
-        android:transitionName="@string/zhihu_story_parent">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/news_image"
+            android:layout_width="@dimen/news_image_width"
+            android:layout_height="@dimen/news_image_height"
+            android:layout_margin="@dimen/margin_8dp"
+            android:elevation="2dp"
+            android:scaleType="fitXY"/>
 
-            <ImageView
-                android:id="@+id/news_image"
-                android:layout_width="@dimen/news_image_width"
-                android:layout_height="@dimen/news_image_height"
-                android:layout_margin="@dimen/margin_8dp"
-                android:elevation="2dp"
-                android:scaleType="fitXY"/>
-
-            <TextView
-                android:id="@+id/news_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_8dp"
-                android:layout_marginStart="@dimen/margin_8dp"
-                android:layout_marginTop="@dimen/margin_8dp"
-                android:layout_toEndOf="@id/news_image"
-                android:textColor="@color/black_000000"
-                android:textSize="@dimen/text_size_big"/>
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
-</FrameLayout>
+        <TextView
+            android:id="@+id/news_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_8dp"
+            android:layout_marginStart="@dimen/margin_8dp"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:layout_toEndOf="@id/news_image"
+            android:textColor="@color/black_000000"
+            android:textSize="@dimen/text_size_big"/>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

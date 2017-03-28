@@ -4,7 +4,7 @@ import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
 import com.pandaq.pandaeye.model.api.ApiManager;
-import com.pandaq.pandaeye.model.neteasynews.TopNews;
+import com.pandaq.pandaeye.model.neteasynews.NewsBean;
 import com.pandaq.pandaeye.model.neteasynews.TopNewsList;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.INewsListFrag;
@@ -41,28 +41,28 @@ public class NewsPresenter extends BasePresenter {
         currentIndex = 0;
         ApiManager.getInstence().getTopNewsServie()
                 .getTopNews("T1348647909107", currentIndex + "")
-                .map(new Function<TopNewsList, ArrayList<TopNews>>() {
+                .map(new Function<TopNewsList, ArrayList<NewsBean>>() {
                     @Override
-                    public ArrayList<TopNews> apply(TopNewsList topNewsList) {
+                    public ArrayList<NewsBean> apply(TopNewsList topNewsList) {
                         return topNewsList.getTopNewsArrayList();
                     }
                 })
-                .flatMap(new Function<ArrayList<TopNews>, Observable<TopNews>>() {
+                .flatMap(new Function<ArrayList<NewsBean>, Observable<NewsBean>>() {
                     @Override
-                    public Observable<TopNews> apply(ArrayList<TopNews> topNewses) throws Exception {
+                    public Observable<NewsBean> apply(ArrayList<NewsBean> topNewses) throws Exception {
                         return Observable.fromIterable(topNewses);
                     }
                 })
-                .filter(new Predicate<TopNews>() {
+                .filter(new Predicate<NewsBean>() {
                     @Override
-                    public boolean test(TopNews topNews) throws Exception {
+                    public boolean test(NewsBean topNews) throws Exception {
                         return topNews.getUrl() != null;
                     }
                 })
-                .map(new Function<TopNews, BaseItem>() {
+                .map(new Function<NewsBean, BaseItem>() {
                     @Override
-                    public BaseItem apply(TopNews topNews) {
-                        BaseItem<TopNews> baseItem = new BaseItem<>();
+                    public BaseItem apply(NewsBean topNews) {
+                        BaseItem<NewsBean> baseItem = new BaseItem<>();
                         baseItem.setData(topNews);
                         return baseItem;
                     }
@@ -108,28 +108,28 @@ public class NewsPresenter extends BasePresenter {
     public void loadMore() {
         ApiManager.getInstence().getTopNewsServie()
                 .getTopNews("T1348647909107", currentIndex + "")
-                .map(new Function<TopNewsList, ArrayList<TopNews>>() {
+                .map(new Function<TopNewsList, ArrayList<NewsBean>>() {
                     @Override
-                    public ArrayList<TopNews> apply(TopNewsList topNewsList) {
+                    public ArrayList<NewsBean> apply(TopNewsList topNewsList) {
                         return topNewsList.getTopNewsArrayList();
                     }
                 })
-                .flatMap(new Function<ArrayList<TopNews>, Observable<TopNews>>() {
+                .flatMap(new Function<ArrayList<NewsBean>, Observable<NewsBean>>() {
                     @Override
-                    public Observable<TopNews> apply(ArrayList<TopNews> topNewses) {
+                    public Observable<NewsBean> apply(ArrayList<NewsBean> topNewses) {
                         return Observable.fromIterable(topNewses);
                     }
                 })
-                .filter(new Predicate<TopNews>() {
+                .filter(new Predicate<NewsBean>() {
                     @Override
-                    public boolean test(TopNews topNews) {
+                    public boolean test(NewsBean topNews) {
                         return topNews.getUrl() != null;
                     }
                 })
-                .map(new Function<TopNews, BaseItem>() {
+                .map(new Function<NewsBean, BaseItem>() {
                     @Override
-                    public BaseItem apply(TopNews topNews) {
-                        BaseItem<TopNews> baseItem = new BaseItem<>();
+                    public BaseItem apply(NewsBean topNews) {
+                        BaseItem<NewsBean> baseItem = new BaseItem<>();
                         baseItem.setData(topNews);
                         return baseItem;
                     }

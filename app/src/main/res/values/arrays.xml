@@ -9,4 +9,14 @@
         <item>星期六</item>
         <item>星期日</item>
     </array>
+
+    <array name="news_title">
+        <item>要闻</item>
+        <item>科技</item>
+        <item>汽车</item>
+        <item>精选</item>
+        <item>哒哒趣闻</item>
+        <item>军事</item>
+        <item>旅游</item>
+    </array>
 </resources>

@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-import com.pandaq.pandaeye.model.neteasynews.TopNewsContent;
+import com.pandaq.pandaeye.model.neteasynews.NewsContent;
 
 import java.lang.reflect.Type;
 
@@ -17,8 +17,8 @@ import java.lang.reflect.Type;
 public class JsonUtils {
 
     //读取并解析网页新闻json数据
-    public static TopNewsContent readJsonNewsContent(String res, String docId) {
-        TopNewsContent newsDetailBean = null;
+    public static NewsContent readJsonNewsContent(String res, String docId) {
+        NewsContent newsDetailBean = null;
         try {
             JsonParser parser = new JsonParser();
             JsonObject jsonObj = parser.parse(res).getAsJsonObject();
@@ -26,7 +26,7 @@ public class JsonUtils {
             if (jsonElement == null) {
                 return null;
             }
-            newsDetailBean = JsonUtils.deserialize(jsonElement.getAsJsonObject(), TopNewsContent.class);
+            newsDetailBean = JsonUtils.deserialize(jsonElement.getAsJsonObject(), NewsContent.class);
         } catch (Exception e) {
             e.printStackTrace();
         }

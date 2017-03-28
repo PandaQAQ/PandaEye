@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
-import com.pandaq.pandaeye.model.neteasynews.TopNews;
+import com.pandaq.pandaeye.model.neteasynews.NewsBean;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.squareup.picasso.Picasso;
@@ -45,7 +45,7 @@ public class TopNewsListAdapter extends BaseRecyclerAdapter {
     @Override
     public void onBind(RecyclerView.ViewHolder holder, int RealPosition, BaseItem data) {
         if (holder instanceof ViewHolder) {
-            TopNews topNews = (TopNews) data.getData();
+            NewsBean topNews = (NewsBean) data.getData();
             ((ViewHolder) holder).mNewsTitle.setText(topNews.getTitle());
             ((ViewHolder) holder).mSource.setText(topNews.getSource());
             String image = topNews.getImgsrc();

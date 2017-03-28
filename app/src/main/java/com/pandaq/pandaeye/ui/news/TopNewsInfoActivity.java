@@ -2,7 +2,6 @@ package com.pandaq.pandaeye.ui.news;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -16,10 +15,9 @@ import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
-import com.pandaq.pandaeye.model.neteasynews.TopNewsContent;
+import com.pandaq.pandaeye.model.neteasynews.NewsContent;
 import com.pandaq.pandaeye.presenter.news.TopNewsInfoPresenter;
 import com.pandaq.pandaeye.ui.ImplView.ITopNewsInfoActivity;
-import com.pandaq.pandaeye.ui.base.BaseActivity;
 import com.pandaq.pandaeye.ui.base.ShareActivity;
 import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaeye.utils.PicassoTarget;
@@ -125,7 +123,7 @@ public class TopNewsInfoActivity extends ShareActivity implements ITopNewsInfoAc
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
-    public void loadSuccess(TopNewsContent topNewsContent) {
+    public void loadSuccess(NewsContent topNewsContent) {
         mWvTopnewsContent.getSettings().setJavaScriptEnabled(true);
         mWvTopnewsContent.getSettings().setUseWideViewPort(true);
         mWvTopnewsContent.getSettings().setLoadWithOverviewMode(true);

@@ -18,7 +18,7 @@ public class ApiManager {
 
     private DouBanApi mDouBanApi;
     private ZhihuDailyApi mDailyApi;
-    private TopNewsApi mNewsApi;
+    private NetEasyNewsApi mNewsApi;
     private MovieApi mMovieApi;
     private GithubApi mGithubApi;
     private static ApiManager sApiManager;
@@ -79,7 +79,7 @@ public class ApiManager {
     /**
      * 封装网易新闻API
      */
-    public TopNewsApi getTopNewsServie() {
+    public NetEasyNewsApi getTopNewsServie() {
         if (mNewsApi == null) {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(Config.NETEASY_NEWS_API)
@@ -87,7 +87,7 @@ public class ApiManager {
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-            mNewsApi = retrofit.create(TopNewsApi.class);
+            mNewsApi = retrofit.create(NetEasyNewsApi.class);
         }
         return mNewsApi;
     }
