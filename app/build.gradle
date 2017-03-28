@@ -47,9 +47,7 @@ dependencies {
     compile project(':pandaqlib')
     //缓存 DiskLruCache
     compile 'com.jakewharton:disklrucache:2.0.2'
-    //腾讯 X5 浏览服务
-    compile files('libs/tbs_sdk_thirdapp_v3.0.0.1038_43000_sharewithdownload_obfs_20170110_144724.jar')
-    //ijkplayer 需要进行编译比较麻烦，这里直接使用 jiecao 播放器
+    //jiecao 播放器
     compile 'fm.jiecao:jiecaovideoplayer:4.7.1_preview'
     //picasso 图片加载库 （Glide 中有些bug）
     compile 'com.squareup.picasso:picasso:2.5.2'
@@ -57,7 +55,6 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    //显示 html 的 textview
     compile files('libs/tbs_sdk_thirdapp_v3.1.0.1034_43100_sharewithdownload_obfs_20170301_182143.jar')
     compile files('libs/MobCommons-2017.0216.1054.jar')
     compile files('libs/MobTools-2017.0216.1054.jar')

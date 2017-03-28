@@ -28,7 +28,6 @@ import com.pandaq.pandaeye.ui.zhihu.ZhihuDailyFragment;
 import com.pandaq.pandaeye.utils.BlurImageUtils;
 import com.pandaq.pandaeye.utils.DataCleanManager;
 import com.pandaq.pandaeye.widget.NavItem;
-import com.squareup.haha.perflib.Main;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
