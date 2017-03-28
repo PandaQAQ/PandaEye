@@ -97,7 +97,12 @@ public class MovieListFragment extends BaseFragment implements IDoubanFrag, Swip
         });
         View footerView = mMovieList.getFooterView();
         if (footerView != null) {
-            loadMoreData();
+            footerView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    loadMoreData();
+                }
+            });
         }
     }
 

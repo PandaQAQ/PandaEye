@@ -17,7 +17,8 @@ import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.TopNewsListAdapter;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.model.neteasynews.NewsBean;
-import com.pandaq.pandaeye.presenter.news.NewsPresenter;
+import com.pandaq.pandaeye.presenter.news.HeadLinePresenter;
+import com.pandaq.pandaeye.presenter.news.TravelPresenter;
 import com.pandaq.pandaeye.rxbus.RxBus;
 import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.ImplView.INewsListFrag;
@@ -46,7 +47,7 @@ public class TravelFragment extends BaseFragment implements INewsListFrag, Swipe
     SwipeRefreshLayout mRefresh;
     @BindView(R.id.empty_msg)
     TextView mEmptyMsg;
-    private NewsPresenter mPresenter = new NewsPresenter(this);
+    private TravelPresenter mPresenter = new TravelPresenter(this);
     private TopNewsListAdapter mAdapter;
     private boolean loading = false;
     private Disposable mDisposable;

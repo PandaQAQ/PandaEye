@@ -17,6 +17,7 @@ import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.TopNewsListAdapter;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.model.neteasynews.NewsBean;
+import com.pandaq.pandaeye.presenter.news.DadaPresenter;
 import com.pandaq.pandaeye.presenter.news.HeadLinePresenter;
 import com.pandaq.pandaeye.rxbus.RxBus;
 import com.pandaq.pandaeye.rxbus.RxConstants;
@@ -36,10 +37,10 @@ import io.reactivex.disposables.Disposable;
 
 /**
  * Created by PandaQ on 2017/3/28.
- * 网易头条 fragment
+ * Email : 767807368@qq.com
  */
 
-public class HeadLineFragment extends BaseFragment implements INewsListFrag, SwipeRefreshLayout.OnRefreshListener, BaseRecyclerAdapter.OnItemClickListener {
+public class DadaFragment extends BaseFragment implements INewsListFrag, SwipeRefreshLayout.OnRefreshListener, BaseRecyclerAdapter.OnItemClickListener {
 
     @BindView(R.id.newsRecycler)
     MagicRecyclerView mNewsRecycler;
@@ -47,7 +48,7 @@ public class HeadLineFragment extends BaseFragment implements INewsListFrag, Swi
     SwipeRefreshLayout mRefresh;
     @BindView(R.id.empty_msg)
     TextView mEmptyMsg;
-    private HeadLinePresenter mPresenter = new HeadLinePresenter(this);
+    private DadaPresenter mPresenter = new DadaPresenter(this);
     private TopNewsListAdapter mAdapter;
     private boolean loading = false;
     private Disposable mDisposable;
@@ -228,7 +229,7 @@ public class HeadLineFragment extends BaseFragment implements INewsListFrag, Swi
         //跳转到其他界面
         NewsBean topNews = (NewsBean) data.getData();
         Bundle bundle = new Bundle();
-        Intent intent = new Intent(HeadLineFragment.this.getActivity(), TopNewsInfoActivity.class);
+            Intent intent = new Intent(DadaFragment.this.getActivity(), TopNewsInfoActivity.class);
         bundle.putString(Constants.BUNDLE_KEY_TITLE, topNews.getTitle());
         bundle.putString(Constants.BUNDLE_KEY_ID, topNews.getDocid());
         bundle.putString(Constants.BUNDLE_KEY_IMG_URL, topNews.getImgsrc());

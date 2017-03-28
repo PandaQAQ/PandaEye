@@ -46,8 +46,12 @@ public class NewsListFragment extends BaseFragment implements ViewPager.OnPageCh
     private void initView() {
         mFragmentArrayList = new ArrayList<>();
         mFragmentArrayList.add(new HeadLineFragment());
-        mFragmentArrayList.add(new HeadLineFragment());
-        mFragmentArrayList.add(new HeadLineFragment());
+        mFragmentArrayList.add(new TecNewsFragment());
+        mFragmentArrayList.add(new SportNewsFragment());
+        mFragmentArrayList.add(new RecommendFragment());
+        mFragmentArrayList.add(new DadaFragment());
+        mFragmentArrayList.add(new MilitaryFragment());
+        mFragmentArrayList.add(new TravelFragment());
         mVpNewsList.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {

@@ -28,8 +28,14 @@ public class Constants {
      * DiskCache
      */
     public static final long CACHE_MAXSIZE = 10 * 1024 * 1024;
-    public static final String CACHE_TOPNEWS_FILE = "top_news_cache_file";
-    public static final String CACHE_TOPNEWS = "top_news_cache";
+    public static final String CACHE_NEWS_FILE = "top_news_cache_file";
+    public static final String CACHE_HEADLINE_NEWS = "headline_news_cache";
+    public static final String CACHE_TEC_NEWS = "tec_news_cache";
+    public static final String CACHE_SPORT_NEWS = "sport_news_cache";
+    public static final String CACHE_RECOMMEND_NEWS = "recommend_news_cache";
+    public static final String CACHE_DADA_NEWS = "dada_news_cache";
+    public static final String CACHE_MILITARY_NEWS = "military_news_cache";
+    public static final String CACHE_TRAVEL_NEWS = "travel_news_cache";
 
     public static final String CACHE_ZHIHU_FILE = "zhihu_cache_file";
     public static final String CACHE_ZHIHU_DAILY = "zhihu_daily_cache";
@@ -72,13 +78,13 @@ public class Constants {
     /**
      * 网易新闻
      */
-    public static final String NETEASY_NEWS_HEADLINE = "";//头条
-    public static final String NETEASY_NEWS_TEC = "";//科技
-    public static final String NETEASY_NEWS_AUTO = "";//汽车
-    public static final String NETEASY_NEWS_RECOMMEND = "";//精选
-    public static final String NETEASY_NEWS_DADA = "";//哒哒趣闻
-    public static final String NETEASY_NEWS_MILITARY = "";//军事
-    public static final String NETEASY_NEWS_TRAVEL = "";//旅游
+    public static final String NETEASY_NEWS_HEADLINE = "T1348647909107";//头条
+    public static final String NETEASY_NEWS_TEC = "T1348649580692";//科技
+    public static final String NETEASY_NEWS_SPORT = "T1348649079062";//体育
+    public static final String NETEASY_NEWS_RECOMMEND = "T1467284926140";//精选
+    public static final String NETEASY_NEWS_DADA = "T1444289532601";//哒哒趣闻
+    public static final String NETEASY_NEWS_MILITARY = "T1348648141035";//军事
+    public static final String NETEASY_NEWS_TRAVEL = "T1348654204705";//旅游
 
 
 }

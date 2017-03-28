@@ -6,6 +6,7 @@ import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
 import com.pandaq.pandaeye.model.api.ApiManager;
 import com.pandaq.pandaeye.model.neteasynews.NewsBean;
 import com.pandaq.pandaeye.model.neteasynews.TopNewsList;
+import com.pandaq.pandaeye.model.neteasynews.TravelNewsList;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.INewsListFrag;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
@@ -27,12 +28,12 @@ import io.reactivex.schedulers.Schedulers;
  * email : 767807368@qq.com
  */
 
-public class NewsPresenter extends BasePresenter {
+public class TravelPresenter extends BasePresenter {
 
     private INewsListFrag mNewsListFrag;
     private int currentIndex;
 
-    public NewsPresenter(INewsListFrag newsListFrag) {
+    public TravelPresenter(INewsListFrag newsListFrag) {
         this.mNewsListFrag = newsListFrag;
     }
 
@@ -40,11 +41,11 @@ public class NewsPresenter extends BasePresenter {
         mNewsListFrag.showRefreshBar();
         currentIndex = 0;
         ApiManager.getInstence().getTopNewsServie()
-                .getTopNews("T1348647909107", currentIndex + "")
-                .map(new Function<TopNewsList, ArrayList<NewsBean>>() {
+                .getTravelNews(currentIndex + "")
+                .map(new Function<TravelNewsList, ArrayList<NewsBean>>() {
                     @Override
-                    public ArrayList<NewsBean> apply(TopNewsList topNewsList) {
-                        return topNewsList.getTopNewsArrayList();
+                    public ArrayList<NewsBean> apply(TravelNewsList travelNewsList) {
+                        return travelNewsList.getTrivelNewsArrayList();
                     }
                 })
                 .flatMap(new Function<ArrayList<NewsBean>, Observable<NewsBean>>() {
@@ -88,8 +89,8 @@ public class NewsPresenter extends BasePresenter {
 
                     @Override
                     public void onSuccess(ArrayList<BaseItem> value) {
-                        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_TOPNEWS_FILE);
-                        manager.put(Constants.CACHE_TOPNEWS, value);
+                        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_NEWS_FILE);
+                        manager.put(Constants.CACHE_TRAVEL_NEWS, value);
                         currentIndex += 20;
                         mNewsListFrag.hideRefreshBar();
                         mNewsListFrag.refreshNewsSuccessed(value);
@@ -107,11 +108,11 @@ public class NewsPresenter extends BasePresenter {
     //两个方法没区别,只是刷新会重新赋值
     public void loadMore() {
         ApiManager.getInstence().getTopNewsServie()
-                .getTopNews("T1348647909107", currentIndex + "")
-                .map(new Function<TopNewsList, ArrayList<NewsBean>>() {
+                .getTravelNews(currentIndex + "")
+                .map(new Function<TravelNewsList, ArrayList<NewsBean>>() {
                     @Override
-                    public ArrayList<NewsBean> apply(TopNewsList topNewsList) {
-                        return topNewsList.getTopNewsArrayList();
+                    public ArrayList<NewsBean> apply(TravelNewsList travelNewsList) {
+                        return travelNewsList.getTrivelNewsArrayList();
                     }
                 })
                 .flatMap(new Function<ArrayList<NewsBean>, Observable<NewsBean>>() {
@@ -163,8 +164,8 @@ public class NewsPresenter extends BasePresenter {
      * 读取缓存
      */
     public void loadCache() {
-        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_TOPNEWS_FILE);
-        ArrayList<BaseItem> topNews = manager.getSerializable(Constants.CACHE_TOPNEWS);
+        DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_NEWS_FILE);
+        ArrayList<BaseItem> topNews = manager.getSerializable(Constants.CACHE_TRAVEL_NEWS);
         if (topNews != null) {
             mNewsListFrag.refreshNewsSuccessed(topNews);
         }

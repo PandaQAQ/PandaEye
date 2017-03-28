@@ -10,9 +10,9 @@ import java.util.ArrayList;
  * email : 767807368@qq.com
  */
 
-public class AutoNewsList {
+public class SportNewsList {
 
-    @SerializedName(Constants.NETEASY_NEWS_AUTO)
+    @SerializedName(Constants.NETEASY_NEWS_SPORT)
 
     private ArrayList<NewsBean> mAutoNewsArrayList;
 
