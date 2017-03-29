@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.NavUtils;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +24,7 @@ import com.pandaq.pandaeye.rxbus.RxBus;
 import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.ImplView.INewsListFrag;
 import com.pandaq.pandaeye.ui.base.BaseFragment;
+import com.pandaq.pandaeye.utils.LogWritter;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView;
@@ -55,10 +57,9 @@ public class DadaFragment extends BaseFragment implements INewsListFrag, SwipeRe
     private LinearLayoutManager mLinearLayoutManager;
     private Unbinder mUnbinder;
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.headline_newslist_fragment, container, false);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.headline_newslist_fragment, null, false);
         mUnbinder = ButterKnife.bind(this, view);
         mLinearLayoutManager = new LinearLayoutManager(this.getContext());
         mNewsRecycler.setLayoutManager(mLinearLayoutManager);
@@ -80,6 +81,13 @@ public class DadaFragment extends BaseFragment implements INewsListFrag, SwipeRe
         mRefresh.setRefreshing(false);
         mPresenter.dispose();
         onHiddenChanged(true);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
+        mAdapter = null;
     }
 
     private void initView() {
@@ -229,7 +237,7 @@ public class DadaFragment extends BaseFragment implements INewsListFrag, SwipeRe
         //跳转到其他界面
         NewsBean topNews = (NewsBean) data.getData();
         Bundle bundle = new Bundle();
-            Intent intent = new Intent(DadaFragment.this.getActivity(), TopNewsInfoActivity.class);
+        Intent intent = new Intent(DadaFragment.this.getActivity(), TopNewsInfoActivity.class);
         bundle.putString(Constants.BUNDLE_KEY_TITLE, topNews.getTitle());
         bundle.putString(Constants.BUNDLE_KEY_ID, topNews.getDocid());
         bundle.putString(Constants.BUNDLE_KEY_IMG_URL, topNews.getImgsrc());
@@ -238,11 +246,5 @@ public class DadaFragment extends BaseFragment implements INewsListFrag, SwipeRe
         Pair pairImg = new Pair<>(view.findViewById(R.id.news_image), transitionName);
         ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairImg);
         startActivity(intent, transitionActivityOptions.toBundle());
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mUnbinder.unbind();
     }
 }

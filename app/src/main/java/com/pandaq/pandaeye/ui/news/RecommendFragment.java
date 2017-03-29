@@ -48,17 +48,16 @@ public class RecommendFragment extends BaseFragment implements INewsListFrag, Sw
     SwipeRefreshLayout mRefresh;
     @BindView(R.id.empty_msg)
     TextView mEmptyMsg;
-    private RecommendPresenter mPresenter= new RecommendPresenter(this);
+    private RecommendPresenter mPresenter = new RecommendPresenter(this);
     private TopNewsListAdapter mAdapter;
     private boolean loading = false;
     private Disposable mDisposable;
     private LinearLayoutManager mLinearLayoutManager;
     private Unbinder mUnbinder;
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.headline_newslist_fragment, container, false);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.headline_newslist_fragment, null, false);
         mUnbinder = ButterKnife.bind(this, view);
         mLinearLayoutManager = new LinearLayoutManager(this.getContext());
         mNewsRecycler.setLayoutManager(mLinearLayoutManager);
@@ -80,6 +79,13 @@ public class RecommendFragment extends BaseFragment implements INewsListFrag, Sw
         mRefresh.setRefreshing(false);
         mPresenter.dispose();
         onHiddenChanged(true);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
+        mAdapter = null;
     }
 
     private void initView() {
@@ -240,9 +246,4 @@ public class RecommendFragment extends BaseFragment implements INewsListFrag, Sw
         startActivity(intent, transitionActivityOptions.toBundle());
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mUnbinder.unbind();
-    }
 }

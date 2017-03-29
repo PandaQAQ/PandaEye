@@ -20,25 +20,25 @@ import retrofit2.http.Path;
  * 网易新闻Api 都默认一次加载20条
  */
 public interface NetEasyNewsApi {
-    @GET(Constants.NETEASY_NEWS_HEADLINE + "/{index}-20.html")
+    @GET("list/"+Constants.NETEASY_NEWS_HEADLINE + "/{index}-20.html")
     Observable<TopNewsList> getTopNews(@Path("index") String index);
 
-    @GET(Constants.NETEASY_NEWS_TEC + "/{index}-20.html")
+    @GET("list/"+Constants.NETEASY_NEWS_TEC + "/{index}-20.html")
     Observable<TecNewsList> getTecNews(@Path("index") String index);
 
-    @GET(Constants.NETEASY_NEWS_SPORT + "/{index}-20.html")
+    @GET("list/"+Constants.NETEASY_NEWS_SPORT + "/{index}-20.html")
     Observable<SportNewsList> getSportNews(@Path("index") String index);
 
-    @GET(Constants.NETEASY_NEWS_RECOMMEND + "/{index}-20.html")
+    @GET("list/"+Constants.NETEASY_NEWS_RECOMMEND + "/{index}-20.html")
     Observable<RecommendNewsList> getRecommendNews(@Path("index") String index);
 
-    @GET(Constants.NETEASY_NEWS_DADA + "/{index}-20.html")
+    @GET("list/"+Constants.NETEASY_NEWS_DADA + "/{index}-20.html")
     Observable<DadaNewsList> getDadaNews(@Path("index") String index);
 
-    @GET(Constants.NETEASY_NEWS_MILITARY + "/{index}-20.html")
+    @GET("list/"+Constants.NETEASY_NEWS_MILITARY + "/{index}-20.html")
     Observable<MilitaryNewsList> getMilitaryNews(@Path("index") String index);
 
-    @GET(Constants.NETEASY_NEWS_TRAVEL + "/{index}-20.html")
+    @GET("list/"+Constants.NETEASY_NEWS_TRAVEL + "/{index}-20.html")
     Observable<TravelNewsList> getTravelNews(@Path("index") String index);
 
     @GET("{id}/full.html")

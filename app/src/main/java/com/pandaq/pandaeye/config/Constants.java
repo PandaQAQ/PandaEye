@@ -33,7 +33,7 @@ public class Constants {
     public static final String CACHE_TEC_NEWS = "tec_news_cache";
     public static final String CACHE_SPORT_NEWS = "sport_news_cache";
     public static final String CACHE_RECOMMEND_NEWS = "recommend_news_cache";
-    public static final String CACHE_DADA_NEWS = "dada_news_cache";
+    public static final String CACHE_CARTOON_NEWS = "cartoon_news_cache";
     public static final String CACHE_MILITARY_NEWS = "military_news_cache";
     public static final String CACHE_TRAVEL_NEWS = "travel_news_cache";
 
@@ -82,7 +82,7 @@ public class Constants {
     public static final String NETEASY_NEWS_TEC = "T1348649580692";//科技
     public static final String NETEASY_NEWS_SPORT = "T1348649079062";//体育
     public static final String NETEASY_NEWS_RECOMMEND = "T1467284926140";//精选
-    public static final String NETEASY_NEWS_DADA = "T1444289532601";//哒哒趣闻
+    public static final String NETEASY_NEWS_DADA = "T1350383429665";//漫画
     public static final String NETEASY_NEWS_MILITARY = "T1348648141035";//军事
     public static final String NETEASY_NEWS_TRAVEL = "T1348654204705";//旅游
 

@@ -17,7 +17,6 @@ import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.TopNewsListAdapter;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.model.neteasynews.NewsBean;
-import com.pandaq.pandaeye.presenter.news.HeadLinePresenter;
 import com.pandaq.pandaeye.presenter.news.TravelPresenter;
 import com.pandaq.pandaeye.rxbus.RxBus;
 import com.pandaq.pandaeye.rxbus.RxConstants;
@@ -54,10 +53,9 @@ public class TravelFragment extends BaseFragment implements INewsListFrag, Swipe
     private LinearLayoutManager mLinearLayoutManager;
     private Unbinder mUnbinder;
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.headline_newslist_fragment, container, false);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.headline_newslist_fragment, null, false);
         mUnbinder = ButterKnife.bind(this, view);
         mLinearLayoutManager = new LinearLayoutManager(this.getContext());
         mNewsRecycler.setLayoutManager(mLinearLayoutManager);
@@ -79,6 +77,13 @@ public class TravelFragment extends BaseFragment implements INewsListFrag, Swipe
         mRefresh.setRefreshing(false);
         mPresenter.dispose();
         onHiddenChanged(true);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
+        mAdapter = null;
     }
 
     private void initView() {
@@ -239,9 +244,4 @@ public class TravelFragment extends BaseFragment implements INewsListFrag, Swipe
         startActivity(intent, transitionActivityOptions.toBundle());
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mUnbinder.unbind();
-    }
 }

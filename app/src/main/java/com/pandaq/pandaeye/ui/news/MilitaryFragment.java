@@ -55,10 +55,9 @@ public class MilitaryFragment extends BaseFragment implements INewsListFrag, Swi
     private LinearLayoutManager mLinearLayoutManager;
     private Unbinder mUnbinder;
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.headline_newslist_fragment, container, false);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.headline_newslist_fragment, null, false);
         mUnbinder = ButterKnife.bind(this, view);
         mLinearLayoutManager = new LinearLayoutManager(this.getContext());
         mNewsRecycler.setLayoutManager(mLinearLayoutManager);
@@ -80,6 +79,13 @@ public class MilitaryFragment extends BaseFragment implements INewsListFrag, Swi
         mRefresh.setRefreshing(false);
         mPresenter.dispose();
         onHiddenChanged(true);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
+        mAdapter = null;
     }
 
     private void initView() {
@@ -240,9 +246,4 @@ public class MilitaryFragment extends BaseFragment implements INewsListFrag, Swi
         startActivity(intent, transitionActivityOptions.toBundle());
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mUnbinder.unbind();
-    }
 }

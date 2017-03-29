@@ -89,7 +89,7 @@ public class DadaPresenter extends BasePresenter {
                     @Override
                     public void onSuccess(ArrayList<BaseItem> value) {
                         DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_NEWS_FILE);
-                        manager.put(Constants.CACHE_DADA_NEWS, value);
+                        manager.put(Constants.CACHE_CARTOON_NEWS, value);
                         currentIndex += 20;
                         mNewsListFrag.hideRefreshBar();
                         mNewsListFrag.refreshNewsSuccessed(value);
@@ -164,7 +164,7 @@ public class DadaPresenter extends BasePresenter {
      */
     public void loadCache() {
         DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_NEWS_FILE);
-        ArrayList<BaseItem> topNews = manager.getSerializable(Constants.CACHE_DADA_NEWS);
+        ArrayList<BaseItem> topNews = manager.getSerializable(Constants.CACHE_CARTOON_NEWS);
         if (topNews != null) {
             mNewsListFrag.refreshNewsSuccessed(topNews);
         }

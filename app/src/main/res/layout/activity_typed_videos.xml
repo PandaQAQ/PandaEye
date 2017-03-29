@@ -30,7 +30,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:layout_margin="@dimen/margin_8dp"
         android:background="@color/white_FFFFFF"
         app:footer_layout="@layout/recycler_footer_layout"/>
 </RelativeLayout>

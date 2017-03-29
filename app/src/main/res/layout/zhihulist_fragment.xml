@@ -20,6 +20,7 @@
                 android:id="@+id/zhihudaily_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/white_FFFFFF"
                 app:footer_layout="@layout/recycler_footer_layout"
                 app:header_layout="@layout/recycler_header_layout"
                 app:parallaxMultiplier="0.8"/>

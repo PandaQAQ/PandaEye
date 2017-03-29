@@ -8,6 +8,7 @@ import com.pandaq.pandaeye.model.neteasynews.NewsBean;
 import com.pandaq.pandaeye.model.neteasynews.TopNewsList;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.INewsListFrag;
+import com.pandaq.pandaeye.utils.LogWritter;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;

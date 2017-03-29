@@ -53,18 +53,18 @@ public class HeadLineFragment extends BaseFragment implements INewsListFrag, Swi
     private Disposable mDisposable;
     private LinearLayoutManager mLinearLayoutManager;
     private Unbinder mUnbinder;
+    private View mView;
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.headline_newslist_fragment, container, false);
-        mUnbinder = ButterKnife.bind(this, view);
+        mView = getActivity().getLayoutInflater().inflate(R.layout.headline_newslist_fragment, null, false);
+        mUnbinder = ButterKnife.bind(this, mView);
         mLinearLayoutManager = new LinearLayoutManager(this.getContext());
         mNewsRecycler.setLayoutManager(mLinearLayoutManager);
         //屏蔽掉默认的动画，房子刷新时图片闪烁
         mNewsRecycler.getItemAnimator().setChangeDuration(0);
         initView();
-        return view;
+        return mView;
     }
 
     @Override
@@ -79,6 +79,13 @@ public class HeadLineFragment extends BaseFragment implements INewsListFrag, Swi
         mRefresh.setRefreshing(false);
         mPresenter.dispose();
         onHiddenChanged(true);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
+        mAdapter = null;
     }
 
     private void initView() {
@@ -239,9 +246,4 @@ public class HeadLineFragment extends BaseFragment implements INewsListFrag, Swi
         startActivity(intent, transitionActivityOptions.toBundle());
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mUnbinder.unbind();
-    }
 }

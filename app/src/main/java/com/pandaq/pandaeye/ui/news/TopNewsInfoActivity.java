@@ -49,7 +49,6 @@ public class TopNewsInfoActivity extends ShareActivity implements ITopNewsInfoAc
     ProgressBar mPbTopnewsContent;
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
-    private String newsImg = "";
     private int width;
     private int heigh;
     private TopNewsInfoPresenter mPresenter = new TopNewsInfoPresenter(this);
@@ -72,7 +71,7 @@ public class TopNewsInfoActivity extends ShareActivity implements ITopNewsInfoAc
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                TopNewsInfoActivity.this.showShare();
             }
         });
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -86,7 +85,7 @@ public class TopNewsInfoActivity extends ShareActivity implements ITopNewsInfoAc
     private void initData() {
         Bundle bundle = getIntent().getExtras();
         String news_id = bundle.getString(Constants.BUNDLE_KEY_ID);
-        newsImg = bundle.getString(Constants.BUNDLE_KEY_IMG_URL);
+        String newsImg = bundle.getString(Constants.BUNDLE_KEY_IMG_URL);
         String title = bundle.getString(Constants.BUNDLE_KEY_TITLE);
         loadTopNewsInfo(news_id);
         Target target = new PicassoTarget(this, mNewsImg, mToolbarLayout, mToolbar, mFab);
@@ -124,6 +123,7 @@ public class TopNewsInfoActivity extends ShareActivity implements ITopNewsInfoAc
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void loadSuccess(NewsContent topNewsContent) {
+        System.out.println(topNewsContent.getBody());
         mWvTopnewsContent.getSettings().setJavaScriptEnabled(true);
         mWvTopnewsContent.getSettings().setUseWideViewPort(true);
         mWvTopnewsContent.getSettings().setLoadWithOverviewMode(true);

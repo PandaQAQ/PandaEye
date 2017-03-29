@@ -18,7 +18,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:fullBackupContent="true">
         <activity android:name=".ui.base.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -43,6 +44,7 @@
             android:theme="@style/TranslucentFullScreenTheme"/>
         <activity
             android:name=".ui.video.TypedVideosActivity"
+            android:theme="@style/TranslucentFullScreenTheme"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.setting.AboutActivity"
