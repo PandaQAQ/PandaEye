@@ -18,12 +18,15 @@
             android:id="@+id/main_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:elevation="0dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
         <FrameLayout
             android:id="@+id/fl_bottom_navgation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:elevation="@dimen/elevation_height"
+            android:background="@drawable/shdow_theme_background"
             app:layout_behavior="@string/bottom_sheet_behavior">
 
             <com.ashokvarma.bottomnavigation.BottomNavigationBar
@@ -31,8 +34,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom"
-                android:elevation="@dimen/elevation_height"
-
                 />
         </FrameLayout>
     </android.support.design.widget.CoordinatorLayout>

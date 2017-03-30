@@ -1,6 +1,7 @@
 package com.pandaq.pandaeye.widget;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
@@ -61,6 +62,10 @@ public class NavItem extends RelativeLayout {
         if (color != Color.GRAY) {
             mTvActionTitle.setTextColor(color);
             mTvActionState.setTextColor(color);
+        }
+        int tint = ta.getColor(R.styleable.NavItem_tint, Color.TRANSPARENT);
+        if (tint != Color.TRANSPARENT) {
+            mIvStartIcon.setImageTintList(ColorStateList.valueOf(tint));
         }
         ta.recycle();
     }

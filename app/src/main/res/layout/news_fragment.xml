@@ -11,10 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        app:tabIndicatorColor="@color/brown_8D6E63"
+        android:elevation="@dimen/elevation_height"
+        android:outlineProvider="paddedBounds"
+        app:tabIndicatorColor="@color/table_indicator"
         app:tabIndicatorHeight="4dp"
         app:tabSelectedTextColor="@color/white_FFFFFF"
-        app:tabTextColor="@color/grey_adbec0"/>
+        app:tabTextColor="@color/grey_text_5d5c5c"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_news_list"

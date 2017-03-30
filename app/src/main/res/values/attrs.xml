@@ -12,5 +12,6 @@
         <attr name="action" format="string"/>
         <attr name="textColor" format="color"/>
         <attr name="actionState" format="string"/>
+        <attr name="tint" format="color"/>
     </declare-styleable>
 </resources>

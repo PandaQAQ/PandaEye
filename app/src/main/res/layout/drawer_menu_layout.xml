@@ -22,7 +22,7 @@
             android:layout_width="@dimen/user_image_size"
             android:layout_height="@dimen/user_image_size"
             android:src="@drawable/userimage"
-            app:civ_border_color="@color/colorAccent"
+            app:civ_border_color="@color/transparent_3cffffff"
             app:civ_border_width="@dimen/userimage_border_width"/>
 
         <TextView
@@ -41,7 +41,8 @@
         android:layout_height="wrap_content"
         android:foreground="@drawable/ripple_item"
         app:action="我的收藏"
-        app:startIcon="@drawable/ic_favorite"/>
+        app:startIcon="@drawable/ic_favorite"
+        app:tint="@color/colorPrimary"/>
 
     <View
         style="@style/Spliter"/>
@@ -52,7 +53,8 @@
         android:layout_height="wrap_content"
         android:foreground="@drawable/ripple_item"
         app:action="我的视频"
-        app:startIcon="@drawable/ic_action_download"/>
+        app:startIcon="@drawable/ic_action_download"
+        app:tint="@color/colorPrimary"/>
 
     <View
         style="@style/Spliter"/>
@@ -63,7 +65,8 @@
         android:layout_height="wrap_content"
         android:foreground="@drawable/ripple_item"
         app:action="分享应用"
-        app:startIcon="@drawable/ic_menu_share"/>
+        app:startIcon="@drawable/ic_menu_share"
+        app:tint="@color/colorPrimary"/>
 
     <View
         style="@style/Spliter"/>
@@ -74,7 +77,8 @@
         android:layout_height="wrap_content"
         android:foreground="@drawable/ripple_item"
         app:action="@string/clean_chace"
-        app:startIcon="@drawable/ic_clear_all"/>
+        app:startIcon="@drawable/ic_clear_all"
+        app:tint="@color/colorPrimary"/>
 
     <View
         style="@style/Spliter"/>
@@ -85,5 +89,6 @@
         android:layout_height="wrap_content"
         android:foreground="@drawable/ripple_item"
         app:action="关于"
-        app:startIcon="@drawable/ic_action_github"/>
+        app:startIcon="@drawable/ic_action_github"
+        app:tint="@color/colorPrimary"/>
 </LinearLayout>
