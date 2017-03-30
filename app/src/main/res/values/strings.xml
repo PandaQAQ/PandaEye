@@ -35,4 +35,6 @@
     <string name="clean_chace">清理缓存</string>
     <string name="pandaq">PandaQ</string>
     <string name="make_dir_fail">创建文件失败！</string>
+    <string name="select_album">所有图片</string>
+    <string name="pictures">图片</string>
 </resources>

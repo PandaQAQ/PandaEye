@@ -26,11 +26,13 @@ import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.douban.MovieListFragment;
 import com.pandaq.pandaeye.ui.news.NewsListFragment;
 import com.pandaq.pandaeye.ui.setting.AboutActivity;
+import com.pandaq.pandaeye.ui.setting.ChoosePhotoActivity;
 import com.pandaq.pandaeye.ui.video.VideoCircleFragment;
 import com.pandaq.pandaeye.ui.zhihu.ZhihuDailyFragment;
 import com.pandaq.pandaeye.utils.BlurImageUtils;
 import com.pandaq.pandaeye.utils.DataCleanManager;
 import com.pandaq.pandaeye.widget.NavItem;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
@@ -67,6 +69,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     private boolean drawerOpen = false;
     private NavItem mCleanItem;
     private int drawerIntentAction;
+    private final int ACTION_GET_PIC = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -292,20 +295,16 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     }
 
     private void takePhoto() {
-        String photoPath = Environment.getExternalStorageDirectory()
-                .getAbsolutePath() + Constants.USER_PIC;
-        File image = new File(photoPath + "buffer.jpg");
-        File file = new File(photoPath);
-        if (!file.exists()) {
-            try {
-                if (file.mkdirs() & !image.exists()) {
-                    image.createNewFile();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(this, R.string.make_dir_fail, Toast.LENGTH_SHORT).show();
-            }
+        Intent intent = new Intent(this, ChoosePhotoActivity.class);
+        startActivityForResult(intent, ACTION_GET_PIC);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ACTION_GET_PIC && data != null) {
+            Picasso.with(this)
+                    .load(data.getStringExtra("user_pic"))
+                    .into(mUserimage);
         }
-//        Intent intent = new Intent(Intent.IMAGE)
     }
 }

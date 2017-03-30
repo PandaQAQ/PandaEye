@@ -5,15 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tv_empty_msg"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/empty_msg"
-        android:textSize="@dimen/text_size_mid"
-        android:visibility="gone"/>
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -21,14 +12,27 @@
         android:background="@color/colorPrimary"
         app:navigationIcon="@drawable/ic_arrow_back"
         app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:title="@string/pictures"
         app:titleTextColor="@color/white_FFFFFF"
         />
 
-    <com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView
-        android:id="@+id/mrv_video_list"
+    <TextView
+        android:id="@+id/tv_select_album"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical"
+        android:padding="@dimen/margin_8dp"
+        android:text="@string/select_album"
+        android:textColor="@color/white_FFFFFF"/>
+
+    <GridView
+        android:id="@+id/gv_pictures"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/tv_select_album"
         android:layout_below="@id/toolbar"
-        android:background="@color/white_FFFFFF"
-        app:footer_layout="@layout/recycler_footer_layout"/>
+        android:background="@color/base_back_FFFAFAFA"
+        android:numColumns="3"/>
 </RelativeLayout>
