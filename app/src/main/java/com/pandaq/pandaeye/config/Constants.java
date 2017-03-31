@@ -6,7 +6,6 @@ package com.pandaq.pandaeye.config;
  */
 
 public class Constants {
-
     //NetWork Erro
     public static String ERRO = "错误信息:";
     //SecretUtil
@@ -81,8 +80,8 @@ public class Constants {
     public static final String NETEASY_NEWS_HEADLINE = "T1348647909107";//头条
     public static final String NETEASY_NEWS_TEC = "T1348649580692";//科技
     public static final String NETEASY_NEWS_SPORT = "T1348649079062";//体育
-    public static final String NETEASY_NEWS_RECOMMEND = "T1467284926140";//精选
-    public static final String NETEASY_NEWS_DADA = "T1350383429665";//漫画
+    public static final String NETEASY_NEWS_HEALTH = "T1414389941036";//健康
+    public static final String NETEASY_NEWS_DADA = "T1350383429665";//轻松一刻
     public static final String NETEASY_NEWS_MILITARY = "T1348648141035";//军事
     public static final String NETEASY_NEWS_TRAVEL = "T1348654204705";//旅游
 

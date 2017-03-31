@@ -34,5 +34,8 @@
         android:layout_above="@id/tv_select_album"
         android:layout_below="@id/toolbar"
         android:background="@color/base_back_FFFAFAFA"
-        android:numColumns="3"/>
+        android:horizontalSpacing="4dp"
+        android:numColumns="3"
+        android:padding="4dp"
+        android:verticalSpacing="4dp"/>
 </RelativeLayout>

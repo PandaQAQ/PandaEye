@@ -1,5 +1,6 @@
 package com.pandaq.pandaeye.ui.base;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,12 +16,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.pandaq.pandaeye.R;
-import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.rxbus.RxBus;
 import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.douban.MovieListFragment;
@@ -32,9 +31,12 @@ import com.pandaq.pandaeye.ui.zhihu.ZhihuDailyFragment;
 import com.pandaq.pandaeye.utils.BlurImageUtils;
 import com.pandaq.pandaeye.utils.DataCleanManager;
 import com.pandaq.pandaeye.widget.NavItem;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -126,8 +128,22 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         mZhihuFragment = new ZhihuDailyFragment();
         mBubbleFragment = new VideoCircleFragment();
         mNewsFragment = new NewsListFragment();
-        Bitmap overlay = BlurImageUtils.blur(mUserimage, 6, 5);
-        mNavigationHeaderContainer.setBackground(new BitmapDrawable(getResources(), overlay));
+        Picasso.with(this)
+                .load("file://" + getAppFile(this, "images/user.png"))
+                .error(getResources().getDrawable(R.drawable.userimage))
+                .into(mUserimage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Bitmap overlay = BlurImageUtils.blur(mUserimage, 3, 3);
+                        mNavigationHeaderContainer.setBackground(new BitmapDrawable(getResources(), overlay));
+                    }
+
+                    @Override
+                    public void onError() {
+                        Bitmap overlay = BlurImageUtils.blur(mUserimage, 3, 3);
+                        mNavigationHeaderContainer.setBackground(new BitmapDrawable(getResources(), overlay));
+                    }
+                });
         initNavigation();
         switchContent(mZhihuFragment);
         mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
@@ -253,6 +269,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     @Override
     public void onBackPressed() {
+        if (drawerOpen) {
+            mDrawerLayout.closeDrawers();
+            return;
+        }
         if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
             mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
@@ -302,9 +322,47 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ACTION_GET_PIC && data != null) {
-            Picasso.with(this)
-                    .load(data.getStringExtra("user_pic"))
-                    .into(mUserimage);
+            Bitmap bitmap = data.getExtras().getParcelable("data");
+            mUserimage.setImageBitmap(bitmap);
+            Bitmap overlay = BlurImageUtils.blur(mUserimage, 3, 3);
+            mNavigationHeaderContainer.setBackground(new BitmapDrawable(getResources(), overlay));
+            saveUserImage(bitmap);
         }
+    }
+
+    private void saveUserImage(Bitmap bitmap) {
+        // 保存头像到sdcard
+        FileOutputStream fos;
+        try {
+            File file = new File(getAppFile(this, "images"));
+            File image = new File(getAppFile(this, "images/user.png"));
+            if (!file.exists()) {
+                file.mkdirs();
+                if (!image.exists()) {
+                    image.createNewFile();
+                }
+            }
+            fos = new FileOutputStream(image);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, fos);
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取本应用在系统的存储目录
+     */
+    private String getAppFile(Context context, String uniqueName) {
+        String cachePath = null;
+        if ((Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
+                || !Environment.isExternalStorageRemovable())
+                && context.getExternalCacheDir() != null) {
+            cachePath = context.getExternalCacheDir().getParent();
+        } else {
+            cachePath = context.getCacheDir().getParent();
+        }
+        return cachePath + File.separator + uniqueName;
     }
 }

@@ -35,8 +35,8 @@ public class CheckPicAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
-        return null;
+    public String getItem(int position) {
+        return mPicPaths.get(position);
     }
 
     @Override
@@ -55,7 +55,9 @@ public class CheckPicAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         Picasso.with(mContext)
-                .load(mPicPaths.get(position))
+                .load("file://" + mPicPaths.get(position))
+                .fit()
+                .centerCrop()
                 .into(holder.mIvPic);
         return convertView;
     }

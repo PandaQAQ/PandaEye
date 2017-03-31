@@ -17,7 +17,6 @@ import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.adapters.TopNewsListAdapter;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.model.neteasynews.NewsBean;
-import com.pandaq.pandaeye.presenter.news.HeadLinePresenter;
 import com.pandaq.pandaeye.presenter.news.RecommendPresenter;
 import com.pandaq.pandaeye.rxbus.RxBus;
 import com.pandaq.pandaeye.rxbus.RxConstants;
@@ -40,7 +39,7 @@ import io.reactivex.disposables.Disposable;
  * Email 767807368@qq.com
  */
 
-public class RecommendFragment extends BaseFragment implements INewsListFrag, SwipeRefreshLayout.OnRefreshListener, BaseRecyclerAdapter.OnItemClickListener {
+public class HealthFragment extends BaseFragment implements INewsListFrag, SwipeRefreshLayout.OnRefreshListener, BaseRecyclerAdapter.OnItemClickListener {
 
     @BindView(R.id.newsRecycler)
     MagicRecyclerView mNewsRecycler;
@@ -235,7 +234,7 @@ public class RecommendFragment extends BaseFragment implements INewsListFrag, Sw
         //跳转到其他界面
         NewsBean topNews = (NewsBean) data.getData();
         Bundle bundle = new Bundle();
-        Intent intent = new Intent(RecommendFragment.this.getActivity(), TopNewsInfoActivity.class);
+        Intent intent = new Intent(HealthFragment.this.getActivity(), TopNewsInfoActivity.class);
         bundle.putString(Constants.BUNDLE_KEY_TITLE, topNews.getTitle());
         bundle.putString(Constants.BUNDLE_KEY_ID, topNews.getDocid());
         bundle.putString(Constants.BUNDLE_KEY_IMG_URL, topNews.getImgsrc());

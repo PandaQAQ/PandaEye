@@ -1,7 +1,9 @@
 package com.pandaq.pandaeye.ui.setting;
 
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -9,6 +11,8 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -38,7 +42,7 @@ import io.reactivex.schedulers.Schedulers;
  * Email:767807368@qq.com
  */
 
-public class ChoosePhotoActivity extends SwipeBackActivity {
+public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterView.OnItemClickListener {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.tv_select_album)
@@ -48,6 +52,7 @@ public class ChoosePhotoActivity extends SwipeBackActivity {
     private Map<String, ArrayList<String>> picMap = new HashMap<>();
     private Disposable mDisposable;
     private CheckPicAdapter mPicAdapter;
+    private final int CROP_PHOTO = 10;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +60,7 @@ public class ChoosePhotoActivity extends SwipeBackActivity {
         setContentView(R.layout.activity_choose_photo);
         ButterKnife.bind(this);
         initImages();
+        mGvPictures.setOnItemClickListener(this);
     }
 
     private void initImages() {
@@ -82,12 +88,10 @@ public class ChoosePhotoActivity extends SwipeBackActivity {
                 picMap.get(parentPath).add(path);
             }
         }
-        System.out.println(picMap.size());
         cursor.close();
         Observable.create(new ObservableOnSubscribe<Map<String, ArrayList<String>>>() {
             @Override
             public void subscribe(ObservableEmitter<Map<String, ArrayList<String>>> e) throws Exception {
-                System.out.println(picMap.size());
                 e.onNext(picMap);
             }
         }).subscribeOn(Schedulers.io())
@@ -140,5 +144,42 @@ public class ChoosePhotoActivity extends SwipeBackActivity {
         if (mDisposable != null && !mDisposable.isDisposed()) {
             mDisposable.dispose();
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String imagePath = mPicAdapter.getItem(position);
+        File file = new File(imagePath);
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(Uri.fromFile(file), "image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 0.1);
+        intent.putExtra("aspectY", 0.1);
+        intent.putExtra("outputX", 150);
+        intent.putExtra("outputY", 150);
+        intent.putExtra("return-data", true);
+        intent.putExtra("scale", true);
+        startActivityForResult(intent, CROP_PHOTO);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case CROP_PHOTO: //裁剪照片后
+                if (data != null) {
+                    setPicToView(data);
+                }
+        }
+    }
+
+    /**
+     * 将获取的头像显示在imageview中
+     *
+     * @param picData 裁剪后的图片数据
+     */
+    private void setPicToView(Intent picData) {
+        setResult(RESULT_OK, picData);
+        this.finish();
     }
 }

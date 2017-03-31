@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class RecommendNewsList {
 
-    @SerializedName(Constants.NETEASY_NEWS_RECOMMEND)
+    @SerializedName(Constants.NETEASY_NEWS_HEALTH)
 
     private ArrayList<NewsBean> mRecommNewsArrayList;
 

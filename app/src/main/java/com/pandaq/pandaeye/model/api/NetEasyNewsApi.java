@@ -29,7 +29,7 @@ public interface NetEasyNewsApi {
     @GET("list/"+Constants.NETEASY_NEWS_SPORT + "/{index}-20.html")
     Observable<SportNewsList> getSportNews(@Path("index") String index);
 
-    @GET("list/"+Constants.NETEASY_NEWS_RECOMMEND + "/{index}-20.html")
+    @GET("list/"+Constants.NETEASY_NEWS_HEALTH + "/{index}-20.html")
     Observable<RecommendNewsList> getRecommendNews(@Path("index") String index);
 
     @GET("list/"+Constants.NETEASY_NEWS_DADA + "/{index}-20.html")
