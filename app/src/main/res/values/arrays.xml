@@ -19,4 +19,11 @@
         <item>军事</item>
         <item>旅游</item>
     </array>
+
+    <array name="splash_background">
+        <item>file:///android_asset/splash_01.jpg</item>
+        <item>file:///android_asset/splash_02.jpg</item>
+        <item>file:///android_asset/splash_03.jpg</item>
+        <item>file:///android_asset/splash_04.jpg</item>
+    </array>
 </resources>

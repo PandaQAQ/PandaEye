@@ -1,11 +1,9 @@
 package com.pandaq.pandaeye.ui.base;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,6 +28,7 @@ import com.pandaq.pandaeye.ui.video.VideoCircleFragment;
 import com.pandaq.pandaeye.ui.zhihu.ZhihuDailyFragment;
 import com.pandaq.pandaeye.utils.BlurImageUtils;
 import com.pandaq.pandaeye.utils.DataCleanManager;
+import com.pandaq.pandaeye.utils.ViewUtils;
 import com.pandaq.pandaeye.widget.NavItem;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -129,7 +128,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         mBubbleFragment = new VideoCircleFragment();
         mNewsFragment = new NewsListFragment();
         Picasso.with(this)
-                .load("file://" + getAppFile(this, "images/user.png"))
+                .load("file://" + ViewUtils.getAppFile(this, "images/user.png"))
                 .error(getResources().getDrawable(R.drawable.userimage))
                 .into(mUserimage, new Callback() {
                     @Override
@@ -334,8 +333,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         // 保存头像到sdcard
         FileOutputStream fos;
         try {
-            File file = new File(getAppFile(this, "images"));
-            File image = new File(getAppFile(this, "images/user.png"));
+            File file = new File(ViewUtils.getAppFile(this, "images"));
+            File image = new File(ViewUtils.getAppFile(this, "images/user.png"));
             if (!file.exists()) {
                 file.mkdirs();
                 if (!image.exists()) {
@@ -349,20 +348,5 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * 获取本应用在系统的存储目录
-     */
-    private String getAppFile(Context context, String uniqueName) {
-        String cachePath = null;
-        if ((Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
-                || !Environment.isExternalStorageRemovable())
-                && context.getExternalCacheDir() != null) {
-            cachePath = context.getExternalCacheDir().getParent();
-        } else {
-            cachePath = context.getCacheDir().getParent();
-        }
-        return cachePath + File.separator + uniqueName;
     }
 }

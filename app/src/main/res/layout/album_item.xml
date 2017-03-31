@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_item"
+    android:layout_width="match_parent"
+    android:layout_height="96dp"
+    android:layout_margin="@dimen/base_margin"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_8dp">
+
+
+        <ImageView
+            android:id="@+id/iv_cover"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="@dimen/base_margin"/>
+
+        <TextView
+            android:id="@+id/tv_file_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/iv_cover"
+            android:text="微信"
+            android:textColor="@color/black_000000"
+            android:textSize="@dimen/text_size_small"/>
+
+        <TextView
+            android:id="@+id/tv_file_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@id/iv_cover"
+            android:text="11张"
+            android:textSize="@dimen/text_size_small"/>
+
+        <RadioButton
+            android:id="@+id/rb_check_status"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

@@ -37,4 +37,5 @@
     <string name="make_dir_fail">创建文件失败！</string>
     <string name="select_album">所有图片</string>
     <string name="pictures">图片</string>
+    <string name="all_pictures">全部图片</string>
 </resources>

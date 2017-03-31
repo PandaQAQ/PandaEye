@@ -3,14 +3,19 @@ package com.pandaq.pandaeye.ui.setting;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -18,7 +23,9 @@ import android.widget.TextView;
 
 import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.R;
+import com.pandaq.pandaeye.adapters.AlbumAdapter;
 import com.pandaq.pandaeye.adapters.CheckPicAdapter;
+import com.pandaq.pandaeye.model.ImageBean;
 import com.pandaq.pandaeye.ui.base.SwipeBackActivity;
 
 import java.io.File;
@@ -28,6 +35,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -53,12 +61,15 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
     private Disposable mDisposable;
     private CheckPicAdapter mPicAdapter;
     private final int CROP_PHOTO = 10;
+    private BottomSheetDialog mBottomSheetDialog;
+    private ArrayList<ImageBean> mImageBeen;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_photo);
         ButterKnife.bind(this);
+        mImageBeen = new ArrayList<>();
         initImages();
         mGvPictures.setOnItemClickListener(this);
     }
@@ -100,8 +111,18 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
                     public ArrayList<String> apply(Map<String, ArrayList<String>> stringArrayListMap) throws Exception {
                         ArrayList<String> allPath = new ArrayList<>();
                         for (Map.Entry<String, ArrayList<String>> entry : stringArrayListMap.entrySet()) {
+                            ImageBean imageBean = new ImageBean();
+                            imageBean.setFileName(entry.getKey());
+                            imageBean.setImages(entry.getValue());
+                            imageBean.setTopImage(entry.getValue().get(0));
+                            mImageBeen.add(imageBean);
                             allPath.addAll(entry.getValue());
                         }
+                        ImageBean all = new ImageBean();
+                        all.setFileName(getString(R.string.all_pictures));
+                        all.setTopImage(allPath.get(0));
+                        all.setImages(allPath);
+                        mImageBeen.add(0, all);
                         return allPath;
                     }
                 })
@@ -115,6 +136,7 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
                     @Override
                     public void onNext(ArrayList<String> value) {
                         showPics(value);
+                        initBottomDialog();
                     }
 
                     @Override
@@ -136,6 +158,47 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
         } else {
             mPicAdapter.setPicPaths(value);
         }
+    }
+
+    private void initBottomDialog() {
+        mBottomSheetDialog = new BottomSheetDialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_bottom_sheet, null, false);
+        mBottomSheetDialog.setContentView(view);
+        RecyclerView recyclerView = (RecyclerView) mBottomSheetDialog.findViewById(R.id.rv_album_list);
+        assert recyclerView != null;
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setSmoothScrollbarEnabled(true);
+        recyclerView.setLayoutManager(layoutManager);
+        AlbumAdapter adapter = new AlbumAdapter(mImageBeen, this);
+        adapter.setItemClickListener(new AlbumAdapter.OnItemClickListener() {
+            @Override
+            public void OnItemClick(ArrayList<String> images) {
+                showPics(images);
+                mBottomSheetDialog.dismiss();
+            }
+        });
+        recyclerView.setAdapter(adapter);
+        setBehaviorCallback();
+    }
+
+    private void setBehaviorCallback() {
+        View view = mBottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet);
+        assert view != null;
+        final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(view);
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    mBottomSheetDialog.dismiss();
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+            }
+        });
     }
 
     @Override
@@ -181,5 +244,14 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
     private void setPicToView(Intent picData) {
         setResult(RESULT_OK, picData);
         this.finish();
+    }
+
+    @OnClick(R.id.tv_select_album)
+    public void onViewClicked() {
+        if (mBottomSheetDialog.isShowing()) {
+            mBottomSheetDialog.dismiss();
+        } else {
+            mBottomSheetDialog.show();
+        }
     }
 }

@@ -27,6 +27,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
+import android.os.Environment;
 import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
@@ -39,12 +40,15 @@ import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.ImageView;
 
+import java.io.File;
+
 /**
  * Utility methods for working with Views.
  */
 public class ViewUtils {
 
-    private ViewUtils() { }
+    private ViewUtils() {
+    }
 
     private static int actionBarSize = -1;
 
@@ -63,12 +67,12 @@ public class ViewUtils {
      * PhoneWindowManager.
      */
     public static boolean isNavBarOnBottom(@NonNull Context context) {
-        final Resources res= context.getResources();
+        final Resources res = context.getResources();
         final Configuration cfg = context.getResources().getConfiguration();
-        final DisplayMetrics dm =res.getDisplayMetrics();
+        final DisplayMetrics dm = res.getDisplayMetrics();
         boolean canMove = (dm.widthPixels != dm.heightPixels &&
                 cfg.smallestScreenWidthDp < 600);
-        return(!canMove || dm.widthPixels < dm.heightPixels);
+        return (!canMove || dm.widthPixels < dm.heightPixels);
     }
 
     public static RippleDrawable createRipple(@ColorInt int color,
@@ -129,7 +133,7 @@ public class ViewUtils {
 
     /**
      * Recursive binary search to find the best size for the text.
-     *
+     * <p>
      * Adapted from https://github.com/grantland/android-autofittextview
      */
     public static float getSingleLineTextSize(String text,
@@ -246,4 +250,18 @@ public class ViewUtils {
                 paddingBottom);
     }
 
+    /**
+     * 获取本应用在系统的存储目录
+     */
+    public static String getAppFile(Context context, String uniqueName) {
+        String cachePath = null;
+        if ((Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
+                || !Environment.isExternalStorageRemovable())
+                && context.getExternalCacheDir() != null) {
+            cachePath = context.getExternalCacheDir().getParent();
+        } else {
+            cachePath = context.getCacheDir().getParent();
+        }
+        return cachePath + File.separator + uniqueName;
+    }
 }

@@ -17,8 +17,7 @@
             android:id="@+id/movie_pic"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/movie"/>
+            android:scaleType="fitXY"/>
 
         <TextView
             android:id="@+id/movie_name"
