@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <ImageView
         android:id="@+id/iv_background"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_splash_image"

@@ -53,18 +53,17 @@ public class HeadLineFragment extends BaseFragment implements INewsListFrag, Swi
     private Disposable mDisposable;
     private LinearLayoutManager mLinearLayoutManager;
     private Unbinder mUnbinder;
-    private View mView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mView = getActivity().getLayoutInflater().inflate(R.layout.headline_newslist_fragment, null, false);
-        mUnbinder = ButterKnife.bind(this, mView);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.headline_newslist_fragment, null, false);
+        mUnbinder = ButterKnife.bind(this, view);
         mLinearLayoutManager = new LinearLayoutManager(this.getContext());
         mNewsRecycler.setLayoutManager(mLinearLayoutManager);
-        //屏蔽掉默认的动画，房子刷新时图片闪烁
+        //屏蔽掉默认的动画，防止刷新时图片闪烁
         mNewsRecycler.getItemAnimator().setChangeDuration(0);
         initView();
-        return mView;
+        return view;
     }
 
     @Override
@@ -147,6 +146,7 @@ public class HeadLineFragment extends BaseFragment implements INewsListFrag, Swi
 
     @Override
     public void refreshNewsSuccessed(ArrayList<BaseItem> topNews) {
+        System.out.println(topNews);
         if (topNews == null || topNews.size() <= 0) {
             mEmptyMsg.setVisibility(View.VISIBLE);
             mNewsRecycler.setVisibility(View.INVISIBLE);

@@ -1,6 +1,7 @@
 package com.pandaq.pandaeye.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,11 @@ public class CheckPicAdapter extends BaseAdapter {
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
+        }
+        if (mPicPaths.get(position).equals("/android_asset/ic_camera_alt.png")) {
+            holder.mIvPic.setImageTintList(ColorStateList.valueOf(mContext.getResources().getColor(R.color.grey_adbec0)));
+        } else {
+            holder.mIvPic.setImageTintList(null);
         }
         Picasso.with(mContext)
                 .load("file://" + mPicPaths.get(position))

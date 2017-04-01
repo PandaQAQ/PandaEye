@@ -97,6 +97,16 @@
         <meta-data
             android:name="QBSDKAppKey"
             android:value="iahkz0B5LQ171VoCrdaflZl2"/>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.pandaq.pandaeye.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths"/>
+        </provider>
     </application>
 
 </manifest>

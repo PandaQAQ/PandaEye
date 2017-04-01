@@ -3,6 +3,8 @@ package com.pandaq.pandaeye.ui.base;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
@@ -30,6 +32,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN , WindowManager.LayoutParams. FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         String[] images = getResources().getStringArray(R.array.splash_background);
@@ -45,6 +48,7 @@ public class SplashActivity extends BaseActivity {
         animation.setDuration(1000);
         mIvSplashImage.startAnimation(animation);
         animation.setAnimationListener(new AnimationImpl());
+
     }
 
     private class AnimationImpl implements Animation.AnimationListener {
@@ -66,4 +70,5 @@ public class SplashActivity extends BaseActivity {
         }
 
     }
+
 }

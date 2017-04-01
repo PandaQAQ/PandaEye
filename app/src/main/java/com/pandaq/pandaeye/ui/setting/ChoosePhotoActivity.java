@@ -1,9 +1,11 @@
 package com.pandaq.pandaeye.ui.setting;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -12,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +23,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.R;
@@ -27,6 +31,7 @@ import com.pandaq.pandaeye.adapters.AlbumAdapter;
 import com.pandaq.pandaeye.adapters.CheckPicAdapter;
 import com.pandaq.pandaeye.model.ImageBean;
 import com.pandaq.pandaeye.ui.base.SwipeBackActivity;
+import com.pandaq.pandaeye.utils.ViewUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -63,6 +68,7 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
     private final int CROP_PHOTO = 10;
     private BottomSheetDialog mBottomSheetDialog;
     private ArrayList<ImageBean> mImageBeen;
+    private final int ACTION_TAKE_PHOTO = 20;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,7 +76,18 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
         setContentView(R.layout.activity_choose_photo);
         ButterKnife.bind(this);
         mImageBeen = new ArrayList<>();
-        initImages();
+        requestRunTimePermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE}, new PermissionCall() {
+            @Override
+            public void requestSuccess() {
+                initImages();
+            }
+
+            @Override
+            public void refused() {
+                Toast.makeText(ChoosePhotoActivity.this, "请授予读写和相机权限", Toast.LENGTH_LONG).show();
+            }
+        });
         mGvPictures.setOnItemClickListener(this);
     }
 
@@ -80,7 +97,8 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
         }
         Uri imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         ContentResolver contentResolver = CustomApplication.getContext().getContentResolver();
-        Cursor cursor = contentResolver.query(imageUri, null, MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?"
+        Cursor cursor = contentResolver.query(imageUri, null, MediaStore.Images.Media.MIME_TYPE + "=? or "
+                        + MediaStore.Images.Media.MIME_TYPE + "=?"
                 , new String[]{"image/jpeg", "image/png"}, MediaStore.Images.Media.DATE_MODIFIED);
         if (cursor == null) {
             showSnackBar(mTvSelectAlbum, "未发现存储设备！", Snackbar.LENGTH_SHORT);
@@ -118,9 +136,10 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
                             mImageBeen.add(imageBean);
                             allPath.addAll(entry.getValue());
                         }
+                        allPath.add(0, "/android_asset/ic_camera_alt.png");
                         ImageBean all = new ImageBean();
                         all.setFileName(getString(R.string.all_pictures));
-                        all.setTopImage(allPath.get(0));
+                        all.setTopImage(allPath.get(1)); //去掉相机图片
                         all.setImages(allPath);
                         mImageBeen.add(0, all);
                         return allPath;
@@ -212,9 +231,52 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String imagePath = mPicAdapter.getItem(position);
+        if (imagePath.equals("/android_asset/ic_camera_alt.png")) {
+            takePhoto();
+            return;
+        }
+        cropPic(imagePath);
+    }
+
+
+    /**
+     * 拍照
+     */
+    private void takePhoto() {
+        try {
+            Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+            File file = new File(ViewUtils.getAppFile(this, "images"));
+            File mPhotoFile = new File(ViewUtils.getAppFile(this, "images/user_take.jpg"));
+            if (!file.exists()) {
+                file.mkdirs();
+                if (!mPhotoFile.exists()) {
+                    mPhotoFile.createNewFile();
+                }
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Uri contentUri = FileProvider.getUriForFile(this, "com.pandaq.pandaeye.fileprovider", mPhotoFile);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
+            } else {
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
+            }
+            startActivityForResult(intent, ACTION_TAKE_PHOTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void cropPic(String imagePath) {
         File file = new File(imagePath);
         Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(Uri.fromFile(file), "image/*");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri contentUri = FileProvider.getUriForFile(this, "com.pandaq.pandaeye.fileprovider", file);
+            intent.setDataAndType(contentUri, "image/*");
+        } else {
+            intent.setDataAndType(Uri.fromFile(file), "image/*");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", 0.1);
         intent.putExtra("aspectY", 0.1);
@@ -233,6 +295,16 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
                 if (data != null) {
                     setPicToView(data);
                 }
+                break;
+            case ACTION_TAKE_PHOTO:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    cropPic(ViewUtils.getAppFile(this, "images/user_take.jpg"));
+                } else {
+                    if (data != null) {
+                        cropPic(ViewUtils.getAppFile(this, "images/user_take.jpg"));
+                    }
+                }
+                break;
         }
     }
 
