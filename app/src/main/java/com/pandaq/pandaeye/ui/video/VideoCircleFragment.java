@@ -147,7 +147,8 @@ public class VideoCircleFragment extends BaseFragment implements IVideoListFrag,
         //配置底部列表故事
         mBaseItems.clear();
         for (RetDataBean.ListBean listBean : listBeen) {
-            if (!TextUtils.isEmpty(listBean.getMoreURL())) {
+            if (!TextUtils.isEmpty(listBean.getMoreURL()) &&
+                    !listBean.getTitle().equals("直播专区") && !listBean.getTitle().equals("专题")) {
                 BaseItem<RetDataBean.ListBean> baseItem = new BaseItem<>();
                 baseItem.setData(listBean);
                 mBaseItems.add(baseItem);

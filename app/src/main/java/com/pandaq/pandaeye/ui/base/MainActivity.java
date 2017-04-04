@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -14,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
@@ -194,7 +196,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 .addItem(new BottomNavigationItem(R.drawable.ic_home, getString(R.string.nav_00_title)).setActiveColorResource(R.color.colorPrimary))
                 .addItem(new BottomNavigationItem(R.drawable.ic_view_headline, getString(R.string.nav_01_title)).setActiveColorResource(R.color.colorPrimary))
                 .addItem(new BottomNavigationItem(R.drawable.ic_live_tv, getString(R.string.nav_02_title)).setActiveColorResource(R.color.colorPrimary))
-                .addItem(new BottomNavigationItem(R.drawable.ic_explore, getString(R.string.nav_03_title)).setActiveColorResource(R.color.colorPrimary))
+                //暂时没想好做个神马功能
+//                .addItem(new BottomNavigationItem(R.drawable.ic_explore, getString(R.string.nav_03_title)).setActiveColorResource(R.color.colorPrimary))
                 .setFirstSelectedPosition(0)
                 .setTabSelectedListener(this)
                 .initialise();
@@ -227,9 +230,9 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
             case 2:
                 switchContent(mBubbleFragment);
                 break;
-            case 3:
-                switchContent(mMovieFragment);
-                break;
+//            case 3:
+//                switchContent(mMovieFragment);
+//                break;
             default:
                 break;
         }
@@ -293,14 +296,14 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 break;
             case R.id.nav_favorite:
                 drawerIntentAction = FAVORITE;
-                System.out.println("nav_favorite");
+                Toast.makeText(this, "敬请期待", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_download:
                 drawerIntentAction = VIDEO;
-                System.out.println("nav_download");
+                Toast.makeText(this, "敬请期待", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_share:
-                System.out.println("nav_share");
+                Toast.makeText(this, "敬请期待", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_about:
                 mDrawerLayout.closeDrawers();

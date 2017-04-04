@@ -87,7 +87,7 @@ public class SwipeBackLayout extends FrameLayout {
             case MotionEvent.ACTION_DOWN:
                 downX = tempX = (int) ev.getRawX();
                 downY = (int) ev.getRawY();
-                canSwipe = downX <= viewWidth / 4;
+                canSwipe = downX <= viewWidth / 2;
                 if (!canSwipe) {
                     return super.onInterceptTouchEvent(ev);
                 }

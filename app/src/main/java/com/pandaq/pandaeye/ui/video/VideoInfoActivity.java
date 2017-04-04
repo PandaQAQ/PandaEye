@@ -10,7 +10,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,7 +21,6 @@ import com.pandaq.pandaeye.rxbus.RxBus;
 import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.ui.base.SwipeBackActivity;
 import com.pandaq.pandaeye.utils.PicassoTarget;
-import com.pandaq.pandaqlib.SwipeBackLayout;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -73,7 +71,7 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
     private void initView() {
         Bundle bundle = getIntent().getExtras();
         String title = bundle.getString(Constants.BUNDLE_KEY_TITLE);
-        String currentDataId = bundle.getString(Constants.BUNDLE_KEY_ID);
+        String idOrUrl = bundle.getString(Constants.BUNDLE_KEY_ID);
         String pic = bundle.getString(Constants.BUNDLE_KEY_IMG_URL);
         mToolbarTitle.setText(title);
         mJcVideoPlayer.backButton.setVisibility(View.GONE);
@@ -87,7 +85,7 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
         //将首次需要加载的电影Id传递过去
         VideoInfoFragment videoInfoFragment = new VideoInfoFragment();
         Bundle arg = new Bundle();
-        arg.putString(Constants.BUNDLE_KEY_DATAID, currentDataId);
+        arg.putString(Constants.BUNDLE_KEY_DATAID, idOrUrl);
         videoInfoFragment.setArguments(arg);
         VideoCommentFrag videoCommentFrag = new VideoCommentFrag();
         videoCommentFrag.setArguments(arg);

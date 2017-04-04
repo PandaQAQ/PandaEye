@@ -75,6 +75,13 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_photo);
         ButterKnife.bind(this);
+        setSupportActionBar(mToolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChoosePhotoActivity.this.finish();
+            }
+        });
         mImageBeen = new ArrayList<>();
         requestRunTimePermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE}, new PermissionCall() {
@@ -233,9 +240,9 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
         String imagePath = mPicAdapter.getItem(position);
         if (imagePath.equals("/android_asset/ic_camera_alt.png")) {
             takePhoto();
-            return;
+        } else {
+            cropPic(imagePath);
         }
-        cropPic(imagePath);
     }
 
 
@@ -248,9 +255,9 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
             File file = new File(ViewUtils.getAppFile(this, "images"));
             File mPhotoFile = new File(ViewUtils.getAppFile(this, "images/user_take.jpg"));
             if (!file.exists()) {
-                file.mkdirs();
+                boolean result = file.mkdirs();
                 if (!mPhotoFile.exists()) {
-                    mPhotoFile.createNewFile();
+                    boolean b = mPhotoFile.createNewFile();
                 }
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -275,7 +282,6 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
             intent.setDataAndType(contentUri, "image/*");
         } else {
             intent.setDataAndType(Uri.fromFile(file), "image/*");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", 0.1);
@@ -289,7 +295,6 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case CROP_PHOTO: //裁剪照片后
                 if (data != null) {

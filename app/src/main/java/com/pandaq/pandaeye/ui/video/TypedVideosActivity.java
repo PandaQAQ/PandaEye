@@ -17,7 +17,6 @@ import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.model.video.TypedVideos;
 import com.pandaq.pandaeye.presenter.video.TypedVideosPresenter;
 import com.pandaq.pandaeye.ui.ImplView.ITypedVideosActivity;
-import com.pandaq.pandaeye.ui.base.BaseActivity;
 import com.pandaq.pandaeye.ui.base.SwipeBackActivity;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
@@ -93,14 +92,14 @@ public class TypedVideosActivity extends SwipeBackActivity implements ITypedVide
     public void loadMoreSuccess(ArrayList<BaseItem> list) {
         loading = false;
         mTvEmptyMsg.setVisibility(View.GONE);
-        if (mAdapter == null) {
-            mAdapter = new TypedVideosAdapter(this);
-            mAdapter.setBaseDatas(list);
-            mMrvVideoList.setAdapter(mAdapter);
-            mMrvVideoList.addOnItemClickListener(this);
-        } else {
-            mAdapter.addBaseDatas(list);
-        }
+            if (mAdapter == null) {
+                mAdapter = new TypedVideosAdapter(this);
+                mAdapter.setBaseDatas(list);
+                mMrvVideoList.setAdapter(mAdapter);
+                mMrvVideoList.addOnItemClickListener(this);
+            } else {
+                mAdapter.addBaseDatas(list);
+            }
     }
 
     @Override
