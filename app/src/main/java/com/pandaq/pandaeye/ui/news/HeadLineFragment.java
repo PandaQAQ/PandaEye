@@ -146,7 +146,6 @@ public class HeadLineFragment extends BaseFragment implements INewsListFrag, Swi
 
     @Override
     public void refreshNewsSuccessed(ArrayList<BaseItem> topNews) {
-        System.out.println(topNews);
         if (topNews == null || topNews.size() <= 0) {
             mEmptyMsg.setVisibility(View.VISIBLE);
             mNewsRecycler.setVisibility(View.INVISIBLE);
