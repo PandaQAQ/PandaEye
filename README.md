@@ -12,7 +12,7 @@
 
 # 界面功能
 <div width = "300" height = "300" align="center">
-<img src="http://oddbiem8l.bkt.clouddn.com/ezgif.com-video-to-gif.gif" width = "200" height = "300" alt="侧滑菜单"/>
+<img src="http://oddbiem8l.bkt.clouddn.com/ezgif.com-video-to-gif.gif" width = "200" height = "300" alt="动态图总览"/>
 <img src="https://user-gold-cdn.xitu.io/2017/4/5/91fa0196ce8a1d224d88fccd6f5b7b1a.png" width = "200" height = "300" alt="侧滑菜单"/>
 </div>
 
