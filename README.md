@@ -5,6 +5,7 @@
 
 # TODO
 m3u8 视频离线缓存
+视频页面偶现闪退BUG修复
 
 # 仓库地址
 [https://github.com/PandaQAQ/PandaEye][0]
