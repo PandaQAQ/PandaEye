@@ -12,7 +12,7 @@ m3u8 视频离线缓存
 
 
 # APK 下载
-[PandaEye][2]
+[PandaEye（非最新代码打包）][2]
 
 # 界面功能
 <div width = "300" height = "300" align="center">
