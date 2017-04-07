@@ -310,7 +310,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 break;
             case R.id.nav_share:
                 drawerIntentAction = SHARE;
-                this.showShare("发现有趣的熊猫眼！点击下载http://oddbiem8l.bkt.clouddn.com/com.pandaq.pandaeye.apk", "分享下载地址");
+                this.showShare("发现有趣的熊猫眼！https://github.com/PandaQAQ/PandaEye/blob/master/README.md", "分享下载地址");
                 break;
             case R.id.nav_about:
                 drawerIntentAction = ABOUT_ME;
