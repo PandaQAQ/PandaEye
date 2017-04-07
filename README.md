@@ -89,7 +89,7 @@ limitations under the License.
 
   [0]: https://github.com/PandaQAQ/PandaEye
   [1]: https://github.com/PandaQAQ/MvpDemo
-  [2]: http://oddbiem8l.bkt.clouddn.com/com.pandaq.pandaeye.apk
+  [2]: http://oddbiem8l.bkt.clouddn.com/20170407.apk
   [3]: https://user-gold-cdn.xitu.io/2017/4/5/d5c265c122a2e6d9dda520ae5d3492b0.png
   [4]: https://user-gold-cdn.xitu.io/2017/4/5/cd53d5a0ce9358046102d0ea4675b9f4.png
   [5]: https://user-gold-cdn.xitu.io/2017/4/5/add239969036cb88027394fab7546cff.png
