@@ -11,6 +11,8 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+
+        ndk{abiFilters "armeabi", "armeabi-v7a", "x86", "mips"}
     }
     buildTypes {
         release {
