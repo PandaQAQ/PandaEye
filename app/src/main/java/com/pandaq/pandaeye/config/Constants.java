@@ -21,6 +21,7 @@ public class Constants {
     public static final String BUNDLE_KEY_TITLE = "title";//bundle传至用的key各处可以复用
     public static final String BUNDLE_KEY_ID = "id";
     public static final String BUNDLE_KEY_IMG_URL = "img_url";
+    public static final String BUNDLE_KEY_HTML_URL = "3gurl";
     public static final String BUNDLE_KEY_TRANSLATION_EXPORD = "expord";//转场动画是否为expord类型
     public static final String BUNDLE_KEY_DATAID = "dataId";
     /**

@@ -19,6 +19,7 @@ import com.pandaq.pandaeye.presenter.zhihu.ZhihuStoryInfoPresenter;
 import com.pandaq.pandaeye.ui.ImplView.IZhihuStoryInfoActivity;
 import com.pandaq.pandaeye.ui.base.ShareActivity;
 import com.pandaq.pandaeye.ui.base.SwipeBackActivity;
+import com.pandaq.pandaeye.ui.news.TopNewsInfoActivity;
 import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaeye.utils.PicassoTarget;
 import com.pandaq.pandaeye.utils.x5webview.WebUtils;
@@ -38,6 +39,7 @@ import butterknife.ButterKnife;
 public class ZhihuStoryInfoActivity extends ShareActivity implements IZhihuStoryInfoActivity {
 
     private static final float SCRIM_ADJUSTMENT = 0.075f;
+    private String shareUrl = "";
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.toolbar_layout)
@@ -78,7 +80,9 @@ public class ZhihuStoryInfoActivity extends ShareActivity implements IZhihuStory
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ZhihuStoryInfoActivity.this.showShare();
+                if (!TextUtils.isEmpty(shareUrl)) {
+                    ZhihuStoryInfoActivity.this.showShare(shareUrl, mToolbarTitle.getText().toString());
+                }
             }
         });
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -120,14 +124,18 @@ public class ZhihuStoryInfoActivity extends ShareActivity implements IZhihuStory
 
     @Override
     public void loadSuccess(ZhihuStoryContent zhihuStory) {
+        shareUrl = zhihuStory.getShare_url();
         Target target = new PicassoTarget(this, mStoryImg, mToolbarLayout, mToolbar, mFab);
         //不设置的话会有时候不加载图片
         mStoryImg.setTag(target);
-        Picasso.with(this)
-                .load(zhihuStory.getImage())
-                .resize(width, heigh)
-                .centerCrop()
-                .into(target);
+        String image = zhihuStory.getImage();
+        if (!TextUtils.isEmpty(image)) {
+            Picasso.with(this)
+                    .load(image)
+                    .resize(width, heigh)
+                    .centerCrop()
+                    .into(target);
+        }
         startPostponedEnterTransition();
         String url = zhihuStory.getShare_url();
         boolean isEmpty = TextUtils.isEmpty(zhihuStory.getBody());

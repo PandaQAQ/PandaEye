@@ -92,14 +92,14 @@ public class TypedVideosActivity extends SwipeBackActivity implements ITypedVide
     public void loadMoreSuccess(ArrayList<BaseItem> list) {
         loading = false;
         mTvEmptyMsg.setVisibility(View.GONE);
-            if (mAdapter == null) {
-                mAdapter = new TypedVideosAdapter(this);
-                mAdapter.setBaseDatas(list);
-                mMrvVideoList.setAdapter(mAdapter);
-                mMrvVideoList.addOnItemClickListener(this);
-            } else {
-                mAdapter.addBaseDatas(list);
-            }
+        if (mAdapter == null) {
+            mAdapter = new TypedVideosAdapter(this);
+            mAdapter.setBaseDatas(list);
+            mMrvVideoList.setAdapter(mAdapter);
+            mMrvVideoList.addOnItemClickListener(this);
+        } else {
+            mAdapter.addBaseDatas(list);
+        }
     }
 
     @Override

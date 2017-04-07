@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -78,9 +79,11 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
         mJcVideoPlayer.titleTextView.setVisibility(View.GONE);
         mJcVideoPlayer.tinyBackImageView.setVisibility(View.GONE);
         mJcVideoPlayer.thumbImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        Picasso.with(this)
-                .load(pic)
-                .into(new PicassoTarget(this, mJcVideoPlayer.thumbImageView, mToolbar));
+        if (!TextUtils.isEmpty(pic)) {
+            Picasso.with(this)
+                    .load(pic)
+                    .into(new PicassoTarget(this, mJcVideoPlayer.thumbImageView, mToolbar));
+        }
         final ArrayList<Fragment> fragments = new ArrayList<>();
         //将首次需要加载的电影Id传递过去
         VideoInfoFragment videoInfoFragment = new VideoInfoFragment();
@@ -152,9 +155,11 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
 
                     @Override
                     public void onNext(String value) {
-                        Picasso.with(VideoInfoActivity.this)
-                                .load(value)
-                                .into(new PicassoTarget(VideoInfoActivity.this, mJcVideoPlayer.thumbImageView, mToolbar));
+                        if (!TextUtils.isEmpty(value)) {
+                            Picasso.with(VideoInfoActivity.this)
+                                    .load(value)
+                                    .into(new PicassoTarget(VideoInfoActivity.this, mJcVideoPlayer.thumbImageView, mToolbar));
+                        }
                     }
 
                     @Override

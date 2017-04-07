@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,9 +42,12 @@ public class VideoTopPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = LayoutInflater.from(container.getContext()).inflate(R.layout.zhihutop_item, container, false);
         final ImageView mTopStoryImg = (ImageView) view.findViewById(R.id.top_story_img);
-        Picasso.with(mContext)
-                .load(mBanders.get(position).getPic())
-                .into(mTopStoryImg);
+        String image = mBanders.get(position).getPic();
+        if (!TextUtils.isEmpty(image)) {
+            Picasso.with(mContext)
+                    .load(image)
+                    .into(mTopStoryImg);
+        }
         mTopStoryImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

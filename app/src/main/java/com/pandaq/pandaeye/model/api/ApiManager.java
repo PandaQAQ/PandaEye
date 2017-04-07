@@ -1,6 +1,8 @@
 package com.pandaq.pandaeye.model.api;
 
+import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.config.Config;
+import com.pandaq.pandaqlib.okhttp.CustomInterceptor;
 
 import java.util.concurrent.TimeUnit;
 
@@ -38,6 +40,7 @@ public class ApiManager {
             }
         }
         mClient = new OkHttpClient.Builder()
+                .addInterceptor(new CustomInterceptor())
                 .connectTimeout(5, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .build();

@@ -7,6 +7,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -32,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TopNewsInfoActivity extends ShareActivity implements ITopNewsInfoActivity {
-
+    private String html_url = "";
     @BindView(R.id.news_img)
     FiveThreeImageView mNewsImg;
     @BindView(R.id.toolbar)
@@ -71,7 +72,9 @@ public class TopNewsInfoActivity extends ShareActivity implements ITopNewsInfoAc
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TopNewsInfoActivity.this.showShare();
+                if (!TextUtils.isEmpty(html_url)) {
+                    TopNewsInfoActivity.this.showShare(html_url, mToolbarTitle.getText().toString());
+                }
             }
         });
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -87,14 +90,17 @@ public class TopNewsInfoActivity extends ShareActivity implements ITopNewsInfoAc
         String news_id = bundle.getString(Constants.BUNDLE_KEY_ID);
         String newsImg = bundle.getString(Constants.BUNDLE_KEY_IMG_URL);
         String title = bundle.getString(Constants.BUNDLE_KEY_TITLE);
+        html_url = bundle.getString(Constants.BUNDLE_KEY_HTML_URL);
         loadTopNewsInfo(news_id);
         Target target = new PicassoTarget(this, mNewsImg, mToolbarLayout, mToolbar, mFab);
         //不设置的话会有时候不加载图片
         mNewsImg.setTag(target);
-        Picasso.with(this)
-                .load(newsImg)
-                .resize(width, heigh)
-                .into(target);
+        if (!TextUtils.isEmpty(newsImg)) {
+            Picasso.with(this)
+                    .load(newsImg)
+                    .resize(width, heigh)
+                    .into(target);
+        }
         mToolbarTitle.setText(title);
         mToolbarTitle.setSelected(true);
     }
@@ -123,7 +129,6 @@ public class TopNewsInfoActivity extends ShareActivity implements ITopNewsInfoAc
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void loadSuccess(NewsContent topNewsContent) {
-        System.out.println(topNewsContent.getBody());
         mWvTopnewsContent.getSettings().setJavaScriptEnabled(true);
         mWvTopnewsContent.getSettings().setUseWideViewPort(true);
         mWvTopnewsContent.getSettings().setLoadWithOverviewMode(true);

@@ -3,6 +3,7 @@ package com.pandaq.pandaeye.adapters;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,11 +49,13 @@ public class TopNewsListAdapter extends BaseRecyclerAdapter {
             NewsBean topNews = (NewsBean) data.getData();
             ((ViewHolder) holder).mNewsTitle.setText(topNews.getTitle());
             ((ViewHolder) holder).mSource.setText(topNews.getSource());
-            String image = topNews.getImgsrc();
-            Picasso.with(mContext)
-                    .load(image)
-                    .resize(widthPx, heighPx)
-                    .into(((ViewHolder) holder).mNewsImage);
+            String image = topNews.getImgsrc();//避免null引起Picasso崩溃
+            if (!TextUtils.isEmpty(image)) {
+                Picasso.with(mContext)
+                        .load(image)
+                        .resize(widthPx, heighPx)
+                        .into(((ViewHolder) holder).mNewsImage);
+            }
         }
     }
 

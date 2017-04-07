@@ -146,9 +146,11 @@ public class TecPresenter extends BasePresenter {
 
                     @Override
                     public void onSuccess(List<BaseItem> value) {
-                        //每刷新成功一次多加载20条
-                        currentIndex += 20;
-                        mNewsListFrag.loadMoreSuccessed((ArrayList<BaseItem>) value);
+                        if (value != null && value.size() > 0) {
+                            //每刷新成功一次多加载20条
+                            currentIndex += 20;
+                            mNewsListFrag.loadMoreSuccessed((ArrayList<BaseItem>) value);
+                        }
                     }
 
                     @Override

@@ -3,6 +3,7 @@ package com.pandaq.pandaeye.adapters;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,11 +50,14 @@ public class VideoCommentAdapter extends BaseRecyclerAdapter {
             ((ViewHolder) viewHolder).mTvUsername.setText(comment.getPhoneNumber());
             ((ViewHolder) viewHolder).mTvCommentText.setText(comment.getMsg());
             ((ViewHolder) viewHolder).mTvTimeText.setText(comment.getTime());
-//            Picasso.with(mContext)
-//                    .load(String.valueOf(comment.getUserPic()))
-//                    .resize(widthPx, heighPx)
-//                    .error(R.mipmap.ic_launcher)
-//                    .into(((ViewHolder) viewHolder).mCivUser);
+            String image =comment.getUserPic();
+            if (!TextUtils.isEmpty(image)) {
+                Picasso.with(mContext)
+                        .load(image)
+                        .resize(widthPx, heighPx)
+                        .error(R.mipmap.ic_launcher)
+                        .into(((ViewHolder) viewHolder).mCivUser);
+            }
         }
     }
 

@@ -28,6 +28,7 @@ import com.pandaq.pandaeye.ui.setting.AboutActivity;
 import com.pandaq.pandaeye.ui.setting.ChoosePhotoActivity;
 import com.pandaq.pandaeye.ui.video.VideoCircleFragment;
 import com.pandaq.pandaeye.ui.zhihu.ZhihuDailyFragment;
+import com.pandaq.pandaeye.ui.zhihu.ZhihuStoryInfoActivity;
 import com.pandaq.pandaeye.utils.BlurImageUtils;
 import com.pandaq.pandaeye.utils.DataCleanManager;
 import com.pandaq.pandaeye.utils.ViewUtils;
@@ -309,7 +310,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 break;
             case R.id.nav_share:
                 drawerIntentAction = SHARE;
-                Toast.makeText(this, "敬请期待", Toast.LENGTH_SHORT).show();
+                this.showShare("发现有趣的熊猫眼！点击下载http://oddbiem8l.bkt.clouddn.com/com.pandaq.pandaeye.apk", "分享下载地址");
                 break;
             case R.id.nav_about:
                 drawerIntentAction = ABOUT_ME;
@@ -357,5 +358,13 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void showShare(String url, String shareTitle) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+        shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(Intent.createChooser(shareIntent, shareTitle));
     }
 }
