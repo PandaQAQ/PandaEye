@@ -146,7 +146,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                     }
                 });
         initNavigation();
-        switchContent(mZhihuFragment);
+        switchContent(mBubbleFragment);
         mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -198,7 +198,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 .addItem(new BottomNavigationItem(R.drawable.ic_live_tv, getString(R.string.nav_02_title)).setActiveColorResource(R.color.colorPrimary))
                 //暂时没想好做个神马功能
 //                .addItem(new BottomNavigationItem(R.drawable.ic_explore, getString(R.string.nav_03_title)).setActiveColorResource(R.color.colorPrimary))
-                .setFirstSelectedPosition(0)
+                .setFirstSelectedPosition(2)
                 .setTabSelectedListener(this)
                 .initialise();
     }
