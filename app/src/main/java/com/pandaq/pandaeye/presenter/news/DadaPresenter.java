@@ -8,6 +8,7 @@ import com.pandaq.pandaeye.model.neteasynews.DadaNewsList;
 import com.pandaq.pandaeye.model.neteasynews.NewsBean;
 import com.pandaq.pandaeye.presenter.BasePresenter;
 import com.pandaq.pandaeye.ui.ImplView.INewsListFrag;
+import com.pandaq.pandaeye.utils.LogWritter;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;
@@ -146,12 +147,17 @@ public class DadaPresenter extends BasePresenter {
                     @Override
                     public void onSuccess(List<BaseItem> value) {
                         //每刷新成功一次多加载20条
-                        currentIndex += 20;
-                        mNewsListFrag.loadMoreSuccessed((ArrayList<BaseItem>) value);
+                        if (value != null && value.size() > 0) {
+                            currentIndex += 20;
+                            mNewsListFrag.loadMoreSuccessed((ArrayList<BaseItem>) value);
+                        } else {
+                            mNewsListFrag.loadAll();
+                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        LogWritter.LogStr(e.getMessage());
                         mNewsListFrag.loadMoreFail(e.getMessage());
                     }
 

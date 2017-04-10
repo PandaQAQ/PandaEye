@@ -3,6 +3,7 @@ package com.pandaq.pandaeye.adapters;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,10 +54,12 @@ public class VideoInfoAdapter extends BaseRecyclerAdapter {
         params.height = image_height;
         holder.mRlParent.setLayoutParams(params);
         String pic = listBean.getPic();
-        Picasso.with(mContext)
-                .load(pic) //加载第一张图
-                .resize(image_width, image_height)
-                .into(holder.mIvVideoType);
+        if (!TextUtils.isEmpty(pic)) {
+            Picasso.with(mContext)
+                    .load(pic) //加载第一张图
+                    .resize(image_width, image_height)
+                    .into(holder.mIvVideoType);
+        }
         holder.mTvVideoType.setText(listBean.getTitle());
     }
 

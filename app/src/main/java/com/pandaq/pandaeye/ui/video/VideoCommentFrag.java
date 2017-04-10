@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
@@ -153,7 +154,10 @@ public class VideoCommentFrag extends BaseFragment implements IVideoCommentFrag,
 
     public void noMore() {
         loadAble = false;
-        mMrvComment.getFooterView().setVisibility(View.GONE);
+        TextView ftText = (TextView) mMrvComment.getFooterView().findViewById(R.id.tv_footer_text);
+        ProgressBar ftPB = (ProgressBar) mMrvComment.getFooterView().findViewById(R.id.cp_progressbar);
+        ftPB.setVisibility(View.GONE);
+        ftText.setText(getString(R.string.nomore_data));
     }
 
     @Override

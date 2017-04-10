@@ -3,6 +3,7 @@ package com.pandaq.pandaeye.adapters;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,10 +48,12 @@ public class VideoListAdapter extends BaseRecyclerAdapter {
         ViewHolder holder = (ViewHolder) viewHolder;
         RetDataBean.ListBean listBean = (RetDataBean.ListBean) data.getData();
         String pic = listBean.getChildList().get(0).getPic();
-        Picasso.with(mContext)
-                .load(pic) //加载第一张图
-                .resize(image_width, image_height)
-                .into(holder.mIvVideoType);
+        if (!TextUtils.isEmpty(pic)) {
+            Picasso.with(mContext)
+                    .load(pic) //加载第一张图
+                    .resize(image_width, image_height)
+                    .into(holder.mIvVideoType);
+        }
         holder.mTvVideoType.setText(listBean.getTitle());
     }
 

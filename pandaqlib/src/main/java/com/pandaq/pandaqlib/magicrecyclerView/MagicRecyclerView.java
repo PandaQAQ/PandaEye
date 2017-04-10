@@ -246,4 +246,16 @@ public class MagicRecyclerView extends RecyclerView {
     public interface OnTagChangeListener {
         void onChange(String newTag);
     }
+
+    public void hideFooter() {
+        if (footerView != null && footerView.getVisibility() != GONE) {
+            footerView.setVisibility(GONE);
+        }
+    }
+
+    public void showFooter() {
+        if (footerView != null && footerView.getVisibility() != VISIBLE) {
+            footerView.setVisibility(VISIBLE);
+        }
+    }
 }

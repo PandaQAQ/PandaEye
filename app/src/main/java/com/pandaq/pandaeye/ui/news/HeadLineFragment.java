@@ -146,7 +146,6 @@ public class HeadLineFragment extends BaseFragment implements INewsListFrag, Swi
 
     @Override
     public void refreshNewsSuccessed(ArrayList<BaseItem> topNews) {
-        System.out.println(topNews);
         if (topNews == null || topNews.size() <= 0) {
             mEmptyMsg.setVisibility(View.VISIBLE);
             mNewsRecycler.setVisibility(View.INVISIBLE);
@@ -164,6 +163,7 @@ public class HeadLineFragment extends BaseFragment implements INewsListFrag, Swi
         } else {
             mAdapter.setBaseDatas(topNews);
         }
+        mNewsRecycler.showFooter();
     }
 
     @Override
@@ -183,6 +183,11 @@ public class HeadLineFragment extends BaseFragment implements INewsListFrag, Swi
     public void loadMoreSuccessed(ArrayList<BaseItem> topNewses) {
         loading = false;
         mAdapter.addBaseDatas(topNewses);
+    }
+
+    @Override
+    public void loadAll() {
+        mNewsRecycler.hideFooter();
     }
 
     @Override
@@ -239,6 +244,7 @@ public class HeadLineFragment extends BaseFragment implements INewsListFrag, Swi
         bundle.putString(Constants.BUNDLE_KEY_TITLE, topNews.getTitle());
         bundle.putString(Constants.BUNDLE_KEY_ID, topNews.getDocid());
         bundle.putString(Constants.BUNDLE_KEY_IMG_URL, topNews.getImgsrc());
+        bundle.putString(Constants.BUNDLE_KEY_HTML_URL, topNews.getUrl());
         intent.putExtras(bundle);
         String transitionName = getString(R.string.top_news_img);
         Pair pairImg = new Pair<>(view.findViewById(R.id.news_image), transitionName);

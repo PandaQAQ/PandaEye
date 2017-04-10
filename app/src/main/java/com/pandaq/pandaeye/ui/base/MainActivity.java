@@ -28,6 +28,7 @@ import com.pandaq.pandaeye.ui.setting.AboutActivity;
 import com.pandaq.pandaeye.ui.setting.ChoosePhotoActivity;
 import com.pandaq.pandaeye.ui.video.VideoCircleFragment;
 import com.pandaq.pandaeye.ui.zhihu.ZhihuDailyFragment;
+import com.pandaq.pandaeye.ui.zhihu.ZhihuStoryInfoActivity;
 import com.pandaq.pandaeye.utils.BlurImageUtils;
 import com.pandaq.pandaeye.utils.DataCleanManager;
 import com.pandaq.pandaeye.utils.ViewUtils;
@@ -52,6 +53,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     private final int ABOUT_ME = 10;
     private final int FAVORITE = 11;
     private final int VIDEO = 12;
+    private final int SHARE = 13;
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     @BindView(R.id.bottom_navgation)
@@ -64,7 +66,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     LinearLayout mNavigationHeaderContainer;
     private Fragment mCurrentFrag;
     private FragmentManager fm;
-    private Fragment mMovieFragment;
     private Fragment mZhihuFragment;
     private Fragment mNewsFragment;
     private Fragment mBubbleFragment;
@@ -125,7 +126,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
      * 几个Fragment都采用懒加载的方式，只有当用户可见状态下才做数据初始化操作
      */
     private void initView() {
-        mMovieFragment = new MovieListFragment();
         mZhihuFragment = new ZhihuDailyFragment();
         mBubbleFragment = new VideoCircleFragment();
         mNewsFragment = new NewsListFragment();
@@ -158,6 +158,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 drawerView.setClickable(true);
                 drawerOpen = true;
                 mCleanItem.setTvActionState(DataCleanManager.getTotalCacheSize(MainActivity.this));
+                // action 初始化
+                drawerIntentAction = 0;
             }
 
             @Override
@@ -171,6 +173,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                     case ABOUT_ME:
                         Intent intent = new Intent(MainActivity.this, AboutActivity.class);
                         startActivity(intent);
+                        break;
+                    case SHARE:
+                        break;
+                    default:
                         break;
                 }
             }
@@ -303,11 +309,12 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 Toast.makeText(this, "敬请期待", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_share:
-                Toast.makeText(this, "敬请期待", Toast.LENGTH_SHORT).show();
+                drawerIntentAction = SHARE;
+                this.showShare("发现有趣的熊猫眼！https://github.com/PandaQAQ/PandaEye/blob/master/README.md", "分享下载地址");
                 break;
             case R.id.nav_about:
-                mDrawerLayout.closeDrawers();
                 drawerIntentAction = ABOUT_ME;
+                mDrawerLayout.closeDrawers();
                 break;
             case R.id.nav_clean:
                 DataCleanManager.clearAllCache(this);
@@ -351,5 +358,13 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void showShare(String url, String shareTitle) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+        shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(Intent.createChooser(shareIntent, shareTitle));
     }
 }

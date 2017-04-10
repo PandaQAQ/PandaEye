@@ -1,40 +1,48 @@
 package com.pandaq.pandaeye.ui.base;
 
-import com.pandaq.pandaeye.R;
+import android.content.Intent;
+import android.net.Uri;
 
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
+import java.io.File;
 
 /**
  * Created by PandaQ on 2017/3/23.
  * 带分享的 Activity 继承至 SwipeBackActivity
  */
 
+/**
+ * 分享文本
+ */
 public class ShareActivity extends SwipeBackActivity {
-    public void showShare() {
-        ShareSDK.initSDK(this);
-        OnekeyShare oks = new OnekeyShare();
-        //关闭sso授权
-        oks.disableSSOWhenAuthorize();
+    public void showShare(String url, String shareTitle) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+        shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(Intent.createChooser(shareIntent, shareTitle));
+    }
 
-        // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间等使用
-        oks.setTitle("标题");
-        // titleUrl是标题的网络链接，QQ和QQ空间等使用
-        oks.setTitleUrl("http://sharesdk.cn");
-        // text是分享文本，所有平台都需要这个字段
-        oks.setText("我是分享文本");
-        // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
-        //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
-        // url仅在微信（包括好友和朋友圈）中使用
-        oks.setUrl("http://sharesdk.cn");
-        // comment是我对这条分享的评论，仅在人人网和QQ空间使用
-        oks.setComment("我是测试评论文本");
-        // site是分享此内容的网站名称，仅在QQ空间使用
-        oks.setSite(getString(R.string.app_name));
-        // siteUrl是分享此内容的网站地址，仅在QQ空间使用
-        oks.setSiteUrl("http://sharesdk.cn");
-
-// 启动分享GUI
-        oks.show(this);
+    /**
+     * 分享多内容功能
+     *
+     * @param activityTitle Activity的名字
+     * @param msgTitle      消息标题
+     * @param msgText       消息内容
+     * @param imgPath       图片路径，不分享图片则传null
+     */
+    public void showShare(String activityTitle, String msgTitle, String msgText,
+                          String imgPath) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        if (imgPath == null || imgPath.equals("")) {
+            intent.setType("text/plain"); // 纯文本
+        } else {
+            intent.setType("image/*");
+            File file = new File("file:///android_asset/splash_01.jpg");
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        }
+        intent.putExtra(Intent.EXTRA_SUBJECT, msgTitle);
+        intent.putExtra(Intent.EXTRA_TEXT, msgText);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(Intent.createChooser(intent, activityTitle));
     }
 }

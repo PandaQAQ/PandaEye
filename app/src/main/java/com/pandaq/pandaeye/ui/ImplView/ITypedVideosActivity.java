@@ -18,4 +18,5 @@ public interface ITypedVideosActivity {
     void loadMoreSuccess(ArrayList<BaseItem> list);
 
     void loadFail(String errCode, String errMsg);
+
 }

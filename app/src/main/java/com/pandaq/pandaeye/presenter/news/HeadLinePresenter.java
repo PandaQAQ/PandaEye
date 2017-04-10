@@ -98,6 +98,7 @@ public class HeadLinePresenter extends BasePresenter {
 
                     @Override
                     public void onError(Throwable e) {
+                        LogWritter.LogStr(e.getMessage() + "------------->errMsg");
                         mNewsListFrag.hideRefreshBar();
                         mNewsListFrag.refreshNewsFail(e.getMessage());
                     }
@@ -146,13 +147,18 @@ public class HeadLinePresenter extends BasePresenter {
 
                     @Override
                     public void onSuccess(List<BaseItem> value) {
-                        //每刷新成功一次多加载20条
-                        currentIndex += 20;
-                        mNewsListFrag.loadMoreSuccessed((ArrayList<BaseItem>) value);
+                        if (value != null && value.size() > 0) {
+                            //每刷新成功一次多加载20条
+                            currentIndex += 20;
+                            mNewsListFrag.loadMoreSuccessed((ArrayList<BaseItem>) value);
+                        } else {
+                            mNewsListFrag.loadAll();
+                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        LogWritter.LogStr(e.getMessage());
                         mNewsListFrag.loadMoreFail(e.getMessage());
                     }
 

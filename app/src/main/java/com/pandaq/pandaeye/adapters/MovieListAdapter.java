@@ -2,6 +2,7 @@ package com.pandaq.pandaeye.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,9 +45,12 @@ public class MovieListAdapter extends BaseRecyclerAdapter {
         float rate = movieSubject.getRating().getAverage();
         holder.mMovieRate.setText(toString(rate));
         holder.mMovieStarts.setRating(rate / 2);
-        Picasso.with(mFragment.getContext())
-                .load(movieSubject.getImages().getMedium())
-                .into(holder.mMoviePic);
+        String image = movieSubject.getImages().getMedium();
+        if (!TextUtils.isEmpty(image)) {
+            Picasso.with(mFragment.getContext())
+                    .load(image)
+                    .into(holder.mMoviePic);
+        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

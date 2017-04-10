@@ -3,6 +3,7 @@ package com.pandaq.pandaeye.adapters;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,18 +60,20 @@ public class ZhihuDailyAdapter extends BaseRecyclerAdapter {
             ZhiHuStory story = (ZhiHuStory) data.getData();
             ViewHolder holder = (ViewHolder) viewHolder;
             holder.mNewsTitle.setText(story.getTitle());
-            Picasso.with(mContext)
-                    .load(story.getImages().get(0)) //加载第一张图
-                    .centerCrop()
-                    .resize(image_width, image_height)
-                    .into(holder.mNewsImage);
+            String image = story.getImages().get(0);
+            if (!TextUtils.isEmpty(image))
+                Picasso.with(mContext)
+                        .load(image) //加载第一张图
+                        .centerCrop()
+                        .resize(image_width, image_height)
+                        .into(holder.mNewsImage);
         } else if (data.getItemType() == RecyclerItemType.TYPE_TAGS) { //日期标签
             String title = (String) data.getData();
             int year = Integer.parseInt(title.substring(0, 4));
             int mon = Integer.parseInt(title.substring(4, 6));
             int day = Integer.parseInt(title.substring(6, 8));
             Calendar calendar = Calendar.getInstance();
-            calendar.set(year, mon-1, day);
+            calendar.set(year, mon - 1, day);
             TitleHolder holder = (TitleHolder) viewHolder;
             holder.mItemTitle.setText(DateUtils.formatDate(calendar) + " | " + DateUtils.getWeek(calendar));
         }

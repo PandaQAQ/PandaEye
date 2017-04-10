@@ -6,7 +6,6 @@ package com.pandaq.pandaeye.config;
  * 应用配置类，用于配置
  */
 public class Config {
-
     public static final boolean DEBUG = true;
     public static String DOUBAN_API_URL = "http://api.douban.com/v2/";
     public static String ZHIHU_API_URL = "http://news-at.zhihu.com/api/4/";

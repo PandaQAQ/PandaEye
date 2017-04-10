@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,9 +54,12 @@ public class ZhihuTopPagerAdapter extends PagerAdapter {
         final ImageView mTopStoryImg = (ImageView) view.findViewById(R.id.top_story_img);
         TextView mTopStoryTitle = (TextView) view.findViewById(R.id.top_story_title);
         mTopStoryTitle.setText(mTopStories.get(position).getTitle());
-        Picasso.with(mContext)
-                .load(mTopStories.get(position).getImage())
-                .into(mTopStoryImg);
+        String image = mTopStories.get(position).getImage();
+        if (!TextUtils.isEmpty(image)) {
+            Picasso.with(mContext)
+                    .load(image)
+                    .into(mTopStoryImg);
+        }
         mTopStoryImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -2,6 +2,7 @@ package com.pandaq.pandaeye.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,10 +51,13 @@ public class TypedVideosAdapter extends BaseRecyclerAdapter {
         holder.mTvDuration.setText(mContext.getString(R.string.duration) + listBean.getDuration() + "");
         holder.mRbVideoStarts.setRating(listBean.getScore() / 2);
         holder.mTvVideoRate.setText(String.valueOf(listBean.getScore()));
-        Picasso.with(mContext)
-                .load(listBean.getPic())
-                .resize(image_width, image_height)
-                .into(holder.mIvVideo);
+        String image = listBean.getPic();
+        if (!TextUtils.isEmpty(image)) {
+            Picasso.with(mContext)
+                    .load(image)
+                    .resize(image_width, image_height)
+                    .into(holder.mIvVideo);
+        }
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

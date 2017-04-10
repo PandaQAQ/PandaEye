@@ -1,10 +1,9 @@
 package com.pandaq.pandaqlib.okhttp;
 
-import android.content.Context;
+import android.util.Log;
 
 import java.io.IOException;
 
-import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -15,14 +14,13 @@ import okhttp3.Response;
  */
 
 public class CustomInterceptor implements Interceptor {
-    private Context mContext;
-
-    public CustomInterceptor(Context context) {
-        mContext = context;
-    }
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        return chain.proceed(chain.request());
+        Request request = chain.request()
+                .newBuilder()
+                .header("User-agent", "Mozilla/4.0")
+                .build();
+        return chain.proceed(request);
     }
 }

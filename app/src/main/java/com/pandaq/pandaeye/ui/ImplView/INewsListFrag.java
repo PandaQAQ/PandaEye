@@ -26,4 +26,6 @@ public interface INewsListFrag {
     void loadMoreFail(String errorMsg);
 
     void loadMoreSuccessed(ArrayList<BaseItem> topNewses);
+
+    void loadAll();
 }
