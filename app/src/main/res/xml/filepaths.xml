@@ -6,4 +6,5 @@
     <external-path
         name="external_storage_root"
         path="."/>
+    <root-path path="" name="camera_photos" />
 </paths>
