@@ -55,16 +55,17 @@ public class CheckPicAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        if (mPicPaths.get(position).equals("/android_asset/ic_camera_alt.png")) {
+        if (mPicPaths.get(position).equals("ic_action_camera")) {
             holder.mIvPic.setImageTintList(ColorStateList.valueOf(mContext.getResources().getColor(R.color.grey_adbec0)));
+            holder.mIvPic.setBackground(mContext.getResources().getDrawable(R.drawable.ic_action_camera));
         } else {
             holder.mIvPic.setImageTintList(null);
+            Picasso.with(mContext)
+                    .load("file://" + mPicPaths.get(position))
+                    .fit()
+                    .centerCrop()
+                    .into(holder.mIvPic);
         }
-        Picasso.with(mContext)
-                .load("file://" + mPicPaths.get(position))
-                .fit()
-                .centerCrop()
-                .into(holder.mIvPic);
         return convertView;
     }
 

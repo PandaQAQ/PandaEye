@@ -143,7 +143,7 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
                             mImageBeen.add(imageBean);
                             allPath.addAll(entry.getValue());
                         }
-                        allPath.add(0, "/android_asset/ic_camera_alt.png");
+                        allPath.add(0, "ic_action_camera");
                         ImageBean all = new ImageBean();
                         all.setFileName(getString(R.string.all_pictures));
                         all.setTopImage(allPath.get(1)); //去掉相机图片
