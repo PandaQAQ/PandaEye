@@ -106,7 +106,7 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
         ContentResolver contentResolver = CustomApplication.getContext().getContentResolver();
         Cursor cursor = contentResolver.query(imageUri, null, MediaStore.Images.Media.MIME_TYPE + "=? or "
                         + MediaStore.Images.Media.MIME_TYPE + "=?"
-                , new String[]{"image/jpeg", "image/png"}, MediaStore.Images.Media.DATE_MODIFIED);
+                , new String[]{"image/jpeg", "image/jpg"}, MediaStore.Images.Media.DATE_MODIFIED);
         if (cursor == null) {
             showSnackBar(mTvSelectAlbum, "未发现存储设备！", Snackbar.LENGTH_SHORT);
             return;
@@ -295,20 +295,23 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        File mPhotoFile = new File(ViewUtils.getAppFile(this, "images/user_take.jpg"));
         switch (requestCode) {
             case CROP_PHOTO: //裁剪照片后
                 if (data != null) {
                     setPicToView(data);
                 }
+                //裁剪后删除拍照的照片
+                if (mPhotoFile.exists()) {
+                    //noinspection ResultOfMethodCallIgnored
+                    mPhotoFile.delete();
+                }
                 break;
             case ACTION_TAKE_PHOTO:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    cropPic(ViewUtils.getAppFile(this, "images/user_take.jpg"));
-                } else {
-                    if (data != null) {
-                        cropPic(ViewUtils.getAppFile(this, "images/user_take.jpg"));
-                    }
+                if (!mPhotoFile.exists()) {
+                    return;
                 }
+                cropPic(ViewUtils.getAppFile(this, "images/user_take.jpg"));
                 break;
         }
     }
@@ -331,4 +334,5 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
             mBottomSheetDialog.show();
         }
     }
+
 }

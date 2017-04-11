@@ -4,8 +4,8 @@
 - 像之前的 [MVPDemo][1] 这个仓库，只是进行单一功能的验证测试。写得比较杂乱，慢慢的会失去写下去的热情。所以萌生了写个稍微完整一点的应用的想法。
 
 # TODO
+Android 7.0 华为手机系统自带壁纸裁剪 FileProvider 路径报错BUG
 m3u8 视频离线缓存
-视频页面偶现闪退BUG修复
 
 # 仓库地址
 [https://github.com/PandaQAQ/PandaEye][0]

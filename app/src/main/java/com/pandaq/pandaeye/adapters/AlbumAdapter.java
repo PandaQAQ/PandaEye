@@ -40,7 +40,7 @@ public class AlbumAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final  int position) {
         ViewHolder mHolder = (ViewHolder) holder;
         mHolder.mTvFileCount.setText("" + mImageBeen.get(position).getImages().size() + "张");
         mHolder.mTvFileName.setText(mImageBeen.get(position).getFileName());
