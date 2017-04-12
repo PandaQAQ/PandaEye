@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/white_FFFFFF"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.pandaq.pandaeye.ui.news.TopNewsInfoActivity"
+    tools:context=".modules.news.newsdetail.NewsDetailActivity"
     tools:showIn="@layout/activity_top_news_info">
 
     <com.tencent.smtt.sdk.WebView

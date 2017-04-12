@@ -1,6 +1,6 @@
 package com.pandaq.pandaeye.utils.x5webview;
 
-import com.pandaq.pandaeye.model.neteasynews.NewsContent;
+import com.pandaq.pandaeye.modules.news.newsdetail.NewsContent;
 
 import java.util.List;
 

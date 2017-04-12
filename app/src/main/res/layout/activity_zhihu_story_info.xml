@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/white_FFFFFF"
     android:fitsSystemWindows="true"
-    tools:context="com.pandaq.pandaeye.ui.zhihu.ZhihuStoryInfoActivity">
+    tools:context=".modules.zhihu.zhihudetail.ZhihuStoryInfoActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"

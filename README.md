@@ -3,9 +3,9 @@
 - 公司项目因为历史原因还有风险控制方面的问题，新的技术不一定能够应用在现有的版本上。所以手痒了就自己弄个应用写一写，持续的更新增加自己的技能熟练度。同时也把坑踩一踩，以后用到的时候可以少走绕路。
 - 像之前的 [MVPDemo][1] 这个仓库，只是进行单一功能的验证测试。写得比较杂乱，慢慢的会失去写下去的热情。所以萌生了写个稍微完整一点的应用的想法。
 # FIX LIST
-修复 Android 7.0 华为荣耀8系统自带壁纸裁剪 FileProvider 路径报错BUG
-# TODO LIST
+- 修复 Android 7.0 华为荣耀8系统自带壁纸裁剪 FileProvider 路径报错BUG
 - 调整工程包结构，使之逻辑更清晰符合 Google 官方示例的结构
+# TODO LIST
 - m3u8 视频离线缓存
 
 # 仓库地址
@@ -50,7 +50,7 @@
 - RxBus 实现事件总线功能
 
 ### 图片加载：
-- Picasso 
+- Picasso
 
 ### 新闻数据缓存：
 - DiskLurCache （PandaEye 中我对 DiskLruCache 进行了简单的封装，使用类似于 SharePrefenrence）

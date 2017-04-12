@@ -11,7 +11,6 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.TintableBackgroundView;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
@@ -19,8 +18,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 
 import com.pandaq.pandaeye.R;
-import com.pandaq.pandaeye.ui.base.BaseActivity;
-import com.pandaq.pandaeye.ui.base.SwipeBackActivity;
+import com.pandaq.pandaeye.BaseActivity;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 

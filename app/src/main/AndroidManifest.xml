@@ -20,38 +20,38 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.base.SplashActivity">
+        <activity android:name=".activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.base.MainActivity"
+            android:name=".activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name=".ui.zhihu.ZhihuStoryInfoActivity"
+            android:name=".modules.zhihu.zhihudetail.ZhihuStoryInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentFullScreenTheme"/>
         <activity
-            android:name=".ui.news.TopNewsInfoActivity"
+            android:name=".modules.news.newsdetail.NewsDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentFullScreenTheme"/>
         <activity
-            android:name=".ui.video.VideoInfoActivity"
+            android:name=".modules.video.videodetail.VideoInfoActivity"
             android:launchMode="singleTop"
             android:theme="@style/TranslucentFullScreenTheme"/>
         <activity
-            android:name=".ui.video.TypedVideosActivity"
+            android:name=".modules.video.videotypelist.mvp.TypedVideosActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentFullScreenTheme"/>
         <activity
-            android:name=".ui.setting.AboutActivity"
+            android:name=".modules.setting.aboutme.AboutActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentFullScreenTheme"/>
         <activity
-            android:name=".ui.setting.ChoosePhotoActivity"
+            android:name=".modules.setting.ChoosePhotoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentFullScreenTheme"/>
         <provider
