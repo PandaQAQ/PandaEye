@@ -64,7 +64,7 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
     private CheckPicAdapter mPicAdapter;
     private final int CROP_PHOTO = 10;
     private BottomSheetDialog mBottomSheetDialog;
-    private ArrayList<ImageBean> mImageBeen;
+    private ArrayList<ImageFileBean> mImageBeen;
     private final int ACTION_TAKE_PHOTO = 20;
 
     @Override
@@ -133,15 +133,15 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
                     public ArrayList<String> apply(Map<String, ArrayList<String>> stringArrayListMap) throws Exception {
                         ArrayList<String> allPath = new ArrayList<>();
                         for (Map.Entry<String, ArrayList<String>> entry : stringArrayListMap.entrySet()) {
-                            ImageBean imageBean = new ImageBean();
-                            imageBean.setFileName(entry.getKey());
-                            imageBean.setImages(entry.getValue());
-                            imageBean.setTopImage(entry.getValue().get(0));
-                            mImageBeen.add(imageBean);
+                            ImageFileBean imageFileBean = new ImageFileBean();
+                            imageFileBean.setFileName(entry.getKey());
+                            imageFileBean.setImages(entry.getValue());
+                            imageFileBean.setTopImage(entry.getValue().get(0));
+                            mImageBeen.add(imageFileBean);
                             allPath.addAll(entry.getValue());
                         }
                         allPath.add(0, "ic_action_camera");
-                        ImageBean all = new ImageBean();
+                        ImageFileBean all = new ImageFileBean();
                         all.setFileName(getString(R.string.all_pictures));
                         all.setTopImage(allPath.get(1)); //去掉相机图片
                         all.setImages(allPath);
@@ -235,7 +235,7 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String imagePath = mPicAdapter.getItem(position);
-        if (imagePath.equals("/android_asset/ic_camera_alt.png")) {
+        if (imagePath.equals("ic_action_camera")) {
             takePhoto();
         } else {
             cropPic(imagePath);

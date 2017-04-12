@@ -11,7 +11,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
-import com.pandaq.pandaeye.modules.setting.ImageBean;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -25,10 +24,10 @@ import butterknife.ButterKnife;
  */
 
 public class AlbumAdapter extends RecyclerView.Adapter {
-    private ArrayList<ImageBean> mImageBeen;
+    private ArrayList<ImageFileBean> mImageBeen;
     private Context mContext;
 
-    public AlbumAdapter(ArrayList<ImageBean> imageBeen, Context context) {
+    public AlbumAdapter(ArrayList<ImageFileBean> imageBeen, Context context) {
         mImageBeen = imageBeen;
         mContext = context;
     }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * 读取相册图片后的相册bean类
  */
 
-public class ImageBean {
+public class ImageFileBean {
 
     private String topImage;
 
@@ -37,5 +37,4 @@ public class ImageBean {
 
     private ArrayList<String> images;
     private String fileName;
-
 }

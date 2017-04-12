@@ -12,6 +12,7 @@ import com.pandaq.pandaeye.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,17 +56,23 @@ public class CheckPicAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        if (mPicPaths.get(position).equals("ic_action_camera")) {
-            holder.mIvPic.setImageTintList(ColorStateList.valueOf(mContext.getResources().getColor(R.color.grey_adbec0)));
-            holder.mIvPic.setBackground(mContext.getResources().getDrawable(R.drawable.ic_action_camera));
-        } else {
-            holder.mIvPic.setImageTintList(null);
+        String path = mPicPaths.get(position);
+        if (path.equals("ic_action_camera")){
+            Picasso.with(mContext)
+                    .load(R.drawable.ic_action_camera)
+                    .fit()
+                    .centerInside()
+                    .into(holder.mIvPic);
+        }else {
             Picasso.with(mContext)
                     .load("file://" + mPicPaths.get(position))
                     .fit()
                     .centerCrop()
                     .into(holder.mIvPic);
         }
+        System.out.println(position);
+        System.out.println(mPicPaths.get(position));
+
         return convertView;
     }
 
