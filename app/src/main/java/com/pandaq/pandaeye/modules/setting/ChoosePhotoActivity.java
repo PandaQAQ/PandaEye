@@ -253,9 +253,6 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
             File mPhotoFile = new File(ViewUtils.getAppFile(this, "images/user_take.jpg"));
             if (!file.exists()) {
                 boolean result = file.mkdirs();
-                if (!mPhotoFile.exists()) {
-                    boolean b = mPhotoFile.createNewFile();
-                }
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -305,10 +302,9 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
                 }
                 break;
             case ACTION_TAKE_PHOTO:
-                if (!mPhotoFile.exists()) {
-                    return;
+                if (mPhotoFile.exists()) {
+                    cropPic(ViewUtils.getAppFile(this, "images/user_take.jpg"));
                 }
-                cropPic(ViewUtils.getAppFile(this, "images/user_take.jpg"));
                 break;
         }
     }

@@ -140,7 +140,7 @@ public class VideoHomeFragment extends BaseFragment implements VideoHomeContract
             viewGroupIndicator.setParent(scrollViewPager);
             listBeen.remove(banner);
         }
-        //配置底部列表故事
+        //配置底部列表故事s
         mBaseItems.clear();
         for (RetDataBean.ListBean listBean : listBeen) {
             if (!TextUtils.isEmpty(listBean.getMoreURL()) &&

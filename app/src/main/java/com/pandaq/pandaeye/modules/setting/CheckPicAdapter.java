@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.pandaq.pandaeye.R;
+import com.pandaq.pandaeye.utils.DensityUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -58,20 +59,21 @@ public class CheckPicAdapter extends BaseAdapter {
         }
         String path = mPicPaths.get(position);
         if (path.equals("ic_action_camera")){
+            int value = DensityUtil.dip2px(mContext,30);
+            holder.mIvPic.setPadding(value,value,value,value);
             Picasso.with(mContext)
                     .load(R.drawable.ic_action_camera)
                     .fit()
                     .centerInside()
                     .into(holder.mIvPic);
         }else {
+            holder.mIvPic.setPadding(0,0,0,0);
             Picasso.with(mContext)
                     .load("file://" + mPicPaths.get(position))
                     .fit()
                     .centerCrop()
                     .into(holder.mIvPic);
         }
-        System.out.println(position);
-        System.out.println(mPicPaths.get(position));
 
         return convertView;
     }

@@ -56,6 +56,7 @@ public class TypedVideosAdapter extends BaseRecyclerAdapter {
             Picasso.with(mContext)
                     .load(image)
                     .resize(image_width, image_height)
+                    .centerCrop()
                     .into(holder.mIvVideo);
         }
     }
