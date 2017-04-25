@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.pandaq.pandaeye.BaseFragment;
 import com.pandaq.pandaeye.R;
@@ -19,6 +20,7 @@ import com.pandaq.pandaeye.modules.news.relaxing.RelaxFragment;
 import com.pandaq.pandaeye.modules.news.sports.SportNewsFragment;
 import com.pandaq.pandaeye.modules.news.technology.TecNewsFragment;
 import com.pandaq.pandaeye.modules.news.travel.TravelFragment;
+import com.pandaq.pandaeye.utils.DensityUtil;
 
 import java.util.ArrayList;
 
@@ -33,6 +35,8 @@ import butterknife.Unbinder;
  */
 public class NewsMainFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
 
+    @BindView(R.id.parentPanel)
+    LinearLayout mParentPanel;
     private ArrayList<Fragment> mFragmentArrayList;
     @BindView(R.id.vp_news_list)
     ViewPager mVpNewsList;

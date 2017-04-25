@@ -45,7 +45,7 @@ public class SwipeBackActivity extends BaseActivity implements SwipeBackLayout.S
     @Override
     public void swipeValue(double value) {
         int statusColor = (int) argbEvaluator.evaluate((float) value, currentStatusColor,
-                ContextCompat.getColor(this, R.color.colorPrimaryDark));
+                ContextCompat.getColor(this, R.color.transparent_00ffffff));
         getWindow().setStatusBarColor(statusColor);
     }
 

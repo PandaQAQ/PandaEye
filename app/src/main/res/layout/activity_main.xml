@@ -25,8 +25,8 @@
             android:id="@+id/fl_bottom_navgation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="@dimen/elevation_height"
             android:background="@drawable/shdow_theme_background"
+            android:elevation="@dimen/elevation_height"
             app:layout_behavior="@string/bottom_sheet_behavior">
 
             <com.ashokvarma.bottomnavigation.BottomNavigationBar
