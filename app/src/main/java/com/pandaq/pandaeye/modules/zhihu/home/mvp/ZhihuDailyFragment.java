@@ -44,7 +44,8 @@ import io.reactivex.disposables.Disposable;
  * email : 767807368@qq.com
  * 知乎日报列表Fragment
  */
-public class ZhihuDailyFragment extends BaseFragment implements ZhiHuHomeContract.View, SwipeRefreshLayout.OnRefreshListener, MagicRecyclerView.OnTagChangeListener, BaseRecyclerAdapter.OnItemClickListener {
+public class ZhihuDailyFragment extends BaseFragment implements ZhiHuHomeContract.View, SwipeRefreshLayout.OnRefreshListener,
+        MagicRecyclerView.OnTagChangeListener, BaseRecyclerAdapter.OnItemClickListener {
 
     @BindView(R.id.zhihudaily_list)
     MagicRecyclerView mZhihudailyList;
