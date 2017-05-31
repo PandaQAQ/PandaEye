@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
@@ -41,6 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/video_info_tab_height"
         android:background="@color/transparent_3cffffff"
+        android:elevation="4dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -71,9 +73,11 @@
             android:visibility="visible"/>
     </LinearLayout>
 
+
+
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_video_info"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/transparent_00ffffff"/>
+        android:background="@color/transparent_3cffffff"/>
 </LinearLayout>

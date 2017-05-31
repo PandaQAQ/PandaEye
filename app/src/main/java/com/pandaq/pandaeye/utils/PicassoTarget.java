@@ -34,9 +34,15 @@ public class PicassoTarget implements Target {
     private CollapsingToolbarLayout mToolbarLayout;
     private Toolbar mToolbar;
     private FloatingActionButton mFloatingActionButton;
+    private LoadListener mListener;
 
     public PicassoTarget(Activity activity, ImageView imageView, Toolbar toolbar) {
         this(activity, imageView, null, toolbar, null);
+    }
+
+    public PicassoTarget(Activity activity, ImageView imageView, Toolbar toolbar, LoadListener listener) {
+        this(activity, imageView, null, toolbar, null);
+        this.mListener = listener;
     }
 
     public PicassoTarget(Activity activity, ImageView imageView, @Nullable CollapsingToolbarLayout toolbarLayout, Toolbar toolbar, @Nullable FloatingActionButton fab) {
@@ -111,6 +117,9 @@ public class PicassoTarget implements Target {
                         }
                     }
                 });
+        if (mListener != null) {
+            mListener.loaded(bitmap);
+        }
     }
 
     @Override
@@ -123,6 +132,9 @@ public class PicassoTarget implements Target {
 
     }
 
+    public interface LoadListener {
+        void loaded(Bitmap bitmap);
+    }
 
 }
 

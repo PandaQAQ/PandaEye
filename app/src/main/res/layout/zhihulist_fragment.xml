@@ -28,6 +28,7 @@
                 android:id="@+id/tv_tag"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:paddingTop="@dimen/android_statusbar_height"
                 android:background="@drawable/shdow_theme_background"
                 android:elevation="@dimen/elevation_height"
                 android:gravity="center_vertical"

@@ -38,6 +38,8 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.StreamCorruptedException;
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
