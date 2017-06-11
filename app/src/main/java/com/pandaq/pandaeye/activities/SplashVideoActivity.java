@@ -46,52 +46,47 @@ public class SplashVideoActivity extends BaseActivity {
 
     /**
      * 播放视频背景
-     *
-     * @throws IllegalArgumentException
-     * @throws SecurityException
-     * @throws IllegalStateException
-     * @throws IOException
      */
-    public void play() throws IllegalArgumentException, SecurityException,
-            IllegalStateException, IOException {
+    public void play() {
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        AssetFileDescriptor fd = this.getAssets().openFd("start.mp4");
-        mMediaPlayer.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
-        mMediaPlayer.setLooping(false);
-        mMediaPlayer.setDisplay(mSfvSplash.getHolder());
-        // 通过异步的方式装载媒体资源
-        mMediaPlayer.prepareAsync();
-        mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                // 装载完毕回调
-                mMediaPlayer.start();
-            }
-        });
-        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                Intent intent = new Intent(SplashVideoActivity.this, MainActivity.class);
-                startActivity(intent);
-                SplashVideoActivity.this.finish();
-            }
-        });
+        AssetFileDescriptor fd = null;
+        try {
+            fd = this.getAssets().openFd("start.mp4");
+            mMediaPlayer.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
+            mMediaPlayer.setLooping(false);
+            mMediaPlayer.setDisplay(mSfvSplash.getHolder());
+            // 通过异步的方式装载媒体资源
+            mMediaPlayer.prepareAsync();
+            mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    // 装载完毕回调
+                    mMediaPlayer.start();
+                }
+            });
+            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    Intent intent = new Intent(SplashVideoActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    SplashVideoActivity.this.finish();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private class SfvListener implements SurfaceHolder.Callback {
 
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
-
+            play();
         }
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            try {
-                play();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
         }
 
         @Override
@@ -99,6 +94,5 @@ public class SplashVideoActivity extends BaseActivity {
 
         }
     }
-
 
 }
