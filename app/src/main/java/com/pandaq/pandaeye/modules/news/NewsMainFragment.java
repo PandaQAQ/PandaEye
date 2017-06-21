@@ -35,8 +35,6 @@ import butterknife.Unbinder;
  */
 public class NewsMainFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
 
-    @BindView(R.id.parentPanel)
-    LinearLayout mParentPanel;
     private ArrayList<Fragment> mFragmentArrayList;
     @BindView(R.id.vp_news_list)
     ViewPager mVpNewsList;

@@ -23,7 +23,7 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="floating_button_bmargin">72dp</dimen>
     <dimen name="splash_image_width">88dp</dimen>
-    <dimen name="toolbar_title_width">240dp</dimen>
+    <dimen name="toolbar_title_width">40dp</dimen>
     <dimen name="splash_image_top_margin">160dp</dimen>
     <dimen name="video_type_text_height">32dp</dimen>
     <dimen name="video_type_card_height">112dp</dimen>
