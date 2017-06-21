@@ -7,6 +7,7 @@
 - 调整工程包结构，使之逻辑更清晰符合 Google 官方示例的结构
 # TODO LIST
 - m3u8 视频离线缓存
+- lottie 优化加载动画
 
 # 仓库地址
 [https://github.com/PandaQAQ/PandaEye][0]

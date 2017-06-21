@@ -14,7 +14,7 @@ import com.pandaq.pandaeye.config.Constants;
 public class SPUtils {
     private static SharedPreferences sp;
 
-    public static SharedPreferences getInstance(Context context) {
+    public static SharedPreferences instance(Context context) {
         if (sp == null) {
             sp = context.getSharedPreferences(Constants.SP_NAME, Context.MODE_PRIVATE);
         }
@@ -28,57 +28,14 @@ public class SPUtils {
         editor.apply();
     }
 
-    public static void putStringValue(String key, String value) {
+    private SharedPreferences.Editor edit() {
         checkSp();
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(key, value);
-        editor.apply();
-    }
-
-    public static String getStringValue(String key, String defValue) {
-        checkSp();
-        return sp.getString(key, defValue);
-    }
-
-    public static void putBooleanValue(String key, boolean value) {
-        checkSp();
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putBoolean(key, value);
-        editor.apply();
-    }
-
-    public static boolean getBooleanValue(String key, boolean defValue) {
-        checkSp();
-        return sp.getBoolean(key, defValue);
-    }
-
-    public static void putIntValue(String key, int value) {
-        checkSp();
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putInt(key, value);
-        editor.apply();
-    }
-
-    public static int getIntValue(String key, int defValue) {
-        checkSp();
-        return sp.getInt(key, defValue);
-    }
-
-    public static void putFloatValue(String key, float value) {
-        checkSp();
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putFloat(key, value);
-        editor.apply();
-    }
-
-    public static float getFloatValue(String key, float defValue) {
-        checkSp();
-        return sp.getFloat(key, defValue);
+        return sp.edit();
     }
 
     private static void checkSp() {
         if (sp == null) {
-            sp = getInstance(CustomApplication.getContext());
+            sp = instance(CustomApplication.getContext());
         }
     }
 }

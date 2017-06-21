@@ -12,8 +12,8 @@
         android:id="@+id/ftv_content_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:textColor="@color/grey_adbec0"
-        app:flagColor="@color/grey_607D8B"
+        app:textColor="@color/grey_303335"
+        app:flagColor="@color/grey_303335"
         app:flagGravity="end"
         app:minLines="5"/>
 </LinearLayout>

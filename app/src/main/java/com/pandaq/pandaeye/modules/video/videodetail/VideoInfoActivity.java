@@ -2,6 +2,8 @@ package com.pandaq.pandaeye.modules.video.videodetail;
 
 import android.animation.ArgbEvaluator;
 import android.animation.FloatEvaluator;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,17 +15,19 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
+import com.pandaq.pandaeye.activities.SwipeBackActivity;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.modules.video.videodetail.mvp.MovieInfo;
-import com.pandaq.pandaeye.rxbus.RxBus;
-import com.pandaq.pandaeye.rxbus.RxConstants;
-import com.pandaq.pandaeye.activities.SwipeBackActivity;
-import com.pandaq.pandaeye.utils.PicassoTarget;
 import com.pandaq.pandaeye.modules.video.videodetail.mvp.VideoCommentFrag;
 import com.pandaq.pandaeye.modules.video.videodetail.mvp.VideoInfoFragment;
+import com.pandaq.pandaeye.rxbus.RxBus;
+import com.pandaq.pandaeye.rxbus.RxConstants;
+import com.pandaq.pandaeye.utils.BlurImageUtils;
+import com.pandaq.pandaeye.utils.PicassoTarget;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -54,6 +58,8 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
     TextView mTvTabDescription;
     @BindView(R.id.tv_tab_comment)
     TextView mTvTabComment;
+    @BindView(R.id.ll_parent)
+    LinearLayout mLlParent;
     private Disposable mDisposable;
     private Disposable mPicDisposable;
     private ArgbEvaluator argbEvaluator;
@@ -84,7 +90,14 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
         if (!TextUtils.isEmpty(pic)) {
             Picasso.with(this)
                     .load(pic)
-                    .into(new PicassoTarget(this, mJcVideoPlayer.thumbImageView, mToolbar));
+                    .into(new PicassoTarget(this, mJcVideoPlayer.thumbImageView, mToolbar,
+                            new PicassoTarget.LoadListener() {
+                                @Override
+                                public void loaded(Bitmap bitmap) {
+                                    Bitmap overlay = BlurImageUtils.blur(bitmap, 8, 8);
+                                    mLlParent.setBackground(new BitmapDrawable(getResources(), overlay));
+                                }
+                            }));
         }
         final ArrayList<Fragment> fragments = new ArrayList<>();
         //将首次需要加载的电影Id传递过去
@@ -160,7 +173,14 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
                         if (!TextUtils.isEmpty(value)) {
                             Picasso.with(VideoInfoActivity.this)
                                     .load(value)
-                                    .into(new PicassoTarget(VideoInfoActivity.this, mJcVideoPlayer.thumbImageView, mToolbar));
+                                    .into(new PicassoTarget(VideoInfoActivity.this, mJcVideoPlayer.thumbImageView,
+                                            mToolbar, new PicassoTarget.LoadListener() {
+                                        @Override
+                                        public void loaded(Bitmap bitmap) {
+                                            Bitmap overlay = BlurImageUtils.blur(bitmap, 8, 8);
+                                            mLlParent.setBackground(new BitmapDrawable(getResources(), overlay));
+                                        }
+                                    }));
                         }
                     }
 
@@ -186,12 +206,17 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
 
     @Override
     protected void onPause() {
+        super.onPause();
+        JCVideoPlayer.releaseAllVideos();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         if (mDisposable != null && !mDisposable.isDisposed()) {
             mDisposable.dispose();
             mPicDisposable.dispose();
         }
-        super.onPause();
-        JCVideoPlayer.releaseAllVideos();
     }
 
     @Override
@@ -214,10 +239,10 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
             // 字体颜色
             mTvTabDescription.setTextColor(ContextCompat.getColor(this, R.color.white_FFFFFF));
             int stepsColor = (int) argbEvaluator.evaluate(positionOffset, ContextCompat.getColor(this, R.color.white_FFFFFF),
-                    ContextCompat.getColor(this, R.color.grey_607D8B));
+                    ContextCompat.getColor(this, R.color.grey_303335));
             mTvTabDescription.setTextColor(stepsColor);
-            mTvTabComment.setTextColor(ContextCompat.getColor(this, R.color.grey_607D8B));
-            int sleepColor = (int) argbEvaluator.evaluate(positionOffset, ContextCompat.getColor(this, R.color.grey_607D8B),
+            mTvTabComment.setTextColor(ContextCompat.getColor(this, R.color.grey_303335));
+            int sleepColor = (int) argbEvaluator.evaluate(positionOffset, ContextCompat.getColor(this, R.color.grey_303335),
                     ContextCompat.getColor(this, R.color.white_FFFFFF));
             mTvTabComment.setTextColor(sleepColor);
             // 字体大小
@@ -229,13 +254,13 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
             mTvTabComment.setTextSize(TypedValue.COMPLEX_UNIT_SP, sleepSize);
         } else {
             // 字体颜色
-            mTvTabDescription.setTextColor(ContextCompat.getColor(this, R.color.grey_607D8B));
-            int stepsColor = (int) argbEvaluator.evaluate(positionOffset, ContextCompat.getColor(this, R.color.grey_607D8B),
+            mTvTabDescription.setTextColor(ContextCompat.getColor(this, R.color.grey_303335));
+            int stepsColor = (int) argbEvaluator.evaluate(positionOffset, ContextCompat.getColor(this, R.color.grey_303335),
                     ContextCompat.getColor(this, R.color.white_FFFFFF));
             mTvTabDescription.setTextColor(stepsColor);
             mTvTabComment.setTextColor(ContextCompat.getColor(this, R.color.white_FFFFFF));
             int sleepColor = (int) argbEvaluator.evaluate(positionOffset, ContextCompat.getColor(this, R.color.white_FFFFFF),
-                    ContextCompat.getColor(this, R.color.grey_607D8B));
+                    ContextCompat.getColor(this, R.color.grey_303335));
             mTvTabComment.setTextColor(sleepColor);
             // 字体大小
             mTvTabDescription.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);

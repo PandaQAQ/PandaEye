@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white_FFFFFF"
-    android:layout_margin="@dimen/margin_8dp">
+    android:layout_margin="@dimen/margin_8dp"
+    android:background="@color/transparent_00ffffff">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white_FFFFFF"
+        android:background="@color/transparent_00ffffff"
         android:padding="@dimen/margin_8dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
