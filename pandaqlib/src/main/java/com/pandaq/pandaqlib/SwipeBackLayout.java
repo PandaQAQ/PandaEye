@@ -174,9 +174,9 @@ public class SwipeBackLayout extends FrameLayout {
     /**
      * 返回我们touch的ViewPager
      *
-     * @param mViewPagers
-     * @param ev
-     * @return
+     * @param mViewPagers 添加的ViewPagers
+     * @param ev 事件
+     * @return 正在触摸的 ViewPager
      */
     private ViewPager getTouchViewPager(List<ViewPager> mViewPagers, MotionEvent ev) {
         if (mViewPagers == null || mViewPagers.size() == 0) {
