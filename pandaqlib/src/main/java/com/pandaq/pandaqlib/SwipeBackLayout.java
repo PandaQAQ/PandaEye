@@ -45,10 +45,9 @@ public class SwipeBackLayout extends FrameLayout {
 
     public SwipeBackLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
+        // 获取触发移动时间的最小距离
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         mScroller = new Scroller(context);
-
         mShadowDrawable = getResources().getDrawable(R.drawable.shadow_left);
     }
 
@@ -58,19 +57,28 @@ public class SwipeBackLayout extends FrameLayout {
         TypedArray a = activity.getTheme().obtainStyledAttributes(
                 new int[]{android.R.attr.windowBackground});
         int background = a.getResourceId(0, 0);
+        Log.i("background", background + "");
         a.recycle();
-
+        //获取到 DecorView 对象
         ViewGroup decor = (ViewGroup) activity.getWindow().getDecorView();
+        Log.i("decorChildCount", decor.getChildCount() + "");
         ViewGroup decorChild = (ViewGroup) decor.getChildAt(0);
+        Log.i("decorChild", decorChild.toString());
         decorChild.setBackgroundResource(background);
+        //decorView 中将子布局移除
         decor.removeView(decorChild);
+        //SwipeBackLayout 添加从decorView中移除布局
         addView(decorChild);
+        //将ContentView设置为decorChild的父布局即添加进来的SwipeBackLayout
         setContentView(decorChild);
+        //将SwipeBackLayout添加进DecorView
         decor.addView(this);
     }
 
     private void setContentView(View decorChild) {
+        // 后续对 mContentView 进行滑动处理就相当于将显示的 View 放在 SwipeBackLayout 这个盒子里面
         mContentView = (View) decorChild.getParent();
+        Log.i("mContentView", mContentView.toString());
     }
 
     /**
@@ -80,6 +88,7 @@ public class SwipeBackLayout extends FrameLayout {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         //处理ViewPager冲突问题
         ViewPager mViewPager = getTouchViewPager(mViewPagers, ev);
+        //当无触摸ViewPager或者该ViewPager未滑动到最左则不对滑动时间进行拦截
         if (mViewPager != null && mViewPager.getCurrentItem() != 0) {
             return super.onInterceptTouchEvent(ev);
         }
@@ -124,6 +133,7 @@ public class SwipeBackLayout extends FrameLayout {
                 }
                 if (moveX - downX >= 0 && isSilding) {
                     //deltaX 为单次移动的距离向右滑为负数
+                    // TODO: 2017/6/22 实现 y 方向的移动，即向右任意方向滑出界面
                     mContentView.scrollBy(deltaX, 0);
                 }
                 break;
@@ -240,7 +250,7 @@ public class SwipeBackLayout extends FrameLayout {
             }
             mSwipeListener.swipeValue(offset);
         }
-        // 调用startScroll的时候scroller.computeScrollOffset()返回true，
+        //滚动完成的时候返回 true
         if (mScroller.computeScrollOffset()) {
             mContentView.scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
             postInvalidate();
