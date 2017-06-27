@@ -1,5 +1,6 @@
 package com.pandaq.pandaeye.modules.zhihu.zhihudetail;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -7,6 +8,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -15,11 +18,11 @@ import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.activities.ShareActivity;
 import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaeye.utils.PicassoTarget;
-import com.pandaq.pandaeye.utils.x5webview.WebUtils;
+import com.pandaq.pandaeye.utils.webview.JavaScriptFunction;
+import com.pandaq.pandaeye.utils.webview.WebUtils;
 import com.pandaq.pandaeye.widget.FiveThreeImageView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-import com.tencent.smtt.sdk.WebView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +34,6 @@ import butterknife.ButterKnife;
  */
 public class ZhihuStoryInfoActivity extends ShareActivity implements ZhiHuDetailContract.View {
 
-    private static final float SCRIM_ADJUSTMENT = 0.075f;
     private String shareUrl = "";
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -115,6 +117,7 @@ public class ZhihuStoryInfoActivity extends ShareActivity implements ZhiHuDetail
 
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void loadSuccess(ZhihuStoryContent zhihuStory) {
         shareUrl = zhihuStory.getShare_url();
@@ -135,6 +138,11 @@ public class ZhihuStoryInfoActivity extends ShareActivity implements ZhiHuDetail
         String mBody = zhihuStory.getBody();
         String[] scc = zhihuStory.getCss();
         //如果返回的html body为空则直接 load url
+        WebSettings settings = mZhihudailyWebview.getSettings();
+        settings.setJavaScriptCanOpenWindowsAutomatically(true);
+        settings.setDefaultTextEncodingName("UTF-8");
+        settings.setJavaScriptEnabled(true);
+//        mZhihudailyWebview.addJavascriptInterface(new JavaScriptFunction(),"JavaScriptFunction");
         if (isEmpty) {
             mZhihudailyWebview.loadUrl(url);
         } else {

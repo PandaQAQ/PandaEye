@@ -1,4 +1,4 @@
-package com.pandaq.pandaeye.utils.x5webview;
+package com.pandaq.pandaeye.utils.webview;
 
 import com.pandaq.pandaeye.modules.news.newsdetail.NewsContent;
 
@@ -10,9 +10,6 @@ import java.util.List;
  * webView加载html的帮助类
  */
 public class WebUtils {
-
-    private WebUtils() {
-    }
 
     public static final String BASE_URL = "file:///android_asset/";
     public static final String MIME_TYPE = "text/html";
@@ -48,7 +45,7 @@ public class WebUtils {
                 + "<html xmlns=\"http://www.w3.org/1999/xhtml\">" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"application/xhtml+xml; charset=utf-8\"/>"
                 + "<meta http-equiv=\"Cache-control\" content=\"public\" />" + "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0\" />"
                 + "<link rel=\"stylesheet\" href=\"file:///android_asset/news.css\" type=\"text/css\">"
-                + "<script type = \"text/javascript\" src=\"file:///android_asset/info.js\"></script>");
+                + "<script type = \"text/javascript\" src=\"file:///android_asset/clickPicture.js\"></script></head>");
         modifiedHtml.append("<body ");
         if (isNightMode) {
             modifiedHtml.append("class=\'night\'");
@@ -76,10 +73,9 @@ public class WebUtils {
         return "<img src = " +
                 url +
                 " width = 100%" +
-//                sizes[0] +
                 " height = 100%" +
-//                sizes[1]
-                "onclick = \"alert(2333)\"" +
-                "/>" + "\n";
+                " onclick = \"clickPicture(src)\""
+                + "/>"
+                + "\n";
     }
 }

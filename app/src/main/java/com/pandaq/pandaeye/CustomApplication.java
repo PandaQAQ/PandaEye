@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
-import com.tencent.smtt.sdk.QbSdk;
-
 /**
  * Created by PandaQ on 2016/12/20.
  * email : 767807368@qq.com
@@ -25,9 +23,6 @@ public class CustomApplication extends Application {
 //            return;
 //        }
 //        LeakCanary.install(this);
-        //预加载腾讯浏览服务 X5 内核
-        QbSdk.initX5Environment(getContext(), null);
-
     }
 
     public static Context getContext() {

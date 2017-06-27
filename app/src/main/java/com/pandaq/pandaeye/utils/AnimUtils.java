@@ -93,7 +93,7 @@ public class AnimUtils {
          * A type-specific override of the {@link #set(Object, Float)} that is faster when dealing
          * with fields of type <code>float</code>.
          */
-        public abstract void setValue(T object, float value);
+        abstract void setValue(T object, float value);
 
         @Override
         final public void set(T object, Float value) {
@@ -111,9 +111,9 @@ public class AnimUtils {
      *
      * @param <T> The class on which the Property is declared.
      */
-    public static abstract class IntProperty<T> extends Property<T, Integer> {
+    static abstract class IntProperty<T> extends Property<T, Integer> {
 
-        public IntProperty(String name) {
+        IntProperty(String name) {
             super(Integer.class, name);
         }
 
@@ -125,7 +125,7 @@ public class AnimUtils {
 
         @Override
         final public void set(T object, Integer value) {
-            setValue(object, value.intValue());
+            setValue(object, value);
         }
 
     }
@@ -262,11 +262,11 @@ public class AnimUtils {
         }
     }
 
-    static class AnimatorListenerWrapper implements Animator.AnimatorListener {
+    private static class AnimatorListenerWrapper implements Animator.AnimatorListener {
         private final Animator mAnimator;
         private final Animator.AnimatorListener mListener;
 
-        public AnimatorListenerWrapper(Animator animator, Animator.AnimatorListener listener) {
+        AnimatorListenerWrapper(Animator animator, Animator.AnimatorListener listener) {
             mAnimator = animator;
             mListener = listener;
         }
@@ -320,7 +320,7 @@ public class AnimUtils {
         }
     }
 
-    public static final LinearOutSlowInInterpolator FAST_OUT_SLOW_IN_INTERPOLATOR = new LinearOutSlowInInterpolator();
+    private static final LinearOutSlowInInterpolator FAST_OUT_SLOW_IN_INTERPOLATOR = new LinearOutSlowInInterpolator();
 
     // 显示view
     public static void scaleShow(View view, ViewPropertyAnimatorListener viewPropertyAnimatorListener) {

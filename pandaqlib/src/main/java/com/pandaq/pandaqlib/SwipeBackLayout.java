@@ -69,12 +69,12 @@ public class SwipeBackLayout extends FrameLayout {
         //SwipeBackLayout 添加从decorView中移除布局
         addView(decorChild);
         //将ContentView设置为decorChild的父布局即添加进来的SwipeBackLayout
-        setContentView(decorChild);
+        setContentView();
         //将SwipeBackLayout添加进DecorView
         decor.addView(this);
     }
 
-    private void setContentView(View decorChild) {
+    private void setContentView() {
         // 后续对 mContentView 进行滑动处理就相当于将显示的 View 放在 SwipeBackLayout 这个盒子里面
         mContentView = this;
         Log.i("mContentView", mContentView.toString());
