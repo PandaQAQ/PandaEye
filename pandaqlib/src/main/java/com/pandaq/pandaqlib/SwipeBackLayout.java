@@ -57,7 +57,6 @@ public class SwipeBackLayout extends FrameLayout {
         TypedArray a = activity.getTheme().obtainStyledAttributes(
                 new int[]{android.R.attr.windowBackground});
         int background = a.getResourceId(0, 0);
-        Log.i("background", background + "");
         a.recycle();
         //获取到 DecorView 对象
         ViewGroup decor = (ViewGroup) activity.getWindow().getDecorView();
@@ -77,7 +76,7 @@ public class SwipeBackLayout extends FrameLayout {
 
     private void setContentView(View decorChild) {
         // 后续对 mContentView 进行滑动处理就相当于将显示的 View 放在 SwipeBackLayout 这个盒子里面
-        mContentView = (View) decorChild.getParent();
+        mContentView = this;
         Log.i("mContentView", mContentView.toString());
     }
 
@@ -175,7 +174,7 @@ public class SwipeBackLayout extends FrameLayout {
      * 返回我们touch的ViewPager
      *
      * @param mViewPagers 添加的ViewPagers
-     * @param ev 事件
+     * @param ev          事件
      * @return 正在触摸的 ViewPager
      */
     private ViewPager getTouchViewPager(List<ViewPager> mViewPagers, MotionEvent ev) {
