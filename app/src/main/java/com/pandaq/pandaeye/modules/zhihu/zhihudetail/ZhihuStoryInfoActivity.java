@@ -1,28 +1,37 @@
 package com.pandaq.pandaeye.modules.zhihu.zhihudetail;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.activities.ShareActivity;
 import com.pandaq.pandaeye.utils.DensityUtil;
 import com.pandaq.pandaeye.utils.PicassoTarget;
 import com.pandaq.pandaeye.utils.webview.JavaScriptFunction;
+import com.pandaq.pandaeye.utils.webview.ProcessWebView;
 import com.pandaq.pandaeye.utils.webview.WebUtils;
 import com.pandaq.pandaeye.widget.FiveThreeImageView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,9 +55,7 @@ public class ZhihuStoryInfoActivity extends ShareActivity implements ZhiHuDetail
     @BindView(R.id.story_img)
     FiveThreeImageView mStoryImg;
     @BindView(R.id.zhihudaily_webview)
-    WebView mZhihudailyWebview;
-    @BindView(R.id.pb_load_story)
-    ProgressBar mPbLoadStory;
+    ProcessWebView mZhihudailyWebview;
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
     private String story_id = "";
@@ -56,6 +63,7 @@ public class ZhihuStoryInfoActivity extends ShareActivity implements ZhiHuDetail
     int[] mDeviceInfo;
     int width;
     int heigh;
+    private ArrayList<String> mImageUrls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,23 +106,13 @@ public class ZhihuStoryInfoActivity extends ShareActivity implements ZhiHuDetail
     }
 
     @Override
-    public void showProgressBar() {
-        mPbLoadStory.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideProgressBar() {
-        mPbLoadStory.setVisibility(View.GONE);
-    }
-
-    @Override
     public void loadZhihuStory() {
         mPresenter.loadStory(story_id);
     }
 
     @Override
     public void loadFail(String errmsg) {
-
+        // TODO: 2017/6/29 显示 404 页面
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -142,11 +140,26 @@ public class ZhihuStoryInfoActivity extends ShareActivity implements ZhiHuDetail
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setDefaultTextEncodingName("UTF-8");
         settings.setJavaScriptEnabled(true);
-//        mZhihudailyWebview.addJavascriptInterface(new JavaScriptFunction(),"JavaScriptFunction");
+        mZhihudailyWebview.addJavascriptInterface(new JavaScriptFunction() {
+            @Override
+            @JavascriptInterface
+            public void getUrl(String imageUrl) {
+                Intent intent = new Intent();
+                intent.putExtra("imageUrls", mImageUrls);
+                intent.putExtra("curImageUrl", imageUrl);
+//                intent.setClass(ZhihuStoryInfoActivity.this, PhotoBrowserActivity.class);
+//                startActivity(intent);
+                for (int i = 0; i < mImageUrls.size(); i++) {
+                    Log.e("图片地址" + i, mImageUrls.get(i).toString());
+                }
+            }
+        }, "JavaScriptFunction");
         if (isEmpty) {
             mZhihudailyWebview.loadUrl(url);
         } else {
             String data = WebUtils.buildHtmlWithCss(mBody, scc, false);
+            System.out.print(data);
+            mImageUrls = WebUtils.getImageUrlsFromHtml(data);
             mZhihudailyWebview.loadDataWithBaseURL(WebUtils.BASE_URL, data, WebUtils.MIME_TYPE, WebUtils.ENCODING, WebUtils.FAIL_URL);
         }
     }

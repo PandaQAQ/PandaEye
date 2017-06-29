@@ -71,13 +71,6 @@
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@drawable/ic_share"/>
 
-    <ProgressBar
-        android:id="@+id/pb_load_story"
-        style="@style/Base.Widget.AppCompat.ProgressBar"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center"/>
-
     <include
         layout="@layout/content_zhihu_story_info"/>
 </android.support.design.widget.CoordinatorLayout>

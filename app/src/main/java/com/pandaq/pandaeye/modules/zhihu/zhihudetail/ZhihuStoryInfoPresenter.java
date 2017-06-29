@@ -23,7 +23,6 @@ public class ZhihuStoryInfoPresenter extends BasePresenter implements ZhiHuDetai
     }
 
     public void loadStory(String id) {
-        mActivity.showProgressBar();
         ApiManager.getInstence().getZhihuService()
                 .getStoryContent(id)
                 .subscribeOn(Schedulers.io())
@@ -33,12 +32,10 @@ public class ZhihuStoryInfoPresenter extends BasePresenter implements ZhiHuDetai
                     @Override
                     public void onError(Throwable e) {
                         mActivity.loadFail(e.getMessage());
-                        mActivity.hideProgressBar();
                     }
 
                     @Override
                     public void onComplete() {
-                        mActivity.hideProgressBar();
                     }
 
                     @Override
@@ -49,7 +46,6 @@ public class ZhihuStoryInfoPresenter extends BasePresenter implements ZhiHuDetai
                     @Override
                     public void onNext(ZhihuStoryContent zhihuStoryContent) {
                         mActivity.loadSuccess(zhihuStoryContent);
-                        mActivity.hideProgressBar();
                     }
                 });
 

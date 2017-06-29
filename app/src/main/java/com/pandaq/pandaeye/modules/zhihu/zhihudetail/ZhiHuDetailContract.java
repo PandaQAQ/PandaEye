@@ -7,9 +7,6 @@ package com.pandaq.pandaeye.modules.zhihu.zhihudetail;
 
 public interface ZhiHuDetailContract {
     interface View {
-        void showProgressBar();
-
-        void hideProgressBar();
 
         void loadZhihuStory();
 
