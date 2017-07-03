@@ -83,7 +83,6 @@ public class SwipeBackLayout extends FrameLayout {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        Log.i(TAG, "onLayout");
         if (changed) {
             viewWidth = this.getWidth();
             getAlLViewPager(mViewPagers, this);
@@ -240,7 +239,6 @@ public class SwipeBackLayout extends FrameLayout {
 
     @Override
     public void computeScroll() {
-        Log.i("computeScroll","computeScroll");
         if (mSwipeListener != null) {
             double scrollx = Math.abs(mContentView.getScrollX());
             double offset = scrollx / viewWidth;
@@ -250,7 +248,6 @@ public class SwipeBackLayout extends FrameLayout {
             mSwipeListener.swipeValue(offset);
         }
         if (mScroller.computeScrollOffset()) {
-            Log.i("computeScroll","mScroller");
             mContentView.scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
             postInvalidate();
             if (mScroller.isFinished() && isFinish) {

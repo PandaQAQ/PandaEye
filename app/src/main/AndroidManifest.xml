@@ -59,6 +59,10 @@
             android:name=".modules.setting.ChoosePhotoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentFullScreenTheme"/>
+        <activity
+            android:name=".activities.PhotoViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentFullScreenTheme"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -69,6 +73,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths"/>
         </provider>
+
     </application>
 
 </manifest>

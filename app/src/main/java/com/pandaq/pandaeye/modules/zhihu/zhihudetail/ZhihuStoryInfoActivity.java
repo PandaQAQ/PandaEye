@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.R;
+import com.pandaq.pandaeye.activities.PhotoViewActivity;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.activities.ShareActivity;
 import com.pandaq.pandaeye.utils.DensityUtil;
@@ -147,18 +148,14 @@ public class ZhihuStoryInfoActivity extends ShareActivity implements ZhiHuDetail
                 Intent intent = new Intent();
                 intent.putExtra("imageUrls", mImageUrls);
                 intent.putExtra("curImageUrl", imageUrl);
-//                intent.setClass(ZhihuStoryInfoActivity.this, PhotoBrowserActivity.class);
-//                startActivity(intent);
-                for (int i = 0; i < mImageUrls.size(); i++) {
-                    Log.e("图片地址" + i, mImageUrls.get(i).toString());
-                }
+                intent.setClass(ZhihuStoryInfoActivity.this, PhotoViewActivity.class);
+                startActivity(intent);
             }
         }, "JavaScriptFunction");
         if (isEmpty) {
             mZhihudailyWebview.loadUrl(url);
         } else {
             String data = WebUtils.buildHtmlWithCss(mBody, scc, false);
-            System.out.print(data);
             mImageUrls = WebUtils.getImageUrlsFromHtml(data);
             mZhihudailyWebview.loadDataWithBaseURL(WebUtils.BASE_URL, data, WebUtils.MIME_TYPE, WebUtils.ENCODING, WebUtils.FAIL_URL);
         }

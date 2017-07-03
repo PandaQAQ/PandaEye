@@ -50,12 +50,7 @@ public class ProcessWebView extends WebView {
      * @param webView 对应的 WebView
      */
     private void addImageClickListener(WebView webView) {
-        webView.loadUrl("javascript:(function(){" +
-                "var objs = document.getElementsByTagName(\"img\");" +
-                "for (var i = 0; i < objs.length; i++) {" +
-                "objs[i].onClick=function(url){" +
-                "window.JavaScriptFunction.getUrl(url);" +
-                "}" +
-                "})()");
+        webView.loadUrl("javascript:(initClick())()");
     }
+
 }
