@@ -24,7 +24,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="@color/transparent_00ffffff"
-            app:layout_scrollFlags="scroll|enterAlways">
+            app:layout_scrollFlags="scroll">
 
             <com.pandaq.pandaeye.widget.FiveThreeImageView
                 android:id="@+id/story_img"

@@ -60,7 +60,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentFullScreenTheme"/>
         <activity
-            android:name=".activities.PhotoViewActivity"
+            android:name=".modules.webphto.mvp.PhotoViewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentFullScreenTheme"/>
 

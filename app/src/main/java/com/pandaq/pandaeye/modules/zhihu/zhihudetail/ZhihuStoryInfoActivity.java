@@ -8,21 +8,17 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.R;
-import com.pandaq.pandaeye.activities.PhotoViewActivity;
+import com.pandaq.pandaeye.modules.webphto.mvp.PhotoViewActivity;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.activities.ShareActivity;
 import com.pandaq.pandaeye.utils.DensityUtil;
+import com.pandaq.pandaeye.utils.LogWritter;
 import com.pandaq.pandaeye.utils.PicassoTarget;
 import com.pandaq.pandaeye.utils.webview.JavaScriptFunction;
 import com.pandaq.pandaeye.utils.webview.ProcessWebView;
@@ -32,7 +28,6 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -145,6 +140,7 @@ public class ZhihuStoryInfoActivity extends ShareActivity implements ZhiHuDetail
             @Override
             @JavascriptInterface
             public void getUrl(String imageUrl) {
+                LogWritter.LogStr(imageUrl);
                 Intent intent = new Intent();
                 intent.putExtra("imageUrls", mImageUrls);
                 intent.putExtra("curImageUrl", imageUrl);

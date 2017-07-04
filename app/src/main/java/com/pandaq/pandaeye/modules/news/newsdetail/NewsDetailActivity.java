@@ -1,6 +1,7 @@
 package com.pandaq.pandaeye.modules.news.newsdetail;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -20,13 +21,19 @@ import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.activities.ShareActivity;
 import com.pandaq.pandaeye.config.Constants;
+import com.pandaq.pandaeye.modules.webphto.mvp.PhotoViewActivity;
+import com.pandaq.pandaeye.modules.zhihu.zhihudetail.ZhihuStoryInfoActivity;
 import com.pandaq.pandaeye.utils.DensityUtil;
+import com.pandaq.pandaeye.utils.LogWritter;
 import com.pandaq.pandaeye.utils.PicassoTarget;
 import com.pandaq.pandaeye.utils.webview.JavaScriptFunction;
+import com.pandaq.pandaeye.utils.webview.ProcessWebView;
 import com.pandaq.pandaeye.utils.webview.WebUtils;
 import com.pandaq.pandaeye.widget.FiveThreeImageView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,7 +49,7 @@ public class NewsDetailActivity extends ShareActivity implements NewsDetailContr
     @BindView(R.id.fab)
     FloatingActionButton mFab;
     @BindView(R.id.wv_topnews_content)
-    WebView mWvTopnewsContent;
+    ProcessWebView mWvTopnewsContent;
     @BindView(R.id.cl_topnews_content_parent)
     CoordinatorLayout mClTopnewsContentParent;
     @BindView(R.id.pb_topnews_content)
@@ -51,6 +58,7 @@ public class NewsDetailActivity extends ShareActivity implements NewsDetailContr
     TextView mToolbarTitle;
     private int width;
     private int heigh;
+    private ArrayList<String> mImageUrls;
     private NewsDetailPresenter mPresenter = new NewsDetailPresenter(this);
 
     @Override
@@ -135,13 +143,19 @@ public class NewsDetailActivity extends ShareActivity implements NewsDetailContr
         mWvTopnewsContent.addJavascriptInterface(new JavaScriptFunction() {
             @Override
             @JavascriptInterface
-            public void getUrl(String string) {
-                Toast.makeText(CustomApplication.getContext(), string, Toast.LENGTH_LONG).show();
+            public void getUrl(String imageUrl) {
+                LogWritter.LogStr(imageUrl);
+                Intent intent = new Intent();
+                intent.putExtra("imageUrls", mImageUrls);
+                intent.putExtra("curImageUrl", imageUrl);
+                intent.setClass(NewsDetailActivity.this, PhotoViewActivity.class);
+                startActivity(intent);
             }
         }, "JavaScriptFunction");
         // 加载新闻数据，如果图片跟标题图相同则不加载
         String htmlBody = WebUtils.newsInsertPic(topNewsContent);
         String html = WebUtils.buildHtmlForIt(htmlBody, false);
+        mImageUrls = WebUtils.getImageUrlsFromHtml(html);
         mWvTopnewsContent.loadDataWithBaseURL(WebUtils.BASE_URL, html, WebUtils.MIME_TYPE, WebUtils.ENCODING, WebUtils.FAIL_URL);
     }
 
