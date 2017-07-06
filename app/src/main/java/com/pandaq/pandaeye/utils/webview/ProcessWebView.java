@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.pandaq.pandaeye.R;
@@ -25,6 +27,7 @@ public class ProcessWebView extends WebView {
         Drawable drawable = context.getResources().getDrawable(R.drawable.webview_process_state, null);
         mProgressBar.setProgressDrawable(drawable);
         addView(mProgressBar);
+        setWebViewClient(new MyWebClient());
         setWebChromeClient(new ChromeClient());
     }
 
@@ -41,6 +44,14 @@ public class ProcessWebView extends WebView {
                     mProgressBar.setProgress(newProgress);
                 }
             }
+        }
+    }
+
+    private class MyWebClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            view.loadUrl(request.getUrl().toString());
+            return true;
         }
     }
 
