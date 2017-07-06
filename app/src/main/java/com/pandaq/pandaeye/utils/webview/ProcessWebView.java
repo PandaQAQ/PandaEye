@@ -1,8 +1,10 @@
 package com.pandaq.pandaeye.utils.webview;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
@@ -48,6 +50,7 @@ public class ProcessWebView extends WebView {
     }
 
     private class MyWebClient extends WebViewClient {
+
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             view.loadUrl(request.getUrl().toString());
