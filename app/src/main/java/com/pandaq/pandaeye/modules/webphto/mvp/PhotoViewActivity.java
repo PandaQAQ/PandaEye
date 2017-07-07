@@ -3,6 +3,7 @@ package com.pandaq.pandaeye.modules.webphto.mvp;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +56,12 @@ public class PhotoViewActivity extends SwipeBackActivity implements ViewPager.On
         mVpHtmlImages.addOnPageChangeListener(this);
         mVpHtmlImages.setCurrentItem(curPosition);
         mTvPhotoProcess.setText(curPosition + "/" + images.size());
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishAfterTransition();
+            }
+        });
     }
 
     @Override

@@ -59,7 +59,7 @@ public class ProcessWebView extends WebView {
     }
 
     /**
-     * 位所有的图片添加点击事件
+     * 为所有的图片添加点击事件
      *
      * @param webView 对应的 WebView
      */
