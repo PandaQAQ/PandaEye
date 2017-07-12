@@ -38,7 +38,7 @@ public class TypedVideosActivity extends SwipeBackActivity implements VideoTyped
     @BindView(R.id.tv_empty_msg)
     TextView mTvEmptyMsg;
     private String mMoreTitle;
-    private TypedVideosPresenter mPresenter = new TypedVideosPresenter(this);
+    private VideoTypedContract.Presenter mPresenter;
     private TypedVideosAdapter mAdapter;
 
     @Override
@@ -46,6 +46,7 @@ public class TypedVideosActivity extends SwipeBackActivity implements VideoTyped
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_typed_videos);
         ButterKnife.bind(this);
+        bindPresenter();
         mMoreTitle = getIntent().getStringExtra(Constants.TYPED_MORE_TITLE);
         mToolbar.setTitle(mMoreTitle);
         setSupportActionBar(mToolbar);
@@ -108,7 +109,7 @@ public class TypedVideosActivity extends SwipeBackActivity implements VideoTyped
 
     @Override
     protected void onPause() {
-        mPresenter.dispose();
+        unbindPresenter();
         super.onPause();
     }
 
@@ -122,5 +123,23 @@ public class TypedVideosActivity extends SwipeBackActivity implements VideoTyped
         bundle.putString(Constants.BUNDLE_KEY_IMG_URL, listBean.getPic());
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void bindPresenter() {
+        if (mPresenter == null) {
+            mPresenter = new TypedVideosPresenter();
+        }
+        mPresenter.bindView(this);
+    }
+
+    @Override
+    public void unbindPresenter() {
+        mPresenter.unbindView();
+    }
+
+    @Override
+    public void destoryPresenter() {
+        mPresenter.onDestory();
     }
 }

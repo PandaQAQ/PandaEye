@@ -47,7 +47,7 @@ public class SportNewsFragment extends BaseFragment implements NewsContract.View
     SwipeRefreshLayout mRefresh;
     @BindView(R.id.empty_msg)
     TextView mEmptyMsg;
-    private SportPresenter mPresenter = new SportPresenter(this);
+    private NewsContract.Presenter mPresenter;
     private NewsListAdapter mAdapter;
     private boolean loading = false;
     private Disposable mDisposable;
@@ -58,6 +58,7 @@ public class SportNewsFragment extends BaseFragment implements NewsContract.View
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.headline_newslist_fragment, null, false);
         mUnbinder = ButterKnife.bind(this, view);
+        bindPresenter();
         mLinearLayoutManager = new LinearLayoutManager(this.getContext());
         mNewsRecycler.setLayoutManager(mLinearLayoutManager);
         //屏蔽掉默认的动画，房子刷新时图片闪烁
@@ -76,7 +77,7 @@ public class SportNewsFragment extends BaseFragment implements NewsContract.View
     public void onPause() {
         super.onPause();
         mRefresh.setRefreshing(false);
-        mPresenter.dispose();
+        unbindPresenter();
         onHiddenChanged(true);
     }
 
@@ -84,6 +85,7 @@ public class SportNewsFragment extends BaseFragment implements NewsContract.View
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
+        destoryPresenter();
         mAdapter = null;
     }
 
@@ -252,4 +254,21 @@ public class SportNewsFragment extends BaseFragment implements NewsContract.View
         startActivity(intent, transitionActivityOptions.toBundle());
     }
 
+    @Override
+    public void bindPresenter() {
+        if (mPresenter == null) {
+            mPresenter = new SportPresenter();
+        }
+        mPresenter.bindView(this);
+    }
+
+    @Override
+    public void unbindPresenter() {
+        mPresenter.unbindView();
+    }
+
+    @Override
+    public void destoryPresenter() {
+        mPresenter.onDestory();
+    }
 }

@@ -1,5 +1,7 @@
 package com.pandaq.pandaeye.modules.douban.mvp;
 
+import com.pandaq.pandaeye.modules.ImpBasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;
@@ -10,14 +12,10 @@ import java.util.ArrayList;
  */
 
 public interface DoubanContract {
-    interface View {
+    interface View extends ImpBaseView{
         void showProgressBar();
 
         void hideProgressBar();
-
-        void showEmptyMessage();
-
-        void hideEmptyMessage();
 
         void loadMoreData();
 
@@ -32,7 +30,7 @@ public interface DoubanContract {
         void refreshFail(String errMsg);
     }
 
-    interface Presenter {
+    interface Presenter extends ImpBasePresenter {
         void refreshData();
 
         void loadMoreData();

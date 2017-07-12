@@ -1,12 +1,15 @@
 package com.pandaq.pandaeye.modules.news.newsdetail;
 
+import com.pandaq.pandaeye.modules.ImpBasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
+
 /**
  * Created by PandaQ on 2017/4/12.
  * 767807368@qq.com
  */
 
-public interface NewsDetailContract {
-    interface View {
+interface NewsDetailContract {
+    interface View extends ImpBaseView{
         void showProgressBar();
 
         void hideProgressBar();
@@ -19,7 +22,7 @@ public interface NewsDetailContract {
 
     }
 
-    interface Presenter {
+    interface Presenter extends ImpBasePresenter{
         void loadNewsContent(final String id);
     }
 }

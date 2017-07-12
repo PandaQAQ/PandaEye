@@ -55,7 +55,7 @@ public class ZhihuStoryInfoActivity extends ShareActivity implements ZhiHuDetail
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
     private String story_id = "";
-    private ZhihuStoryInfoPresenter mPresenter = new ZhihuStoryInfoPresenter(this);
+    private ZhiHuDetailContract.Presenter mPresenter;
     int[] mDeviceInfo;
     int width;
     int heigh;
@@ -66,6 +66,7 @@ public class ZhihuStoryInfoActivity extends ShareActivity implements ZhiHuDetail
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_zhihu_story_info);
         ButterKnife.bind(this);
+        bindPresenter();
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         initView();
@@ -160,6 +161,30 @@ public class ZhihuStoryInfoActivity extends ShareActivity implements ZhiHuDetail
     @Override
     protected void onPause() {
         super.onPause();
-        mPresenter.dispose();
+        unbindPresenter();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        destoryPresenter();
+    }
+
+    @Override
+    public void bindPresenter() {
+        if (mPresenter == null) {
+            mPresenter = new ZhihuStoryInfoPresenter();
+        }
+        mPresenter.bindView(this);
+    }
+
+    @Override
+    public void unbindPresenter() {
+        mPresenter.unbindView();
+    }
+
+    @Override
+    public void destoryPresenter() {
+        mPresenter.onDestory();
     }
 }

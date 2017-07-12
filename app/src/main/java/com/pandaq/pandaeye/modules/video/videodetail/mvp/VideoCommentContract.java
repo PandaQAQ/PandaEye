@@ -1,5 +1,7 @@
 package com.pandaq.pandaeye.modules.video.videodetail.mvp;
 
+import com.pandaq.pandaeye.modules.ImpBasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ import java.util.ArrayList;
  */
 
 public interface VideoCommentContract {
-    interface View {
+    interface View extends ImpBaseView {
         void loadComment();
 
         void refreshComment();
@@ -24,7 +26,7 @@ public interface VideoCommentContract {
         void loadFail();
     }
 
-    interface Presenter {
+    interface Presenter extends ImpBasePresenter {
         void refreshComment();
 
         void loadMoreComment();

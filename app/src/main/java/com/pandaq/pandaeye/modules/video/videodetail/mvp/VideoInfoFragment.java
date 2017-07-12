@@ -21,6 +21,7 @@ import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView;
 import com.pandaq.pandaqlib.magicrecyclerView.SpaceDecoration;
+import com.squareup.haha.trove.THash;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,13 +44,14 @@ public class VideoInfoFragment extends BaseFragment implements VideoInfoContract
     private ArrayList<BaseItem> mBaseItems;
     private VideoInfoAdapter mAdapter;
     private String currentId = "";
-    private VideoInfoFragPresenter mPresenter = new VideoInfoFragPresenter(this);
+    private VideoInfoFragPresenter mPresenter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.video_description_fragment, container, false);
         ButterKnife.bind(this, view);
+        bindPresenter();
         initView();
         return view;
     }
@@ -124,6 +126,30 @@ public class VideoInfoFragment extends BaseFragment implements VideoInfoContract
     @Override
     public void onPause() {
         super.onPause();
-        mPresenter.dispose();
+        unbindPresenter();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        destoryPresenter();
+    }
+
+    @Override
+    public void bindPresenter() {
+        if (mPresenter == null) {
+            mPresenter = new VideoInfoFragPresenter();
+        }
+        mPresenter.bindView(this);
+    }
+
+    @Override
+    public void unbindPresenter() {
+        mPresenter.unbindView();
+    }
+
+    @Override
+    public void destoryPresenter() {
+        mPresenter.onDestory();
     }
 }

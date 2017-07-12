@@ -1,5 +1,7 @@
 package com.pandaq.pandaeye.modules.video.videotypelist.mvp;
 
+import com.pandaq.pandaeye.modules.ImpBasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;
@@ -9,8 +11,8 @@ import java.util.ArrayList;
  * 767807368@qq.com
  */
 
-public interface VideoTypedContract {
-    interface View {
+interface VideoTypedContract {
+    interface View extends ImpBaseView {
         void loadMore();
 
         void noMoreVideo();
@@ -20,9 +22,11 @@ public interface VideoTypedContract {
         void loadFail(String errCode, String errMsg);
     }
 
-    interface Presenter {
+    interface Presenter extends ImpBasePresenter {
         void loadVideos(String id);
 
         void loadLives(String id);
+
+        void loadData(String title);
     }
 }

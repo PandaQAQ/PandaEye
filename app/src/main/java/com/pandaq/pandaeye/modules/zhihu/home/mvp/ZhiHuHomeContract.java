@@ -1,5 +1,7 @@
 package com.pandaq.pandaeye.modules.zhihu.home.mvp;
 
+import com.pandaq.pandaeye.modules.ImpBasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;
@@ -9,8 +11,8 @@ import java.util.ArrayList;
  * 767807368@qq.com
  */
 
-public interface ZhiHuHomeContract {
-    interface View {
+interface ZhiHuHomeContract {
+    interface View extends ImpBaseView {
         void showRefreshBar();
 
         void hideRefreshBar();
@@ -28,7 +30,7 @@ public interface ZhiHuHomeContract {
         void loadFail(String errMsg);
     }
 
-    interface Presenter {
+    interface Presenter extends ImpBasePresenter {
         void refreshZhihuDaily();
 
         void loadMoreData();

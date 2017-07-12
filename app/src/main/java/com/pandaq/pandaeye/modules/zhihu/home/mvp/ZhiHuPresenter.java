@@ -4,7 +4,8 @@ import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.api.ApiManager;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
-import com.pandaq.pandaeye.BasePresenter;
+import com.pandaq.pandaeye.modules.BasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 
@@ -26,15 +27,12 @@ import io.reactivex.schedulers.Schedulers;
  * Created by PandaQ on 2016/9/13.
  * email : 767807368@qq.com
  */
-public class ZhiHuPresenter extends BasePresenter implements ZhiHuHomeContract.Presenter {
+class ZhiHuPresenter extends BasePresenter implements ZhiHuHomeContract.Presenter {
 
     private ZhiHuHomeContract.View mZhiHuDailyFrag;
     private String date;
 
-    public ZhiHuPresenter(ZhiHuHomeContract.View zhiHuDailyFrag) {
-        this.mZhiHuDailyFrag = zhiHuDailyFrag;
-    }
-
+    @Override
     public void refreshZhihuDaily() {
         mZhiHuDailyFrag.showRefreshBar();
         ApiManager.getInstence()
@@ -76,6 +74,7 @@ public class ZhiHuPresenter extends BasePresenter implements ZhiHuHomeContract.P
                 });
     }
 
+    @Override
     public void loadMoreData() {
         ApiManager.getInstence()
                 .getZhihuService()
@@ -139,6 +138,7 @@ public class ZhiHuPresenter extends BasePresenter implements ZhiHuHomeContract.P
     /**
      * 加载缓存
      */
+    @Override
     public void loadCache() {
         final DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_ZHIHU_FILE);
         Observable.create(new ObservableOnSubscribe<ZhiHuDaily>() {
@@ -172,5 +172,20 @@ public class ZhiHuPresenter extends BasePresenter implements ZhiHuHomeContract.P
             }
         });
 
+    }
+
+    @Override
+    public void bindView(ImpBaseView view) {
+        mZhiHuDailyFrag = (ZhiHuHomeContract.View) view;
+    }
+
+    @Override
+    public void unbindView() {
+        dispose();
+    }
+
+    @Override
+    public void onDestory() {
+        mZhiHuDailyFrag = null;
     }
 }

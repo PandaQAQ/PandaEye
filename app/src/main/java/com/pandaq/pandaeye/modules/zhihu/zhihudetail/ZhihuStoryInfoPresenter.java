@@ -1,7 +1,8 @@
 package com.pandaq.pandaeye.modules.zhihu.zhihudetail;
 
 import com.pandaq.pandaeye.api.ApiManager;
-import com.pandaq.pandaeye.BasePresenter;
+import com.pandaq.pandaeye.modules.BasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -14,14 +15,11 @@ import io.reactivex.schedulers.Schedulers;
  * email : 767807368@qq.com
  */
 
-public class ZhihuStoryInfoPresenter extends BasePresenter implements ZhiHuDetailContract.Presenter {
+class ZhihuStoryInfoPresenter extends BasePresenter implements ZhiHuDetailContract.Presenter {
 
     private ZhiHuDetailContract.View mActivity;
 
-    public ZhihuStoryInfoPresenter(ZhiHuDetailContract.View iZhihuStoryInfoActivity) {
-        mActivity = iZhihuStoryInfoActivity;
-    }
-
+    @Override
     public void loadStory(String id) {
         ApiManager.getInstence().getZhihuService()
                 .getStoryContent(id)
@@ -49,5 +47,20 @@ public class ZhihuStoryInfoPresenter extends BasePresenter implements ZhiHuDetai
                     }
                 });
 
+    }
+
+    @Override
+    public void bindView(ImpBaseView view) {
+        mActivity = (ZhiHuDetailContract.View) view;
+    }
+
+    @Override
+    public void unbindView() {
+        dispose();
+    }
+
+    @Override
+    public void onDestory() {
+        mActivity = null;
     }
 }

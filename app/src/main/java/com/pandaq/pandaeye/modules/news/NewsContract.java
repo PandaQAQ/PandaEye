@@ -1,5 +1,7 @@
 package com.pandaq.pandaeye.modules.news;
 
+import com.pandaq.pandaeye.modules.ImpBasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ import java.util.ArrayList;
  */
 
 public interface NewsContract {
-    interface View {
+    interface View extends ImpBaseView{
         void showRefreshBar();
 
         void hideRefreshBar();
@@ -30,7 +32,7 @@ public interface NewsContract {
         void loadAll();
     }
 
-    interface Presenter {
+    interface Presenter extends ImpBasePresenter {
         void refreshNews();
 
         void loadMore();

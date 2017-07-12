@@ -1,12 +1,13 @@
 package com.pandaq.pandaeye.modules.news.headline;
 
 import com.pandaq.pandaeye.CustomApplication;
+import com.pandaq.pandaeye.api.ApiManager;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
-import com.pandaq.pandaeye.api.ApiManager;
+import com.pandaq.pandaeye.modules.BasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
 import com.pandaq.pandaeye.modules.news.NewsBean;
 import com.pandaq.pandaeye.modules.news.NewsContract;
-import com.pandaq.pandaeye.BasePresenter;
 import com.pandaq.pandaeye.utils.LogWritter;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
@@ -27,15 +28,12 @@ import io.reactivex.schedulers.Schedulers;
  * email : 767807368@qq.com
  */
 
-public class HeadLinePresenter extends BasePresenter implements NewsContract.Presenter {
+class HeadLinePresenter extends BasePresenter implements NewsContract.Presenter {
 
     private NewsContract.View mNewsListFrag;
     private int currentIndex;
 
-    public HeadLinePresenter(NewsContract.View newsListFrag) {
-        this.mNewsListFrag = newsListFrag;
-    }
-
+    @Override
     public void refreshNews() {
         mNewsListFrag.showRefreshBar();
         currentIndex = 0;
@@ -106,6 +104,7 @@ public class HeadLinePresenter extends BasePresenter implements NewsContract.Pre
     }
 
     //两个方法没区别,只是刷新会重新赋值
+    @Override
     public void loadMore() {
         ApiManager.getInstence().getTopNewsServie()
                 .getTopNews(currentIndex + "")
@@ -168,11 +167,27 @@ public class HeadLinePresenter extends BasePresenter implements NewsContract.Pre
     /**
      * 读取缓存
      */
+    @Override
     public void loadCache() {
         DiskCacheManager manager = new DiskCacheManager(CustomApplication.getContext(), Constants.CACHE_NEWS_FILE);
         ArrayList<BaseItem> topNews = manager.getSerializable(Constants.CACHE_HEADLINE_NEWS);
         if (topNews != null) {
             mNewsListFrag.refreshNewsSuccessed(topNews);
         }
+    }
+
+    @Override
+    public void bindView(ImpBaseView view) {
+        mNewsListFrag = (NewsContract.View) view;
+    }
+
+    @Override
+    public void unbindView() {
+        dispose();
+    }
+
+    @Override
+    public void onDestory() {
+        mNewsListFrag = null;
     }
 }

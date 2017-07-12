@@ -6,6 +6,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Environment;
 
 import com.pandaq.pandaeye.disklrucache.SecretUtil;
+import com.pandaq.pandaeye.modules.BasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -17,12 +19,11 @@ import java.io.FileOutputStream;
  * 查看大图界面的 Presenter
  */
 
-public class WebPhotoPresenter implements WebPhotoContact.Presenter {
+class WebPhotoPresenter extends BasePresenter implements WebPhotoContact.Presenter {
     private WebPhotoContact.View mView;
     private Context mContext;
 
-    public WebPhotoPresenter(WebPhotoContact.View view, Context context) {
-        mView = view;
+    WebPhotoPresenter(Context context) {
         mContext = context;
     }
 
@@ -86,5 +87,21 @@ public class WebPhotoPresenter implements WebPhotoContact.Presenter {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public void bindView(ImpBaseView view) {
+        mView = (WebPhotoContact.View) view;
+    }
+
+    @Override
+    public void unbindView() {
+        dispose();
+    }
+
+    @Override
+    public void onDestory() {
+        mView = null;
+        mContext = null;
     }
 }

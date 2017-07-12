@@ -3,8 +3,9 @@ package com.pandaq.pandaeye.modules.video.videotypelist.mvp;
 import com.pandaq.pandaeye.config.Config;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.api.ApiManager;
+import com.pandaq.pandaeye.modules.BasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
 import com.pandaq.pandaeye.modules.video.MovieResponse;
-import com.pandaq.pandaeye.BasePresenter;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;
@@ -23,14 +24,11 @@ import io.reactivex.schedulers.Schedulers;
  * 视频分类 Presenter
  */
 
-public class TypedVideosPresenter extends BasePresenter implements VideoTypedContract.Presenter {
+class TypedVideosPresenter extends BasePresenter implements VideoTypedContract.Presenter {
     private VideoTypedContract.View mActivity;
     private int currentPage = 0;
 
-    public TypedVideosPresenter(VideoTypedContract.View activity) {
-        mActivity = activity;
-    }
-
+    @Override
     public void loadVideos(String catalogId) {
         ApiManager
                 .getInstence()
@@ -84,6 +82,7 @@ public class TypedVideosPresenter extends BasePresenter implements VideoTypedCon
                 });
     }
 
+    @Override
     public void loadLives(String catalogId) {
         ApiManager
                 .getInstence()
@@ -138,6 +137,7 @@ public class TypedVideosPresenter extends BasePresenter implements VideoTypedCon
 
     }
 
+    @Override
     public void loadData(String title) {
         switch (title) {
             case Constants.MOVIE_TYPE_BIGBRO:
@@ -168,5 +168,20 @@ public class TypedVideosPresenter extends BasePresenter implements VideoTypedCon
 //                loadVideos(Config.MOVIE_TYPE_TOPIC);
                 break;
         }
+    }
+
+    @Override
+    public void bindView(ImpBaseView view) {
+        mActivity = (VideoTypedContract.View) view;
+    }
+
+    @Override
+    public void unbindView() {
+        dispose();
+    }
+
+    @Override
+    public void onDestory() {
+        mActivity = null;
     }
 }

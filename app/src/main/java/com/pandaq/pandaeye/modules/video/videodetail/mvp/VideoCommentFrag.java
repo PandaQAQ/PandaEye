@@ -52,7 +52,7 @@ public class VideoCommentFrag extends BaseFragment implements VideoCommentContra
     private boolean loadAble = true;
     private String currentId = "currentId";
     private String lastId = "lastId";
-    private VideoCommentPresenter mCommentPresenter = new VideoCommentPresenter(this);
+    private VideoCommentContract.Presenter mPresenter;
     private Disposable mDisposable;
 
     @Nullable
@@ -60,6 +60,7 @@ public class VideoCommentFrag extends BaseFragment implements VideoCommentContra
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.video_comment_fragment, container, false);
         ButterKnife.bind(this, view);
+        bindPresenter();
         initView();
         return view;
     }
@@ -67,7 +68,7 @@ public class VideoCommentFrag extends BaseFragment implements VideoCommentContra
     @Override
     public void onPause() {
         super.onPause();
-        mCommentPresenter.dispose();
+        unbindPresenter();
         if (mDisposable != null && !mDisposable.isDisposed()) {
             mDisposable.dispose();
         }
@@ -109,7 +110,7 @@ public class VideoCommentFrag extends BaseFragment implements VideoCommentContra
     public void loadComment() {
         refresh = false;
         if (!loading) {
-            mCommentPresenter.loadMoreComment();
+            mPresenter.loadMoreComment();
             loading = true;
         }
     }
@@ -119,7 +120,7 @@ public class VideoCommentFrag extends BaseFragment implements VideoCommentContra
         mSrlRefresh.setRefreshing(true);
         refresh = true;
         if (!refresing) {
-            mCommentPresenter.refreshComment();
+            mPresenter.refreshComment();
             refresing = true;
         }
     }
@@ -200,4 +201,27 @@ public class VideoCommentFrag extends BaseFragment implements VideoCommentContra
                 });
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        destoryPresenter();
+    }
+
+    @Override
+    public void bindPresenter() {
+        if (mPresenter == null) {
+            mPresenter = new VideoCommentPresenter();
+        }
+        mPresenter.bindView(this);
+    }
+
+    @Override
+    public void unbindPresenter() {
+        mPresenter.unbindView();
+    }
+
+    @Override
+    public void destoryPresenter() {
+        mPresenter.onDestory();
+    }
 }

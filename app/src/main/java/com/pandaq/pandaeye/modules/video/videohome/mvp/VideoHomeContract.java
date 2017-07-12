@@ -1,5 +1,8 @@
 package com.pandaq.pandaeye.modules.video.videohome.mvp;
 
+import com.pandaq.pandaeye.modules.ImpBasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
+
 import java.util.ArrayList;
 
 /**
@@ -7,8 +10,8 @@ import java.util.ArrayList;
  * 767807368@qq.com
  */
 
-public interface VideoHomeContract {
-    interface View {
+interface VideoHomeContract {
+    interface View extends ImpBaseView {
         void refreshData();
 
         void refreshSuccess(ArrayList<RetDataBean.ListBean> listBeen);
@@ -20,7 +23,7 @@ public interface VideoHomeContract {
         void hideProgressBar();
     }
 
-    interface Presenter {
+    interface Presenter extends ImpBasePresenter {
         void loadData();
 
         void loadCache();

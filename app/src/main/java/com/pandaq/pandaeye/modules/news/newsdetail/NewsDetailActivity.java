@@ -59,13 +59,14 @@ public class NewsDetailActivity extends ShareActivity implements NewsDetailContr
     private int width;
     private int heigh;
     private ArrayList<String> mImageUrls;
-    private NewsDetailPresenter mPresenter = new NewsDetailPresenter(this);
+    private NewsDetailContract.Presenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_news_info);
         ButterKnife.bind(this);
+        bindPresenter();
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         initView();
@@ -162,6 +163,30 @@ public class NewsDetailActivity extends ShareActivity implements NewsDetailContr
     @Override
     protected void onPause() {
         super.onPause();
-        mPresenter.dispose();
+        unbindPresenter();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        destoryPresenter();
+    }
+
+    @Override
+    public void bindPresenter() {
+        if (mPresenter == null) {
+            mPresenter = new NewsDetailPresenter();
+        }
+        mPresenter.bindView(this);
+    }
+
+    @Override
+    public void unbindPresenter() {
+        mPresenter.unbindView();
+    }
+
+    @Override
+    public void destoryPresenter() {
+        mPresenter.onDestory();
     }
 }

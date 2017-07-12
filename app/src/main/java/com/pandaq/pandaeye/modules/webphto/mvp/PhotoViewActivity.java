@@ -28,7 +28,7 @@ public class PhotoViewActivity extends SwipeBackActivity implements ViewPager.On
     @BindView(R.id.tv_photo_process)
     TextView mTvPhotoProcess;
     private int curPosition = 0;
-    private WebPhotoPresenter mPresenter = new WebPhotoPresenter(this, this);
+    private WebPhotoContact.Presenter mPresenter = new WebPhotoPresenter(this);
 
     private ArrayList<String> images;
 
@@ -37,6 +37,7 @@ public class PhotoViewActivity extends SwipeBackActivity implements ViewPager.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_view);
         ButterKnife.bind(this);
+        bindPresenter();
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         initData();
@@ -73,7 +74,7 @@ public class PhotoViewActivity extends SwipeBackActivity implements ViewPager.On
     public void onPageSelected(int position) {
         mVpHtmlImages.setCurrentItem(position);
         curPosition = position;
-        mTvPhotoProcess.setText(curPosition+1 + "/" + images.size());
+        mTvPhotoProcess.setText(curPosition + 1 + "/" + images.size());
     }
 
     @Override
@@ -93,5 +94,32 @@ public class PhotoViewActivity extends SwipeBackActivity implements ViewPager.On
     @Override
     public void savePicFail(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unbindPresenter();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        destoryPresenter();
+    }
+
+    @Override
+    public void bindPresenter() {
+        mPresenter.bindView(this);
+    }
+
+    @Override
+    public void unbindPresenter() {
+        mPresenter.unbindView();
+    }
+
+    @Override
+    public void destoryPresenter() {
+        mPresenter.onDestory();
     }
 }

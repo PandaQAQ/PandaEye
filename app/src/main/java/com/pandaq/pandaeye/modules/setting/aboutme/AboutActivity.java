@@ -36,13 +36,14 @@ public class AboutActivity extends SwipeBackActivity implements AboutMeContract.
     NavItem mNavJianshu;
     @BindView(R.id.nav_juejin)
     NavItem mNavJuejin;
-    private AboutMePresenter mPresenter = new AboutMePresenter(this);
+    private AboutMeContract.Presenter mPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_me);
         ButterKnife.bind(this);
+        bindPresenter();
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +76,8 @@ public class AboutActivity extends SwipeBackActivity implements AboutMeContract.
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPresenter.dispose();
+        unbindPresenter();
+        destoryPresenter();
     }
 
     @OnClick({R.id.nav_github, R.id.nav_jianshu, R.id.nav_juejin})
@@ -99,5 +101,23 @@ public class AboutActivity extends SwipeBackActivity implements AboutMeContract.
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Override
+    public void bindPresenter() {
+        if (mPresenter == null) {
+            mPresenter = new AboutMePresenter();
+        }
+        mPresenter.bindView(this);
+    }
+
+    @Override
+    public void unbindPresenter() {
+        mPresenter.unbindView();
+    }
+
+    @Override
+    public void destoryPresenter() {
+        mPresenter.onDestory();
     }
 }

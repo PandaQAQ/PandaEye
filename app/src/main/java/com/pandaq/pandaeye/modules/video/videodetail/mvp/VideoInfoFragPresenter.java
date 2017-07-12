@@ -2,8 +2,9 @@ package com.pandaq.pandaeye.modules.video.videodetail.mvp;
 
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.api.ApiManager;
+import com.pandaq.pandaeye.modules.BasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
 import com.pandaq.pandaeye.modules.video.MovieResponse;
-import com.pandaq.pandaeye.BasePresenter;
 import com.pandaq.pandaeye.rxbus.RxBus;
 import com.pandaq.pandaeye.rxbus.RxConstants;
 
@@ -17,16 +18,13 @@ import io.reactivex.schedulers.Schedulers;
  * 视频详情
  */
 
-public class VideoInfoFragPresenter extends BasePresenter implements VideoInfoContract.Presenter {
+class VideoInfoFragPresenter extends BasePresenter implements VideoInfoContract.Presenter {
     private VideoInfoContract.View mVideoInfoFrag;
-
-    public VideoInfoFragPresenter(VideoInfoContract.View videoInfoFrag) {
-        mVideoInfoFrag = videoInfoFrag;
-    }
 
     /**
      * 获取视频详情页
      */
+    @Override
     public void loadVideoInfo() {
         ApiManager.getInstence()
                 .getMovieService()
@@ -59,5 +57,20 @@ public class VideoInfoFragPresenter extends BasePresenter implements VideoInfoCo
                         }
                     }
                 });
+    }
+
+    @Override
+    public void bindView(ImpBaseView view) {
+        mVideoInfoFrag = (VideoInfoContract.View) view;
+    }
+
+    @Override
+    public void unbindView() {
+        dispose();
+    }
+
+    @Override
+    public void onDestory() {
+        mVideoInfoFrag = null;
     }
 }

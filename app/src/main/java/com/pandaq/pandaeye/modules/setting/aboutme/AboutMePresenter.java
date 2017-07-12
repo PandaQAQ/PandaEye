@@ -1,7 +1,8 @@
 package com.pandaq.pandaeye.modules.setting.aboutme;
 
 import com.pandaq.pandaeye.api.ApiManager;
-import com.pandaq.pandaeye.BasePresenter;
+import com.pandaq.pandaeye.modules.BasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -13,13 +14,10 @@ import io.reactivex.schedulers.Schedulers;
  * 关于我界面的 Presenter
  */
 
-public class AboutMePresenter extends BasePresenter implements AboutMeContract.Presenter {
+class AboutMePresenter extends BasePresenter implements AboutMeContract.Presenter {
     private AboutMeContract.View mActivity;
 
-    public AboutMePresenter(AboutMeContract.View activity) {
-        mActivity = activity;
-    }
-
+    @Override
     public void loadInfo(String user) {
         ApiManager.getInstence()
                 .getGithubService()
@@ -47,5 +45,20 @@ public class AboutMePresenter extends BasePresenter implements AboutMeContract.P
 
                     }
                 });
+    }
+
+    @Override
+    public void bindView(ImpBaseView view) {
+        mActivity = (AboutMeContract.View) view;
+    }
+
+    @Override
+    public void unbindView() {
+        dispose();
+    }
+
+    @Override
+    public void onDestory() {
+        mActivity = null;
     }
 }

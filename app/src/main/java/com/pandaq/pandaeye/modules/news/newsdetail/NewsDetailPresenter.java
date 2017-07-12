@@ -1,7 +1,8 @@
 package com.pandaq.pandaeye.modules.news.newsdetail;
 
 import com.pandaq.pandaeye.api.ApiManager;
-import com.pandaq.pandaeye.BasePresenter;
+import com.pandaq.pandaeye.modules.BasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
 import com.pandaq.pandaeye.utils.JsonUtils;
 
 import java.io.IOException;
@@ -18,18 +19,13 @@ import okhttp3.ResponseBody;
  * email : 767807368@qq.com
  */
 
-public class NewsDetailPresenter extends BasePresenter implements NewsDetailContract.Presenter {
+class NewsDetailPresenter extends BasePresenter implements NewsDetailContract.Presenter {
     private NewsDetailContract.View mActivity;
-
-    public NewsDetailPresenter(NewsDetailContract.View activity) {
-        mActivity = activity;
-    }
 
     /**
      * 加载新闻详情
-     *
-     * @param id
      */
+    @Override
     public void loadNewsContent(final String id) {
         mActivity.showProgressBar();
         ApiManager.getInstence()
@@ -76,4 +72,18 @@ public class NewsDetailPresenter extends BasePresenter implements NewsDetailCont
 
     }
 
+    @Override
+    public void bindView(ImpBaseView view) {
+        mActivity = (NewsDetailContract.View) view;
+    }
+
+    @Override
+    public void unbindView() {
+        dispose();
+    }
+
+    @Override
+    public void onDestory() {
+        mActivity = null;
+    }
 }

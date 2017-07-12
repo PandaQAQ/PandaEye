@@ -1,10 +1,11 @@
 package com.pandaq.pandaeye.modules.douban.mvp;
 
 import com.pandaq.pandaeye.CustomApplication;
+import com.pandaq.pandaeye.api.ApiManager;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
-import com.pandaq.pandaeye.api.ApiManager;
-import com.pandaq.pandaeye.BasePresenter;
+import com.pandaq.pandaeye.modules.BasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;
@@ -23,15 +24,11 @@ import io.reactivex.schedulers.Schedulers;
  * email : 767807368@qq.com
  * 豆瓣电影FragmentPresenter
  */
-public class DouBanMoviePresenter extends BasePresenter implements DoubanContract.Presenter{
+class DouBanMoviePresenter extends BasePresenter implements DoubanContract.Presenter {
 
     private DoubanContract.View mMovieListFrag;
     private int start;
     private boolean loadAllCompleted = false;
-
-    public DouBanMoviePresenter(DoubanContract.View mMovieListFrag) {
-        this.mMovieListFrag = mMovieListFrag;
-    }
 
     /**
      * 刷新操作
@@ -170,5 +167,20 @@ public class DouBanMoviePresenter extends BasePresenter implements DoubanContrac
         if (movieSubjects != null) {
             mMovieListFrag.refreshSucceed(movieSubjects);
         }
+    }
+
+    @Override
+    public void bindView(ImpBaseView view) {
+        mMovieListFrag = (DoubanContract.View) view;
+    }
+
+    @Override
+    public void unbindView() {
+        dispose();
+    }
+
+    @Override
+    public void onDestory() {
+        mMovieListFrag = null;
     }
 }

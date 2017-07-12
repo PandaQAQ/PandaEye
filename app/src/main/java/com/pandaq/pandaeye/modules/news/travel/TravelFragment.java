@@ -46,7 +46,7 @@ public class TravelFragment extends BaseFragment implements NewsContract.View, S
     SwipeRefreshLayout mRefresh;
     @BindView(R.id.empty_msg)
     TextView mEmptyMsg;
-    private TravelPresenter mPresenter = new TravelPresenter(this);
+    private NewsContract.Presenter mPresenter;
     private NewsListAdapter mAdapter;
     private boolean loading = false;
     private Disposable mDisposable;
@@ -57,6 +57,7 @@ public class TravelFragment extends BaseFragment implements NewsContract.View, S
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.headline_newslist_fragment, null, false);
         mUnbinder = ButterKnife.bind(this, view);
+        bindPresenter();
         mLinearLayoutManager = new LinearLayoutManager(this.getContext());
         mNewsRecycler.setLayoutManager(mLinearLayoutManager);
         //屏蔽掉默认的动画，房子刷新时图片闪烁
@@ -75,7 +76,7 @@ public class TravelFragment extends BaseFragment implements NewsContract.View, S
     public void onPause() {
         super.onPause();
         mRefresh.setRefreshing(false);
-        mPresenter.dispose();
+        unbindPresenter();
         onHiddenChanged(true);
     }
 
@@ -83,6 +84,7 @@ public class TravelFragment extends BaseFragment implements NewsContract.View, S
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
+        destoryPresenter();
         mAdapter = null;
     }
 
@@ -251,4 +253,21 @@ public class TravelFragment extends BaseFragment implements NewsContract.View, S
         startActivity(intent, transitionActivityOptions.toBundle());
     }
 
+    @Override
+    public void bindPresenter() {
+        if (mPresenter == null) {
+            mPresenter = new TravelPresenter();
+        }
+        mPresenter.bindView(this);
+    }
+
+    @Override
+    public void unbindPresenter() {
+        mPresenter.unbindView();
+    }
+
+    @Override
+    public void destoryPresenter() {
+        mPresenter.onDestory();
+    }
 }

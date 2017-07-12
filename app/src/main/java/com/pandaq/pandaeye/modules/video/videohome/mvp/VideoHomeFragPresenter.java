@@ -4,8 +4,9 @@ import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
 import com.pandaq.pandaeye.api.ApiManager;
+import com.pandaq.pandaeye.modules.BasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
 import com.pandaq.pandaeye.modules.video.MovieResponse;
-import com.pandaq.pandaeye.BasePresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +28,9 @@ import io.reactivex.schedulers.Schedulers;
  * 视频 fragment Presenter
  */
 
-public class VideoHomeFragPresenter extends BasePresenter implements VideoHomeContract.Presenter {
+class VideoHomeFragPresenter extends BasePresenter implements VideoHomeContract.Presenter {
 
     private VideoHomeContract.View mFrag;
-
-    public VideoHomeFragPresenter(VideoHomeContract.View frag) {
-        mFrag = frag;
-    }
 
     /**
      * 加载视频主页的json数据
@@ -130,5 +127,20 @@ public class VideoHomeFragPresenter extends BasePresenter implements VideoHomeCo
             }
         });
 
+    }
+
+    @Override
+    public void bindView(ImpBaseView view) {
+        mFrag = (VideoHomeContract.View) view;
+    }
+
+    @Override
+    public void unbindView() {
+        dispose();
+    }
+
+    @Override
+    public void onDestory() {
+        mFrag = null;
     }
 }

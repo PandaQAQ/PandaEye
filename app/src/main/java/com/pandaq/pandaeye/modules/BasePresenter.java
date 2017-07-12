@@ -1,4 +1,4 @@
-package com.pandaq.pandaeye;
+package com.pandaq.pandaeye.modules;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;

@@ -4,9 +4,10 @@ import com.pandaq.pandaeye.CustomApplication;
 import com.pandaq.pandaeye.config.Constants;
 import com.pandaq.pandaeye.disklrucache.DiskCacheManager;
 import com.pandaq.pandaeye.api.ApiManager;
+import com.pandaq.pandaeye.modules.BasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
 import com.pandaq.pandaeye.modules.news.NewsBean;
 import com.pandaq.pandaeye.modules.news.NewsContract;
-import com.pandaq.pandaeye.BasePresenter;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;
@@ -26,14 +27,10 @@ import io.reactivex.schedulers.Schedulers;
  * email : 767807368@qq.com
  */
 
-public class TecPresenter extends BasePresenter implements NewsContract.Presenter{
+class TecPresenter extends BasePresenter implements NewsContract.Presenter {
 
     private NewsContract.View mNewsListFrag;
     private int currentIndex;
-
-    public TecPresenter(NewsContract.View newsListFrag) {
-        this.mNewsListFrag = newsListFrag;
-    }
 
     public void refreshNews() {
         mNewsListFrag.showRefreshBar();
@@ -169,5 +166,20 @@ public class TecPresenter extends BasePresenter implements NewsContract.Presente
         if (topNews != null) {
             mNewsListFrag.refreshNewsSuccessed(topNews);
         }
+    }
+
+    @Override
+    public void bindView(ImpBaseView view) {
+        mNewsListFrag = (NewsContract.View) view;
+    }
+
+    @Override
+    public void unbindView() {
+        dispose();
+    }
+
+    @Override
+    public void onDestory() {
+        mNewsListFrag = null;
     }
 }

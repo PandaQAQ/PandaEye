@@ -1,8 +1,9 @@
 package com.pandaq.pandaeye.modules.video.videodetail.mvp;
 
 import com.pandaq.pandaeye.api.ApiManager;
+import com.pandaq.pandaeye.modules.BasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
 import com.pandaq.pandaeye.modules.video.MovieResponse;
-import com.pandaq.pandaeye.BasePresenter;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 
 import java.util.ArrayList;
@@ -20,14 +21,10 @@ import io.reactivex.schedulers.Schedulers;
  * 视频评论Presenter
  */
 
-public class VideoCommentPresenter extends BasePresenter implements VideoCommentContract.Presenter {
+class VideoCommentPresenter extends BasePresenter implements VideoCommentContract.Presenter {
     private int currentPage = 0;
 
     private VideoCommentContract.View mCommentFrag;
-
-    public VideoCommentPresenter(VideoCommentContract.View commentFrag) {
-        mCommentFrag = commentFrag;
-    }
 
     /**
      * 获取视频评论
@@ -86,6 +83,7 @@ public class VideoCommentPresenter extends BasePresenter implements VideoComment
     /**
      * 刷新评论
      */
+    @Override
     public void refreshComment() {
         currentPage = 0;
         loadVideoComment();
@@ -94,7 +92,23 @@ public class VideoCommentPresenter extends BasePresenter implements VideoComment
     /**
      * 加载更多评论
      */
+    @Override
     public void loadMoreComment() {
         loadVideoComment();
+    }
+
+    @Override
+    public void bindView(ImpBaseView view) {
+        mCommentFrag = (VideoCommentContract.View) view;
+    }
+
+    @Override
+    public void unbindView() {
+        dispose();
+    }
+
+    @Override
+    public void onDestory() {
+        mCommentFrag = null;
     }
 }

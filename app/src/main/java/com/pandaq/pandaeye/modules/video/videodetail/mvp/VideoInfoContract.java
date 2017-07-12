@@ -1,12 +1,15 @@
 package com.pandaq.pandaeye.modules.video.videodetail.mvp;
 
+import com.pandaq.pandaeye.modules.ImpBasePresenter;
+import com.pandaq.pandaeye.modules.ImpBaseView;
+
 /**
  * Created by PandaQ on 2017/4/12.
  * 767807368@qq.com
  */
 
 public interface VideoInfoContract {
-    interface View {
+    interface View extends ImpBaseView {
         void loadInfo();
 
         String getDataId();
@@ -16,7 +19,7 @@ public interface VideoInfoContract {
         void loadInfoSuccess(MovieInfo movieInfo);
     }
 
-    interface Presenter {
+    interface Presenter extends ImpBasePresenter {
         void loadVideoInfo();
     }
 }

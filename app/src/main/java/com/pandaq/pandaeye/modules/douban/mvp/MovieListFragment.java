@@ -37,7 +37,7 @@ public class MovieListFragment extends BaseFragment implements DoubanContract.Vi
     @BindView(R.id.srl_refresh)
     SwipeRefreshLayout mSrlRefresh;
     private MovieListAdapter mMovieListAdapter;
-    private DouBanMoviePresenter mPresenter = new DouBanMoviePresenter(this);
+    private DoubanContract.Presenter mPresenter;
     private boolean loading = false;
     private Disposable mDisposable;
     private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
@@ -47,6 +47,7 @@ public class MovieListFragment extends BaseFragment implements DoubanContract.Vi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.movielist_fragment, container, false);
         ButterKnife.bind(this, view);
+        bindPresenter();
         initView();
         return view;
     }
@@ -61,8 +62,14 @@ public class MovieListFragment extends BaseFragment implements DoubanContract.Vi
     public void onPause() {
         super.onPause();
         mSrlRefresh.setRefreshing(false);
-        mPresenter.dispose();
+        unbindPresenter();
         onHiddenChanged(true);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        destoryPresenter();
     }
 
     private void initView() {
@@ -116,16 +123,6 @@ public class MovieListFragment extends BaseFragment implements DoubanContract.Vi
     public void hideProgressBar() {
         //隐藏加载进度条
         mSrlRefresh.setRefreshing(false);
-    }
-
-    @Override
-    public void showEmptyMessage() {
-        //显示无信息时的界面View
-    }
-
-    @Override
-    public void hideEmptyMessage() {
-        //显示信息时隐藏掉无信息时的界面View
     }
 
     @Override
@@ -215,5 +212,23 @@ public class MovieListFragment extends BaseFragment implements DoubanContract.Vi
                 mDisposable.dispose();
             }
         }
+    }
+
+    @Override
+    public void bindPresenter() {
+        if (mPresenter == null) {
+            mPresenter = new DouBanMoviePresenter();
+        }
+        mPresenter.bindView(this);
+    }
+
+    @Override
+    public void unbindPresenter() {
+        mPresenter.unbindView();
+    }
+
+    @Override
+    public void destoryPresenter() {
+        mPresenter.onDestory();
     }
 }

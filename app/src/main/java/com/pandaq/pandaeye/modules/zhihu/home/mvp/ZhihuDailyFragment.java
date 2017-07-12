@@ -18,6 +18,7 @@ import com.pandaq.pandaeye.R;
 import com.pandaq.pandaeye.modules.zhihu.home.ZhihuDailyAdapter;
 import com.pandaq.pandaeye.modules.zhihu.home.ZhihuTopPagerAdapter;
 import com.pandaq.pandaeye.config.Constants;
+import com.pandaq.pandaeye.modules.zhihu.zhihudetail.ZhihuStoryContent;
 import com.pandaq.pandaeye.rxbus.RxBus;
 import com.pandaq.pandaeye.rxbus.RxConstants;
 import com.pandaq.pandaeye.BaseFragment;
@@ -55,7 +56,7 @@ public class ZhihuDailyFragment extends BaseFragment implements ZhiHuHomeContrac
     TextView mTvTag;
     @BindView(R.id.empty_msg)
     TextView mEmptyMsg;
-    private ZhiHuPresenter mPresenter = new ZhiHuPresenter(this);
+    private ZhiHuHomeContract.Presenter mPresenter;
     private ZhihuDailyAdapter mZhihuDailyAdapter;
     private ArrayList<BaseItem> mBaseItems;
     private AutoScrollViewPager scrollViewPager;
@@ -72,6 +73,7 @@ public class ZhihuDailyFragment extends BaseFragment implements ZhiHuHomeContrac
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.zhihulist_fragment, container, false);
         mUnbinder = ButterKnife.bind(this, view);
+        bindPresenter();
         initView();
         return view;
     }
@@ -86,7 +88,7 @@ public class ZhihuDailyFragment extends BaseFragment implements ZhiHuHomeContrac
     public void onPause() {
         super.onPause();
         mRefresh.setRefreshing(false);
-        mPresenter.dispose();
+        unbindPresenter();
         onHiddenChanged(true);
     }
 
@@ -337,5 +339,24 @@ public class ZhihuDailyFragment extends BaseFragment implements ZhiHuHomeContrac
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
+        destoryPresenter();
+    }
+
+    @Override
+    public void bindPresenter() {
+        if (mPresenter == null) {
+            mPresenter = new ZhiHuPresenter();
+        }
+        mPresenter.bindView(this);
+    }
+
+    @Override
+    public void unbindPresenter() {
+
+    }
+
+    @Override
+    public void destoryPresenter() {
+
     }
 }

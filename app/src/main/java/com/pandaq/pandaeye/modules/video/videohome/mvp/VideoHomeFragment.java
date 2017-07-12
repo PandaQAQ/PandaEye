@@ -54,21 +54,17 @@ public class VideoHomeFragment extends BaseFragment implements VideoHomeContract
     private ViewGroupIndicator viewGroupIndicator;
     private VideoTopPagerAdapter mPagerAdapter;
     private VideoTypesAdapter mAdapter;
-    private VideoHomeFragPresenter mPresenter = new VideoHomeFragPresenter(this);
+    private VideoHomeContract.Presenter mPresenter;
     private ArrayList<BaseItem> mBaseItems;
     private Disposable mDisposable;
     private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
     private Unbinder unbinder;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.video_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
+        bindPresenter();
         initView();
         return view;
     }
@@ -83,7 +79,7 @@ public class VideoHomeFragment extends BaseFragment implements VideoHomeContract
     public void onPause() {
         super.onPause();
         mSrlRefresh.setRefreshing(false);
-        mPresenter.dispose();
+        unbindPresenter();
         onHiddenChanged(true);
     }
 
@@ -237,5 +233,24 @@ public class VideoHomeFragment extends BaseFragment implements VideoHomeContract
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        destoryPresenter();
+    }
+
+    @Override
+    public void bindPresenter() {
+        if (mPresenter == null) {
+            mPresenter = new VideoHomeFragPresenter();
+        }
+        mPresenter.bindView(this);
+    }
+
+    @Override
+    public void unbindPresenter() {
+        mPresenter.unbindView();
+    }
+
+    @Override
+    public void destoryPresenter() {
+        mPresenter.onDestory();
     }
 }

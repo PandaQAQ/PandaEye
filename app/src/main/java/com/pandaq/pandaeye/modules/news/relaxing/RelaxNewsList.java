@@ -17,7 +17,7 @@ public class RelaxNewsList {
 
     private ArrayList<NewsBean> mDadaNewsArrayList;
 
-    public ArrayList<NewsBean> getDadaNewsArrayList() {
+    ArrayList<NewsBean> getDadaNewsArrayList() {
         return mDadaNewsArrayList;
     }
 }
