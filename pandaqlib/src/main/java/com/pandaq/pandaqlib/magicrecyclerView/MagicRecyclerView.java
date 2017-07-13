@@ -258,4 +258,20 @@ public class MagicRecyclerView extends RecyclerView {
             footerView.setVisibility(VISIBLE);
         }
     }
+
+    public void setHeaderView(View view) {
+        mRecyclerAdapter.setHeaderView(view);
+    }
+
+    public void setFooterView(View view) {
+        mRecyclerAdapter.setFooterView(view);
+    }
+
+    public void removeHeaderView() {
+        mRecyclerAdapter.removeHeaderView();
+    }
+
+    public void removeFooterView() {
+        mRecyclerAdapter.removeFooterView();
+    }
 }

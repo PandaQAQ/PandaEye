@@ -26,7 +26,7 @@
     <dimen name="toolbar_title_width">240dp</dimen>
     <dimen name="splash_image_top_margin">160dp</dimen>
     <dimen name="video_type_text_height">32dp</dimen>
-    <dimen name="video_type_card_height">112dp</dimen>
+    <dimen name="video_type_card_height">128dp</dimen>
     <dimen name="typed_video_item_height">116dp</dimen>
     <dimen name="video_info_tab_height">40dp</dimen>
     <dimen name="base_margin">16dp</dimen>

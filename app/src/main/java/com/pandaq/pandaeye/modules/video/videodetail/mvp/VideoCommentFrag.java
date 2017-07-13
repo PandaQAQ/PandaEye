@@ -174,9 +174,11 @@ public class VideoCommentFrag extends BaseFragment implements VideoCommentContra
      * 初始化接收评论数据的 RxBus
      */
     private void initRxbus() {
+        if (mDisposable != null) {
+            mDisposable.dispose();
+        }
         //接收 Video ID
-        RxBus
-                .getDefault()
+        RxBus.getDefault()
                 .toObservableWithCode(RxConstants.ACCEPT_VIDEO_DATAID, String.class)
                 .subscribe(new Observer<String>() {
                     @Override
@@ -191,7 +193,9 @@ public class VideoCommentFrag extends BaseFragment implements VideoCommentContra
 
                     @Override
                     public void onError(Throwable e) {
-
+                        e.printStackTrace();
+                        //发生异常时重新订阅
+                        initRxbus();
                     }
 
                     @Override

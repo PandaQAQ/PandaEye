@@ -65,7 +65,6 @@ public class VideoInfoFragment extends BaseFragment implements VideoInfoContract
         SpaceDecoration itemDecoration = new SpaceDecoration(DensityUtil.dip2px(getContext(), 8));
         itemDecoration.setPaddingEdgeSide(true);
         itemDecoration.setPaddingStart(true);
-        itemDecoration.setPaddingHeaderFooter(false);
         mMrvRecommend.addItemDecoration(itemDecoration);
         currentId = getArguments().getString(Constants.BUNDLE_KEY_DATAID);
         loadInfo();
@@ -115,6 +114,7 @@ public class VideoInfoFragment extends BaseFragment implements VideoInfoContract
         }
         if (mAdapter == null) {
             mAdapter = new VideoInfoAdapter(this);
+            System.out.println(mBaseItems.size());
             mAdapter.setBaseDatas(mBaseItems);
             mMrvRecommend.setAdapter(mAdapter);
             mMrvRecommend.addOnItemClickListener(this);

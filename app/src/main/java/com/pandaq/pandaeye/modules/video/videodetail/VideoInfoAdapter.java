@@ -1,7 +1,9 @@
 package com.pandaq.pandaeye.modules.video.videodetail;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -29,7 +31,8 @@ import butterknife.ButterKnife;
 
 public class VideoInfoAdapter extends BaseRecyclerAdapter {
 
-    private Context mContext;
+    @SuppressLint("StaticFieldLeak")
+    private static Context mContext;
     private int image_width;
     private int image_height;
 
@@ -37,22 +40,22 @@ public class VideoInfoAdapter extends BaseRecyclerAdapter {
         mContext = fragment.getContext();
         float value = fragment.getResources().getDimension(R.dimen.video_type_card_height);
         image_width = (int) value;
-        image_height = (int) value * 5 / 3;
+        image_height = (int) value * 3 / 2;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreate(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.video_type_item, parent, false);
-        return new VideoInfoAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBind(RecyclerView.ViewHolder viewHolder, int RealPosition, BaseItem data) {
-        VideoInfoAdapter.ViewHolder holder = (VideoInfoAdapter.ViewHolder) viewHolder;
+        ViewHolder holder = (ViewHolder) viewHolder;
         MovieInfo.ListBean.ChildListBean listBean = (MovieInfo.ListBean.ChildListBean) data.getData();
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) holder.mRlParent.getLayoutParams();
+        ViewGroup.LayoutParams params = holder.mCardVideoIt.getLayoutParams();
         params.height = image_height;
-        holder.mRlParent.setLayoutParams(params);
+        holder.mCardVideoIt.setLayoutParams(params);
         String pic = listBean.getPic();
         if (!TextUtils.isEmpty(pic)) {
             Picasso.with(mContext)
@@ -63,13 +66,13 @@ public class VideoInfoAdapter extends BaseRecyclerAdapter {
         holder.mTvVideoType.setText(listBean.getTitle());
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.rl_parent)
-        RelativeLayout mRlParent;
+    static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.iv_video_type)
         ImageView mIvVideoType;
         @BindView(R.id.tv_video_type)
         TextView mTvVideoType;
+        @BindView(R.id.card_video_it)
+        CardView mCardVideoIt;
 
         ViewHolder(View view) {
             super(view);

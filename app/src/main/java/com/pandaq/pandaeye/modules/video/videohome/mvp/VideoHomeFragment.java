@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pandaq.pandaeye.R;
@@ -28,6 +30,9 @@ import com.pandaq.pandaqlib.magicrecyclerView.BaseItem;
 import com.pandaq.pandaqlib.magicrecyclerView.BaseRecyclerAdapter;
 import com.pandaq.pandaqlib.magicrecyclerView.MagicRecyclerView;
 import com.pandaq.pandaqlib.magicrecyclerView.SpaceDecoration;
+import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -56,6 +61,7 @@ public class VideoHomeFragment extends BaseFragment implements VideoHomeContract
     private VideoTypesAdapter mAdapter;
     private VideoHomeContract.Presenter mPresenter;
     private ArrayList<BaseItem> mBaseItems;
+    private RetDataBean.ListBean footerItem;
     private Disposable mDisposable;
     private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
     private Unbinder unbinder;
@@ -92,7 +98,9 @@ public class VideoHomeFragment extends BaseFragment implements VideoHomeContract
         SpaceDecoration itemDecoration = new SpaceDecoration(DensityUtil.dip2px(getContext(), 8));
         itemDecoration.setPaddingEdgeSide(true);
         itemDecoration.setPaddingStart(true);
-        itemDecoration.setPaddingHeaderFooter(false);
+        itemDecoration.setPaddingFooter(true);
+        itemDecoration.setFooterCount(1);
+        itemDecoration.setHeaderCount(1);
         mMrvVideo.addItemDecoration(itemDecoration);
         FrameLayout headerView = (FrameLayout) mMrvVideo.getHeaderView();
         scrollViewPager = (AutoScrollViewPager) headerView.findViewById(R.id.scroll_pager);
@@ -110,6 +118,7 @@ public class VideoHomeFragment extends BaseFragment implements VideoHomeContract
 
     @Override
     public void refreshData() {
+        footerItem = null;
         mPresenter.loadData();
     }
 
@@ -138,6 +147,11 @@ public class VideoHomeFragment extends BaseFragment implements VideoHomeContract
         }
         //配置底部列表故事s
         mBaseItems.clear();
+        // 避免单数个 Item 时显示不好看，将最后一个移除单独显示
+        if (listBeen.size() % 2 != 0) {
+            footerItem = listBeen.get(listBeen.size() - 1);
+            listBeen.remove(footerItem);
+        }
         for (RetDataBean.ListBean listBean : listBeen) {
             if (!TextUtils.isEmpty(listBean.getMoreURL()) &&
                     !listBean.getTitle().equals("直播专区") && !listBean.getTitle().equals("专题")) {
@@ -150,9 +164,11 @@ public class VideoHomeFragment extends BaseFragment implements VideoHomeContract
             mAdapter = new VideoTypesAdapter(this);
             mAdapter.setBaseDatas(mBaseItems);
             mMrvVideo.setAdapter(mAdapter);
+            loadFooter();
         } else {
             if (listBeen.size() != 0) {
                 mAdapter.setBaseDatas(mBaseItems);
+                loadFooter();
             }
         }
     }
@@ -188,32 +204,7 @@ public class VideoHomeFragment extends BaseFragment implements VideoHomeContract
             mSrlRefresh.setRefreshing(false);
         }
         if (!hidden) {
-            RxBus.getDefault()
-                    .toObservableWithCode(RxConstants.BACK_PRESSED_CODE, String.class)
-                    .subscribeWith(new Observer<String>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            mDisposable = d;
-                        }
-
-                        @Override
-                        public void onNext(String value) {
-                            if (value.equals(RxConstants.BACK_PRESSED_DATA) && mMrvVideo != null) {
-                                //滚动到顶部
-                                mStaggeredGridLayoutManager.smoothScrollToPosition(mMrvVideo, null, 0);
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
-                        }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
-                    });
+            subscribeEvent();
         } else {
             if (mDisposable != null && !mDisposable.isDisposed()) {
                 mDisposable.dispose();
@@ -252,5 +243,64 @@ public class VideoHomeFragment extends BaseFragment implements VideoHomeContract
     @Override
     public void destoryPresenter() {
         mPresenter.onDestory();
+    }
+
+    private void subscribeEvent() {
+        if (mDisposable != null) {
+            mDisposable.dispose();
+        }
+        RxBus.getDefault()
+                .toObservableWithCode(RxConstants.BACK_PRESSED_CODE, String.class)
+                .subscribeWith(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        mDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(String value) {
+                        if (value.equals(RxConstants.BACK_PRESSED_DATA) && mMrvVideo != null) {
+                            //滚动到顶部
+                            mStaggeredGridLayoutManager.smoothScrollToPosition(mMrvVideo, null, 0);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        subscribeEvent();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    private void loadFooter() {
+        if (footerItem == null) {
+            return;
+        }
+        CardView cardView = (CardView) getActivity().getLayoutInflater().inflate(R.layout.video_type_item, null);
+        // 此处直接 cardView.getLayoutParams() 是会返回 null的
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                DensityUtil.dip2px(getContext(), 208f));
+        cardView.setLayoutParams(params);
+        mMrvVideo.setFooterView(cardView);
+        ImageView image = (ImageView) cardView.findViewById(R.id.iv_video_type);
+        TextView textView = (TextView) cardView.findViewById(R.id.tv_video_type);
+        Picasso.with(getContext())
+                .load(footerItem.getChildList().get(0).getPic())
+                .into(image);
+        textView.setText(footerItem.getTitle());
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), TypedVideosActivity.class);
+                intent.putExtra(Constants.TYPED_MORE_TITLE, footerItem.getTitle());
+                startActivity(intent);
+            }
+        });
     }
 }

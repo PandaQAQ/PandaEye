@@ -234,32 +234,7 @@ public class ZhihuDailyFragment extends BaseFragment implements ZhiHuHomeContrac
             mRefresh.setRefreshing(false);
         }
         if (!hidden) {
-            RxBus.getDefault()
-                    .toObservableWithCode(RxConstants.BACK_PRESSED_CODE, String.class)
-                    .subscribeWith(new Observer<String>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            mDisposable = d;
-                        }
-
-                        @Override
-                        public void onNext(String value) {
-                            if (value.equals(RxConstants.BACK_PRESSED_DATA) && mZhihudailyList != null) {
-                                //滚动到顶部
-                                mLinearLayoutManager.smoothScrollToPosition(mZhihudailyList, null, 0);
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
-                        }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
-                    });
+            subscribeEvent();
         } else {
             if (mDisposable != null && !mDisposable.isDisposed()) {
                 mDisposable.dispose();
@@ -358,5 +333,38 @@ public class ZhihuDailyFragment extends BaseFragment implements ZhiHuHomeContrac
     @Override
     public void destoryPresenter() {
 
+    }
+
+    private void subscribeEvent() {
+        if (mDisposable != null) {
+            mDisposable.dispose();
+        }
+        RxBus.getDefault()
+                .toObservableWithCode(RxConstants.BACK_PRESSED_CODE, String.class)
+                .subscribeWith(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        mDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(String value) {
+                        if (value.equals(RxConstants.BACK_PRESSED_DATA) && mZhihudailyList != null) {
+                            //滚动到顶部
+                            mLinearLayoutManager.smoothScrollToPosition(mZhihudailyList, null, 0);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        subscribeEvent();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 }

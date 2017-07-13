@@ -204,32 +204,7 @@ public class MilitaryFragment extends BaseFragment implements NewsContract.View,
             mRefresh.setRefreshing(false);
         }
         if (!hidden) {
-            RxBus.getDefault()
-                    .toObservableWithCode(RxConstants.BACK_PRESSED_CODE, String.class)
-                    .subscribeWith(new Observer<String>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            mDisposable = d;
-                        }
-
-                        @Override
-                        public void onNext(String value) {
-                            if (value.equals(RxConstants.BACK_PRESSED_DATA) && mNewsRecycler != null) {
-                                //滚动到顶部
-                                mLinearLayoutManager.smoothScrollToPosition(mNewsRecycler, null, 0);
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
-                        }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
-                    });
+            subscribeEvent();
         } else {
             if (mDisposable != null && !mDisposable.isDisposed()) {
                 mDisposable.dispose();
@@ -270,5 +245,38 @@ public class MilitaryFragment extends BaseFragment implements NewsContract.View,
     @Override
     public void destoryPresenter() {
         mPresenter.onDestory();
+    }
+
+    private void subscribeEvent() {
+        if (mDisposable != null) {
+            mDisposable.dispose();
+        }
+        RxBus.getDefault()
+                .toObservableWithCode(RxConstants.BACK_PRESSED_CODE, String.class)
+                .subscribeWith(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        mDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(String value) {
+                        if (value.equals(RxConstants.BACK_PRESSED_DATA) && mNewsRecycler != null) {
+                            //滚动到顶部
+                            mLinearLayoutManager.smoothScrollToPosition(mNewsRecycler, null, 0);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        subscribeEvent();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 }

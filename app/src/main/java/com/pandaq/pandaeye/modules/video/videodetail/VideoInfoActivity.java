@@ -73,7 +73,8 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
         addViewPager(mVpVideoInfo);
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
-        initRxBus();
+        subscribeData();
+        subscribePic();
         initView();
     }
 
@@ -132,10 +133,12 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
         });
     }
 
-    private void initRxBus() {
+    private void subscribeData() {
+        if (mDisposable != null) {
+            mDisposable.dispose();
+        }
         // 点击推荐视频跳转观察者
-        RxBus
-                .getDefault()
+        RxBus.getDefault()
                 .toObservableWithCode(RxConstants.LOADED_DATA_CODE, MovieInfo.class)
                 .subscribe(new Observer<MovieInfo>() {
                     @Override
@@ -151,7 +154,8 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
 
                     @Override
                     public void onError(Throwable e) {
-
+                        e.printStackTrace();
+                        subscribeData();
                     }
 
                     @Override
@@ -159,8 +163,13 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
 
                     }
                 });
-        RxBus
-                .getDefault()
+    }
+
+    private void subscribePic() {
+        if (mPicDisposable != null) {
+            mPicDisposable.dispose();
+        }
+        RxBus.getDefault()
                 .toObservableWithCode(RxConstants.LOADED_VIDEO_PIC_CODE, String.class)
                 .subscribe(new Observer<String>() {
                     @Override
@@ -186,15 +195,16 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
 
                     @Override
                     public void onError(Throwable e) {
-
+                        e.printStackTrace();
+                        subscribePic();
                     }
 
                     @Override
                     public void onComplete() {
-
                     }
                 });
     }
+
 
     @Override
     public void onBackPressed() {

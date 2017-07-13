@@ -8,8 +8,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:padding="@dimen/margin_8dp"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="@dimen/margin_8dp">
 
         <ImageView
             android:id="@+id/iv_video"
@@ -23,6 +23,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/iv_video"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/text_size_mid"
             android:textStyle="bold"/>

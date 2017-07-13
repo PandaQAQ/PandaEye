@@ -25,20 +25,40 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         mListener = li;
     }
 
+    /**
+     * 设置头部
+     *
+     * @param headerView，头部View
+     */
     void setHeaderView(View headerView) {
         mHeaderView = headerView;
         notifyItemInserted(0);
     }
 
+    /**
+     * 设置底部
+     *
+     * @param footerView 底部View
+     */
     void setFooterView(View footerView) {
         mFooterView = footerView;
         notifyItemInserted(getItemCount());
     }
 
+    void removeHeaderView() {
+        mHeaderView = null;
+        notifyItemRangeRemoved(0, 1);
+    }
+
+    void removeFooterView() {
+        mFooterView = null;
+        notifyItemRangeRemoved(getItemCount(), 1);
+    }
+
     /**
      * 根据特定的 Item 传入数据可设置 Tag
      *
-     * @param datas
+     * @param datas item 数据
      */
     public void setBaseDatas(ArrayList<BaseItem> datas) {
         mDatas.clear();
@@ -51,7 +71,7 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     /**
      * 根据特定的 Item 传入数据可设置 Tag
      *
-     * @param datas
+     * @param datas item数据
      */
     public void addBaseDatas(ArrayList<BaseItem> datas) {
         if (datas != null) {

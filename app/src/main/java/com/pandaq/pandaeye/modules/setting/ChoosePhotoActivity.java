@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -321,6 +322,9 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
 
     @OnClick(R.id.tv_select_album)
     public void onViewClicked() {
+        if (mBottomSheetDialog == null) {
+            return;
+        }
         if (mBottomSheetDialog.isShowing()) {
             mBottomSheetDialog.dismiss();
         } else {

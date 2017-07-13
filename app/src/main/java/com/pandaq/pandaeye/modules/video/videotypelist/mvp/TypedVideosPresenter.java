@@ -167,6 +167,12 @@ class TypedVideosPresenter extends BasePresenter implements VideoTypedContract.P
             case Constants.MOVIE_TYPE_TOPIC:
 //                loadVideos(Config.MOVIE_TYPE_TOPIC);
                 break;
+            case Constants.MOVIE_TYPE_BIG:
+                loadVideos(Config.MOVIE_TYPE_BIG);
+                break;
+            case Constants.MOVIE_TYPE_HONGKONG:
+                loadVideos(Config.MOVIE_TYPE_HONGKONG);
+                break;
         }
     }
 

@@ -26,11 +26,15 @@ public class Config {
     //直播专区
     public static final String MOVIE_TYPE_LIVE = "402834815584e463015584e537d00006";
     //微电影
-    public static final String MOVIE_TYPE_LITTLEMOVIE = "402834815584e463015584e538ea0012";
+    public static final String MOVIE_TYPE_LITTLEMOVIE = "0000000055b9a5a00155ba33b405000d";
     //日韩精选
     public static final String MOVIE_TYPE_JSKS = "402834815584e463015584e538a2000f";
     //大咖剧场
     public static final String MOVIE_TYPE_BIGBRO = "402834815584e463015584e537bf0005";
     //午夜剧场
     public static final String MOVIE_TYPE_MIDNIGHT = "402834815584e463015584e5390d0014";
+    //大片抢先看
+    public static final String MOVIE_TYPE_BIG = "402834815584e463015584e539330016";
+    //香港印象
+    public static final String MOVIE_TYPE_HONGKONG = "ff8080815b9075a6015b94ef79dc0284";
 }

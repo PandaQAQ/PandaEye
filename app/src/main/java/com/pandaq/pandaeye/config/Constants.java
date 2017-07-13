@@ -70,7 +70,10 @@ public class Constants {
     public static final String MOVIE_TYPE_BIGBRO = "大咖剧场";
     //午夜剧场
     public static final String MOVIE_TYPE_MIDNIGHT = "午夜剧场";
-
+    //大片抢先看
+    public static final String MOVIE_TYPE_BIG = "大片抢先看";
+    //香港印象
+    public static final String MOVIE_TYPE_HONGKONG = "香港映象";
     /**
      * 设置
      */
