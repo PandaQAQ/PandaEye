@@ -64,6 +64,7 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
     private Disposable mPicDisposable;
     private ArgbEvaluator argbEvaluator;
     private FloatEvaluator floatEvaluator;
+    private String loadingTag = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -180,8 +181,15 @@ public class VideoInfoActivity extends SwipeBackActivity implements ViewPager.On
                     @Override
                     public void onNext(String value) {
                         if (!TextUtils.isEmpty(value)) {
+                            // 当新的图片不是正在加载的图片时取消加载请求重新加载新图片
+                            if (!value.equals(loadingTag)) {
+                                Picasso.with(VideoInfoActivity.this)
+                                        .cancelTag(loadingTag);
+                            }
+                            loadingTag = value;
                             Picasso.with(VideoInfoActivity.this)
                                     .load(value)
+                                    .tag(value)
                                     .into(new PicassoTarget(VideoInfoActivity.this, mJcVideoPlayer.thumbImageView,
                                             mToolbar, new PicassoTarget.LoadListener() {
                                         @Override

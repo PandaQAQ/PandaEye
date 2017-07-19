@@ -221,6 +221,7 @@ public class ChoosePhotoActivity extends SwipeBackActivity implements AdapterVie
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
             }
         });
     }
