@@ -1,9 +1,8 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'android-apt'
+
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.pandaq.pandaeye"
@@ -26,40 +25,42 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     //circleImageView
     //rxAndroid/rxjava
     //butterknife
     // retrofit
     //lib工程
-    compile project(':pandaqlib')
+    implementation project(':pandaqlib')
     //缓存 DiskLruCache
     //jiecao 播放器
     //picasso 图片加载库 （Glide 中有些bug）
     //内存泄露检测
-    compile files('libs/tbs_sdk_thirdapp_v3.1.0.1034_43100_sharewithdownload_obfs_20170301_182143.jar')
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:cardview-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:palette-v7:25.3.1'
-    compile 'com.ashokvarma.android:bottom-navigation-bar:1.3.0'
-    compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
-    compile 'com.jakewharton:butterknife:8.4.0'
-    compile 'com.squareup.retrofit2:retrofit:2.2.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
-    compile 'com.jakewharton:disklrucache:2.0.2'
-    compile 'fm.jiecao:jiecaovideoplayer:4.7.1_preview'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    implementation files('libs/tbs_sdk_thirdapp_v3.1.0.1034_43100_sharewithdownload_obfs_20170301_182143.jar')
+    implementation 'com.android.support:appcompat-v7:25.4.0'
+    implementation 'com.android.support:cardview-v7:25.4.0'
+    implementation 'com.android.support:design:25.4.0'
+    implementation 'com.android.support:palette-v7:25.4.0'
+    implementation 'com.ashokvarma.android:bottom-navigation-bar:1.3.0'
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'com.jakewharton:disklrucache:2.0.2'
+    implementation 'fm.jiecao:jiecaovideoplayer:4.7.1_preview'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 }
 repositories {
     mavenCentral()
